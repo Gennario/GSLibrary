@@ -1,5 +1,5 @@
 package eu.gs.gslibrary.storage;
-/*/
+
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import dev.dejvokep.boostedyaml.YamlDocument;
@@ -10,10 +10,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-/*/
-//@Getter
+
+@Getter
 public class StorageAPI {
-/*/
+
     private final HikariConfig config = new HikariConfig();
     private HikariDataSource dataSource;
 
@@ -81,5 +81,4 @@ public class StorageAPI {
     public enum StorageType {
         MYSQL, FILE
     }
-/*/
 }

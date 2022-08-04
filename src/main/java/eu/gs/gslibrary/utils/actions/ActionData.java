@@ -25,6 +25,10 @@ public class ActionData {
         }
     }
 
+    public boolean isExist(String key) {
+        return data.containsKey(key);
+    }
+
     public String getString(String key) {
         return String.valueOf(data.get(key));
     }
