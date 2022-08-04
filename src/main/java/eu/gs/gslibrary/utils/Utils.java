@@ -25,6 +25,7 @@ public final class Utils {
                 s = PlaceholderAPI.setPlaceholders(null, string);
             }
         }
+
         s = s.replace("§l", "&l");
         s = IridiumColorAPI.process(s);
 
