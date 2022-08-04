@@ -1,5 +1,5 @@
 package eu.gs.gslibrary.storage;
-
+/*/
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import dev.dejvokep.boostedyaml.YamlDocument;
@@ -10,11 +10,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-@Getter
+/*/
+//@Getter
 public class StorageAPI {
-
-    /* Hikari MySql */
+/*/
     private final HikariConfig config = new HikariConfig();
     private HikariDataSource dataSource;
 
@@ -42,7 +41,6 @@ public class StorageAPI {
         if (isConnected()) return;
         if (mySqlSection == null) return;
 
-        /* Mysql setup */
         String host = mySqlSection.getString("host");
         String username = mySqlSection.getString("username");
         String database = mySqlSection.getString("database");
@@ -56,11 +54,9 @@ public class StorageAPI {
         config.setUsername(username);
         config.setPassword(password);
 
-        /* Load hikari config */
         dataSource = new HikariDataSource(config);
         connection = dataSource.getConnection();
 
-        /* Creating a mysql table */
         new StorageTable(table, connection).loadColumns(condition, columns).create();
     }
 
@@ -85,5 +81,5 @@ public class StorageAPI {
     public enum StorageType {
         MYSQL, FILE
     }
-
+/*/
 }
