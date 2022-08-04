@@ -1,0 +1,64 @@
+package eu.gs.gslibrary.utils.actions;
+
+import lombok.Getter;
+import lombok.Setter;
+import org.bukkit.configuration.ConfigurationSection;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Getter
+@Setter
+public class ActionData {
+
+    private Map<String, Object> data;
+    private ConfigurationSection section;
+
+    public ActionData(ConfigurationSection section) {
+        data = new HashMap<>();
+        this.section = section;
+
+        for (String key : section.getKeys(false)) {
+            data.put(key, section.get(key));
+        }
+    }
+
+    public String getString(String key) {
+        return String.valueOf(data.get(key));
+    }
+
+    public double getDouble(String key) {
+        return Double.parseDouble((String) data.get(key));
+    }
+
+    public double getInt(String key) {
+        return Integer.parseInt((String) data.get(key));
+    }
+
+    public List<Object> getList(String key) {
+        return Arrays.asList(data.get(key));
+    }
+
+    public List<String> getListString(String key) {
+        return Arrays.asList(getList(key).toArray(new String[0]));
+    }
+
+    public Object getCustom(String path) {
+        return section.get(path);
+    }
+
+    public String getCustomString(String path) {
+        return section.getString(path);
+    }
+
+    public double getCustomDouble(String path) {
+        return section.getDouble(path);
+    }
+
+    public int getCustomInt(String path) {
+        return section.getInt(path);
+    }
+
+}
