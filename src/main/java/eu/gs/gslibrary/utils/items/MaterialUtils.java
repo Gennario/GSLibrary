@@ -1,4 +1,4 @@
-package eu.gs.gslibrary.utils;
+package eu.gs.gslibrary.utils.items;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;

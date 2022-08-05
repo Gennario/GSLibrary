@@ -1,4 +1,4 @@
-package eu.gs.gslibrary.utils;
+package eu.gs.gslibrary.utils.reflect;
 
 
 import org.bukkit.Bukkit;

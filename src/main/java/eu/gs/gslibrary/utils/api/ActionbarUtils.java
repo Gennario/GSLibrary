@@ -1,13 +1,13 @@
 package eu.gs.gslibrary.utils.api;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import com.cryptomorin.xseries.ReflectionUtils;
 import eu.gs.gslibrary.utils.Utils;
 import lombok.experimental.UtilityClass;
 import org.bukkit.entity.Player;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 @UtilityClass
 public class ActionbarUtils {
@@ -25,13 +25,12 @@ public class ActionbarUtils {
         }
     }
 
-    public static void sendActionbar(Player p, String message)
-    {
+    public static void sendActionbar(Player player, String message) {
         try {
-            Object icbc   = a.invoke(null, "{\"text\":\"" + Utils.colorize(null, message) + "\"}");
+            Object icbc = a.invoke(null, "{\"text\":\"" + Utils.colorize(null, message) + "\"}");
             Object packet = constructor.newInstance(icbc, (byte) 2);
 
-            ReflectionUtils.sendPacket(p, packet);
+            ReflectionUtils.sendPacket(player, packet);
 
         } catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException e) {
             e.printStackTrace();

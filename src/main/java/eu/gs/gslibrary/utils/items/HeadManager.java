@@ -1,4 +1,4 @@
-package eu.gs.gslibrary.utils;
+package eu.gs.gslibrary.utils.items;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;

@@ -1,7 +1,7 @@
 package eu.gs.gslibrary.menu;
 
 import eu.gs.gslibrary.menu.event.GUIItemResponse;
-import eu.gs.gslibrary.utils.HeadManager;
+import eu.gs.gslibrary.utils.items.HeadManager;
 import eu.gs.gslibrary.utils.Pair;
 import eu.gs.gslibrary.utils.replacement.Replacement;
 import eu.gs.gslibrary.utils.Utils;

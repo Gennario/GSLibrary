@@ -1,8 +1,9 @@
-package eu.gs.gslibrary.utils;
+package eu.gs.gslibrary.utils.items;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import eu.gs.gslibrary.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;

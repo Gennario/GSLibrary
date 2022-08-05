@@ -1,6 +1,6 @@
 package eu.gs.gslibrary.menu.utils;
 
-import eu.gs.gslibrary.utils.ReflectClass;
+import eu.gs.gslibrary.utils.reflect.ReflectClass;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
