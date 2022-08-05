@@ -2,6 +2,7 @@ package eu.gs.gslibrary;
 
 import eu.gs.gslibrary.menu.GUI;
 import eu.gs.gslibrary.utils.actions.ActionsAPI;
+import eu.gs.gslibrary.utils.config.Config;
 import eu.gs.gslibrary.utils.cooldowns.CooldownAPI;
 import eu.gs.gslibrary.utils.cooldowns.CooldownTask;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import lombok.Setter;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
