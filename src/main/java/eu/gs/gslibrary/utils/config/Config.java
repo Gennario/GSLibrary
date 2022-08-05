@@ -24,19 +24,25 @@ public class Config {
     private YamlDocument yamlDocument;
     private InputStream resource;
 
+    private UpdaterSettings.Builder updaterSettings;
+    private LoaderSettings.Builder loaderSettings;
+
     public Config(JavaPlugin plugin, String path, String name, InputStream resource) {
         this.plugin = plugin;
         this.path = path;
         this.name = name;
         this.resource = resource;
+
+        this.loaderSettings = LoaderSettings.builder().setAutoUpdate(true);
+        this.updaterSettings = UpdaterSettings.builder().setVersioning(new BasicVersioning("config-version"));
     }
 
     public void load() throws IOException {
         yamlDocument = YamlDocument.create(new File(plugin.getDataFolder(), path+"/"+name+".yml"), resource,
                 GeneralSettings.DEFAULT,
-                LoaderSettings.builder().setAutoUpdate(true).build(),
+                loaderSettings.build(),
                 DumperSettings.DEFAULT,
-                UpdaterSettings.builder().setVersioning(new BasicVersioning("config-version")).build());
+                updaterSettings.build());
     }
 
 }
