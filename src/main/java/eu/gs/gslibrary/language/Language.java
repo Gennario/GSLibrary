@@ -1,19 +1,30 @@
 package eu.gs.gslibrary.language;
 
-import dev.dejvokep.boostedyaml.YamlDocument;
-import org.bukkit.configuration.file.YamlConfiguration;
+import eu.gs.gslibrary.utils.config.Config;
+import lombok.Getter;
+import lombok.Setter;
+import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
+
+@Getter
+@Setter
 public class Language {
 
-    private final LanguageAPI languageAPI;
+    private final JavaPlugin plugin;
 
     private String name;
-    private YamlConfiguration configuration;
+    private Config config;
 
-    public Language(LanguageAPI languageAPI, String name) {
-        this.languageAPI = languageAPI;
+    public Language(JavaPlugin plugin, String name) {
+        this.plugin = plugin;
+        this.name = name;
 
-        //YamlDocument config = YamlDocument.create(new File(getDataFolder(), "config.yml"), getResource("config.yml"));
+        config = new Config(plugin, "languages", name, plugin.getResource("languages/"+name+".yml"));
+        try {
+            config.load();
+        } catch (IOException e) {
+        }
     }
 
 }
