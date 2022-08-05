@@ -7,6 +7,7 @@ import eu.gs.gslibrary.utils.api.TitleUtils;
 import eu.gs.gslibrary.utils.replacement.Replacement;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -53,7 +54,7 @@ public class ActionsAPI {
         addAction("actionbar-all", (player, identifier, data, replacement) -> {
             if (data.isExist("value")) {
                 for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                    ActionbarUtils.sendActionbar(player, replacement.replace(player, data.getString("value")));
+                    ActionbarUtils.sendActionbar(onlinePlayer, replacement.replace(player, data.getString("value")));
                 }
             }
         });
@@ -78,14 +79,20 @@ public class ActionsAPI {
         addAction("sound", ((player, identifier, data, replacement1) -> {
             if (data.isExist("value")) {
                 String[] split = replacement.replace(player, data.getString("value")).split(";");
-                player.playSound(player.getLocation(), XSound.valueOf(split[0].toUpperCase()).parseSound(), Float.parseFloat(split[1]), Float.parseFloat(split[2]));
+                Sound sound = XSound.valueOf(split[0].toUpperCase()).parseSound();
+                if (sound != null) {
+                    player.playSound(player.getLocation(), sound, Float.parseFloat(split[1]), Float.parseFloat(split[2]));
+                }
             }
         }));
         addAction("sound-all", ((player, identifier, data, replacement1) -> {
             if (data.isExist("value")) {
                 String[] split = replacement.replace(player, data.getString("value")).split(";");
-                for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                    onlinePlayer.playSound(onlinePlayer.getLocation(), XSound.valueOf(split[0].toUpperCase()).parseSound(), Float.parseFloat(split[1]), Float.parseFloat(split[2]));
+                Sound sound = XSound.valueOf(split[0].toUpperCase()).parseSound();
+                if (sound != null) {
+                    for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                        onlinePlayer.playSound(onlinePlayer.getLocation(), sound, Float.parseFloat(split[1]), Float.parseFloat(split[2]));
+                    }
                 }
             }
         }));
@@ -129,6 +136,12 @@ public class ActionsAPI {
         /* Fly action */
         addAction("fly", (player, identifier, data, replacement1) -> {
             player.setAllowFlight(!player.getAllowFlight());
+        });
+        addAction("fly-enabled", (player, identifier, data, replacement1) -> {
+            player.setAllowFlight(true);
+        });
+        addAction("fly-disabled", (player, identifier, data, replacement1) -> {
+            player.setAllowFlight(false);
         });
         addAction("fly-all", (player, identifier, data, replacement1) -> {
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
