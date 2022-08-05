@@ -23,7 +23,6 @@ public final class MaterialUtils {
         return material;
     }
 
-    private String specialKey = "%%__USER__%%---%%__RESOURCE__%%---%%__NONCE__%%";
     public static ItemStack getAllVersionStack(String oldName, String newName, int data) {
         Material material = null;
         try {

@@ -41,7 +41,7 @@ public class ActionsAPI {
         });
 
         /* Close inventory action */
-        addAction("close-inventory", (player, identifier, data, replacement) -> {
+        addAction("close-inv", (player, identifier, data, replacement) -> {
             player.closeInventory();
         });
 
@@ -54,7 +54,7 @@ public class ActionsAPI {
         addAction("actionbar-all", (player, identifier, data, replacement) -> {
             if (data.isExist("value")) {
                 for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                    ActionbarUtils.sendActionbar(onlinePlayer, replacement.replace(player, data.getString("value")));
+                    ActionbarUtils.sendActionbar(onlinePlayer, replacement.replace(onlinePlayer, data.getString("value")));
                 }
             }
         });
@@ -128,7 +128,7 @@ public class ActionsAPI {
         addAction("gamemode-all", ((player, identifier, data, replacement1) -> {
             if (data.isExist("value")) {
                 for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                    onlinePlayer.setGameMode(GameMode.valueOf(replacement.replace(player, data.getString("value")).toUpperCase()));
+                    onlinePlayer.setGameMode(GameMode.valueOf(replacement.replace(onlinePlayer, data.getString("value")).toUpperCase()));
                 }
             }
         }));
