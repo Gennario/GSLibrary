@@ -170,7 +170,7 @@ public class LanguageAPI {
         if(exist(name)) return;
         Language language = new Language(instance, name);
         languages.put(name, language);
-        System.out.println("Loaded language "+name+" for plugin "+instance.getDescription().getName());
+        System.out.println("Added language "+name+" for plugin "+instance.getDescription().getName());
     }
 
     public boolean exist(String name) {
