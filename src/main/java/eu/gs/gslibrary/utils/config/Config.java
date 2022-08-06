@@ -19,7 +19,8 @@ import java.io.InputStream;
 public class Config {
 
     private final JavaPlugin plugin;
-    private final String path, name;
+    private String path, name;
+    private boolean update;
 
     private YamlDocument yamlDocument;
     private InputStream resource;
@@ -37,8 +38,45 @@ public class Config {
         this.updaterSettings = UpdaterSettings.builder().setVersioning(new BasicVersioning("config-version"));
     }
 
+    public Config(JavaPlugin plugin, String path, String name) {
+        this.plugin = plugin;
+        this.path = path;
+        this.name = name;
+        this.resource = resource;
+
+        this.loaderSettings = LoaderSettings.builder().setAutoUpdate(true);
+        this.updaterSettings = UpdaterSettings.builder().setVersioning(new BasicVersioning("config-version"));
+    }
+
+    public Config(JavaPlugin plugin, String path, String name, boolean updater) {
+        this.plugin = plugin;
+        this.path = path;
+        this.name = name;
+        this.resource = resource;
+        this.update = updater;
+
+        this.loaderSettings = LoaderSettings.builder().setAutoUpdate(true);
+        this.updaterSettings = UpdaterSettings.builder().setVersioning(new BasicVersioning("config-version"));
+    }
+
+    public Config(JavaPlugin plugin, String path) {
+        this.plugin = plugin;
+        this.path = path;
+        this.resource = resource;
+
+        this.loaderSettings = LoaderSettings.builder().setAutoUpdate(true);
+        this.updaterSettings = UpdaterSettings.builder().setVersioning(new BasicVersioning("config-version"));
+    }
+
     public void load() throws IOException {
-        yamlDocument = YamlDocument.create(new File(plugin.getDataFolder(), path+"/"+name+".yml"), resource,
+        if(!update) updaterSettings = UpdaterSettings.builder();
+        String path;
+        if(this.name == null) {
+            path = this.path;
+        }else {
+            path = this.path+"/"+name+".yml";
+        }
+        yamlDocument = YamlDocument.create(new File(plugin.getDataFolder(), path), resource,
                 GeneralSettings.DEFAULT,
                 loaderSettings.build(),
                 DumperSettings.DEFAULT,

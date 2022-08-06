@@ -44,7 +44,8 @@ public class StorageAPI {
     private void connect(String... columns) throws SQLException {
         if (type == StorageType.FILE) {
             String name = sectionFile.getString("name");
-            Config config = new Config(plugin, "", name, plugin.getResource(name + ".yml"));
+            Config config = new Config(plugin, "", name);
+            config.setUpdate(false);
             try {
                 config.load();
             } catch (IOException e) {
