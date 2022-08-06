@@ -137,14 +137,22 @@ public class LanguageAPI {
     public void setActiveLanguage(String name) {
         if(languages.containsKey(name)) {
             activeLanguage = languages.get(name);
+            if(activeLanguage == null) {
+                System.out.println("Hooked to language "+name+" for plugin "+instance.getDescription().getName()+ ". This language doesn't exist... Disabling plugin.");
+                instance.getPluginLoader().disablePlugin(instance);
+            }else {
+                System.out.println("Hooked to language "+name+" for plugin "+instance.getDescription().getName());
+            }
         }
     }
 
     public void setActiveLanguage(String name, String defaultName) {
         if(languages.containsKey(name)) {
             activeLanguage = languages.get(name);
+            System.out.println("Hooked to language "+name+" for plugin "+instance.getDescription().getName());
         }else {
             activeLanguage = languages.get(defaultName);
+            System.out.println("Tried to hook into the language "+name+" for plugin "+instance.getDescription().getName()+ ". This language doesn't exist... Replaced by "+defaultName+".");
         }
     }
 

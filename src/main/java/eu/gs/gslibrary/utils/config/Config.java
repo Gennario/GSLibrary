@@ -68,6 +68,40 @@ public class Config {
         this.updaterSettings = UpdaterSettings.builder().setVersioning(new BasicVersioning("config-version"));
     }
 
+    public Config setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public Config setUpdate(boolean update) {
+        this.update = update;
+        return this;
+    }
+
+    public Config setPath(String path) {
+        this.path = path;
+        return this;
+    }
+
+    public Config setLoaderSettings(LoaderSettings.Builder loaderSettings) {
+        this.loaderSettings = loaderSettings;
+        return this;
+    }
+
+    public Config setResource(InputStream resource) {
+        this.resource = resource;
+        return this;
+    }
+
+    public Config setUpdaterSettings(UpdaterSettings.Builder updaterSettings) {
+        this.updaterSettings = updaterSettings;
+        return this;
+    }
+
+    public void setYamlDocument(YamlDocument yamlDocument) {
+        this.yamlDocument = yamlDocument;
+    }
+
     public void load() throws IOException {
         if(!update) updaterSettings = UpdaterSettings.builder();
         String path;
