@@ -1,23 +1,19 @@
 package eu.gs.gslibrary.utils.updater;
 
-import com.sun.tools.sjavac.Main;
 import eu.gs.gslibrary.GSLibrary;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 @Getter
 @Setter
@@ -33,6 +29,7 @@ public class PluginUpdater {
     public PluginUpdater(int resourceId, JavaPlugin plugin) {
         this.resourceId = resourceId;
         this.plugin = plugin;
+        this.data = new HashMap<>();
 
         try {
             checkVersions();
