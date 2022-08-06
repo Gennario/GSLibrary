@@ -7,9 +7,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Scanner;
 
 @Getter
@@ -25,7 +29,11 @@ public class PluginUpdater {
         this.resourceId = resourceId;
         this.plugin = plugin;
 
-        checkVersions();
+        try {
+            checkVersions();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         if(sendMessage) sendLoadMessage();
     }
@@ -34,7 +42,7 @@ public class PluginUpdater {
         PluginDescriptionFile description = plugin.getDescription();
         pluginVersion = description.getVersion();
         System.out.println(ChatColor.WHITE+"Loading plugin "+ChatColor.GREEN+description.getName()+ChatColor.WHITE+" v."+ChatColor.GREEN+description.getVersion());
-        System.out.println(ChatColor.DARK_GREEN+"---------------------------------------------------------------");
+        System.out.println(ChatColor.DARK_GREEN+""+ChatColor.STRIKETHROUGH+"                                                                          ");
         System.out.println("");
         System.out.println(ChatColor.WHITE+"This plugin is running on "+ChatColor.GREEN+description.getVersion()+ChatColor.WHITE+"...");
         if(sitesVersion != null) System.out.println(ChatColor.WHITE+"Current plugin version on polymart is "+ChatColor.GREEN+sitesVersion+ChatColor.WHITE+"...");
@@ -51,18 +59,13 @@ public class PluginUpdater {
         System.out.println(ChatColor.WHITE+" Plugin soft-dependencies: "+ChatColor.GREEN+description.getSoftDepend());
         System.out.println("");
         System.out.println(ChatColor.WHITE+"Thanks for selecting "+ChatColor.GREEN+"Gennario's Studios"+ChatColor.WHITE+" development team.");
-        System.out.println(ChatColor.DARK_GREEN+"---------------------------------------------------------------");
+        System.out.println(ChatColor.DARK_GREEN+""+ChatColor.STRIKETHROUGH+"                                                                          ");
     }
 
-    public void checkVersions() {
+    public void checkVersions() throws IOException {
         if(resourceId == 0) return;
-        Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
-            try (InputStream inputStream = new URL("https://api.polymart.org/v1/getResourceInfoSimple/?resource_id="+this.resourceId+"&key=version").openStream(); Scanner scanner = new Scanner(inputStream)) {
-                sitesVersion = scanner.next();
-            } catch (IOException exception) {
-                plugin.getLogger().info("Unable to check for updates: " + exception.getMessage());
-            }
-        });
+        URLConnection con = new URL("https://api.polymart.org/v1/getResourceInfoSimple/?resource_id="+this.resourceId+"&key=version").openConnection();
+        this.sitesVersion = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
     }
 
 
