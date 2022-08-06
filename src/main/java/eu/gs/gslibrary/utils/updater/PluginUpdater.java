@@ -41,8 +41,9 @@ public class PluginUpdater {
     public void sendLoadMessage() {
         PluginDescriptionFile description = plugin.getDescription();
         pluginVersion = description.getVersion();
+        System.out.println(ChatColor.GRAY+""+ChatColor.STRIKETHROUGH+"                                                                          ");
         System.out.println(ChatColor.WHITE+"Loading plugin "+ChatColor.GREEN+description.getName()+ChatColor.WHITE+" v."+ChatColor.GREEN+description.getVersion());
-        System.out.println(ChatColor.DARK_GREEN+""+ChatColor.STRIKETHROUGH+"                                                                          ");
+        System.out.println(ChatColor.GRAY+""+ChatColor.STRIKETHROUGH+"                                                                          ");
         System.out.println("");
         System.out.println(ChatColor.WHITE+"This plugin is running on "+ChatColor.GREEN+description.getVersion()+ChatColor.WHITE+"...");
         if(sitesVersion != null) System.out.println(ChatColor.WHITE+"Current plugin version on polymart is "+ChatColor.GREEN+sitesVersion+ChatColor.WHITE+"...");
@@ -59,7 +60,7 @@ public class PluginUpdater {
         System.out.println(ChatColor.WHITE+" Plugin soft-dependencies: "+ChatColor.GREEN+description.getSoftDepend());
         System.out.println("");
         System.out.println(ChatColor.WHITE+"Thanks for selecting "+ChatColor.GREEN+"Gennario's Studios"+ChatColor.WHITE+" development team.");
-        System.out.println(ChatColor.DARK_GREEN+""+ChatColor.STRIKETHROUGH+"                                                                          ");
+        System.out.println(ChatColor.GRAY+""+ChatColor.STRIKETHROUGH+"                                                                          ");
     }
 
     public void checkVersions() throws IOException {
