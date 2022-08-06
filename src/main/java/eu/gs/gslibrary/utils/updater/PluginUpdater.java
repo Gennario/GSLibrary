@@ -58,9 +58,7 @@ public class PluginUpdater {
         if(resourceId == 0) return;
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
             try (InputStream inputStream = new URL("https://api.polymart.org/v1/getResourceInfoSimple/?resource_id="+this.resourceId+"&key=version").openStream(); Scanner scanner = new Scanner(inputStream)) {
-                if (scanner.hasNext()) {
-                    sitesVersion = scanner.next();
-                }
+                sitesVersion = scanner.next();
             } catch (IOException exception) {
                 plugin.getLogger().info("Unable to check for updates: " + exception.getMessage());
             }
