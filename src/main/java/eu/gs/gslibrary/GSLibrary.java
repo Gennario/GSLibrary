@@ -5,6 +5,7 @@ import eu.gs.gslibrary.utils.BungeeUtils;
 import eu.gs.gslibrary.utils.actions.ActionsAPI;
 import eu.gs.gslibrary.utils.cooldowns.CooldownAPI;
 import eu.gs.gslibrary.utils.cooldowns.CooldownTask;
+import eu.gs.gslibrary.utils.updater.PluginUpdater;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -24,6 +25,8 @@ public final class GSLibrary extends JavaPlugin {
 
     private ActionsAPI actionsAPI;
 
+    private Map<JavaPlugin, PluginUpdater> pluginLoaderMap;
+
     public static GSLibrary getInstance() {
         return instance;
     }
@@ -34,6 +37,7 @@ public final class GSLibrary extends JavaPlugin {
         BungeeUtils.init();
 
         guis = new HashMap<>();
+        pluginLoaderMap = new HashMap<>();
 
         cooldownAPI = new CooldownAPI();
         cooldownTask = new CooldownTask();

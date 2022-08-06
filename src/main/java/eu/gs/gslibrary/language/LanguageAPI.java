@@ -2,6 +2,7 @@ package eu.gs.gslibrary.language;
 
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import eu.gs.gslibrary.GSLibrary;
 import eu.gs.gslibrary.utils.Utils;
 import eu.gs.gslibrary.utils.replacement.Replacement;
 import jline.internal.Nullable;
@@ -141,7 +142,7 @@ public class LanguageAPI {
                 System.out.println("Hooked to language "+name+" for plugin "+instance.getDescription().getName()+ ". This language doesn't exist... Disabling plugin.");
                 instance.getPluginLoader().disablePlugin(instance);
             }else {
-                System.out.println("Hooked to language "+name+" for plugin "+instance.getDescription().getName());
+                GSLibrary.getInstance().getPluginLoaderMap().get(instance).getData().put("Hooked to language", name);
             }
         }
     }
@@ -149,10 +150,10 @@ public class LanguageAPI {
     public void setActiveLanguage(String name, String defaultName) {
         if(languages.containsKey(name)) {
             activeLanguage = languages.get(name);
-            System.out.println("Hooked to language "+name+" for plugin "+instance.getDescription().getName());
+            GSLibrary.getInstance().getPluginLoaderMap().get(instance).getData().put("Hooked to language", name);
         }else {
             activeLanguage = languages.get(defaultName);
-            System.out.println("Tried to hook into the language "+name+" for plugin "+instance.getDescription().getName()+ ". This language doesn't exist... Replaced by "+defaultName+".");
+            GSLibrary.getInstance().getPluginLoaderMap().get(instance).getData().put("Tried to hook into the language", name+" | Not exist, replaced by "+defaultName);
         }
     }
 
@@ -162,15 +163,15 @@ public class LanguageAPI {
             if(languages.containsKey(name)) continue;
             Language language = new Language(instance, name);
             languages.put(name, language);
-            System.out.println("Loaded language "+name+" for plugin "+instance.getDescription().getName());
         }
+        GSLibrary.getInstance().getPluginLoaderMap().get(instance).getData().put("Successfully loaded", languages.size()+" languages");
     }
 
     public void addLanguage(String name) {
         if(exist(name)) return;
         Language language = new Language(instance, name);
         languages.put(name, language);
-        System.out.println("Added language "+name+" for plugin "+instance.getDescription().getName());
+        GSLibrary.getInstance().getPluginLoaderMap().get(instance).getData().put("Added new language", name);
     }
 
     public boolean exist(String name) {
