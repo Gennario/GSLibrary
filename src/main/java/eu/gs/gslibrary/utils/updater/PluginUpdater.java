@@ -43,33 +43,34 @@ public class PluginUpdater {
     public void sendLoadMessage() {
         PluginDescriptionFile description = plugin.getDescription();
         pluginVersion = description.getVersion();
-        System.out.println(ChatColor.GRAY+""+ChatColor.STRIKETHROUGH+"                                                                          ");
-        System.out.println(ChatColor.WHITE+"Loading plugin "+ChatColor.GREEN+description.getName()+ChatColor.WHITE+" v."+ChatColor.GREEN+description.getVersion());
-        System.out.println(ChatColor.GRAY+""+ChatColor.STRIKETHROUGH+"                                                                          ");
+        System.out.println(ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + "                                                                          ");
+        System.out.println(ChatColor.WHITE + "Loading plugin " + ChatColor.GREEN + description.getName() + ChatColor.WHITE + " v." + ChatColor.GREEN + description.getVersion());
+        System.out.println(ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + "                                                                          ");
         System.out.println("");
         for (String key : data.keySet()) {
-            System.out.println(ChatColor.WHITE+" "+key+": "+ChatColor.GREEN+data.get(key));
+            System.out.println(ChatColor.WHITE + " " + key + ": " + ChatColor.GREEN + data.get(key));
         }
         System.out.println("");
-        System.out.println(ChatColor.WHITE+"This plugin is running on "+ChatColor.GREEN+description.getVersion()+ChatColor.WHITE+"...");
-        if(sitesVersion != null) System.out.println(ChatColor.WHITE+"Current plugin version on polymart is "+ChatColor.GREEN+sitesVersion+ChatColor.WHITE+"...");
-        if(sitesVersion != null) {
-            if(pluginVersion == sitesVersion) {
-                System.out.println(ChatColor.DARK_GREEN+"So your plugin is on the latest version...");
-            }else {
-                System.out.println(ChatColor.DARK_GREEN+"So your plugin is outdated. Please update the plugin...");
+        System.out.println(ChatColor.WHITE + "This plugin is running on " + ChatColor.GREEN + description.getVersion() + ChatColor.WHITE + "...");
+        if (sitesVersion != null)
+            System.out.println(ChatColor.WHITE + "Current plugin version on polymart is " + ChatColor.GREEN + sitesVersion + ChatColor.WHITE + "...");
+        if (sitesVersion != null) {
+            if (pluginVersion == sitesVersion) {
+                System.out.println(ChatColor.DARK_GREEN + "So your plugin is on the latest version...");
+            } else {
+                System.out.println(ChatColor.DARK_GREEN + "So your plugin is outdated. Please update the plugin...");
             }
         }
         System.out.println("");
-        System.out.println(ChatColor.WHITE+" Plugin author: "+ChatColor.YELLOW+description.getAuthors());
+        System.out.println(ChatColor.WHITE + " Plugin author: " + ChatColor.YELLOW + description.getAuthors());
         System.out.println("");
-        System.out.println(ChatColor.WHITE+"Thanks for selecting "+ChatColor.GREEN+"Gennario's Studios"+ChatColor.WHITE+" development team.");
-        System.out.println(ChatColor.GRAY+""+ChatColor.STRIKETHROUGH+"                                                                          ");
+        System.out.println(ChatColor.WHITE + "Thanks for selecting " + ChatColor.GREEN + "Gennario's Studios" + ChatColor.WHITE + " development team.");
+        System.out.println(ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + "                                                                          ");
     }
 
     public void checkVersions() throws IOException {
-        if(resourceId == 0) return;
-        URLConnection con = new URL("https://api.polymart.org/v1/getResourceInfoSimple/?resource_id="+this.resourceId+"&key=version").openConnection();
+        if (resourceId == 0) return;
+        URLConnection con = new URL("https://api.polymart.org/v1/getResourceInfoSimple/?resource_id=" + this.resourceId + "&key=version").openConnection();
         this.sitesVersion = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
     }
 
