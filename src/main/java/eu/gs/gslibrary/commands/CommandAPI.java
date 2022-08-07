@@ -97,13 +97,19 @@ public class CommandAPI {
                                 if(!sender.hasPermission(command.getPermission())) return false;
                             }
                             List<CommandArg> commandArgs = new ArrayList<>();
+                            int c = 0;
                             for (String arg : args) {
+                                if(c == 0) {
+                                    c++;
+                                    continue;
+                                }
                                 commandArgs.add(new CommandArg(this, arg));
+                                c++;
                             }
                             int i = 0;
                             int required = 0;
                             for (SubCommandArg commandArg : command.getSubCommandArgs()) {
-                                if(i+1 > commandArgs.size()) {
+                                if(i > commandArgs.size()) {
                                     usageMessage(sender, command);
                                     return false;
                                 }

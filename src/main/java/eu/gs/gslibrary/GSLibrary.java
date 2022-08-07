@@ -46,21 +46,6 @@ public final class GSLibrary extends JavaPlugin {
         cooldownTask.runTaskTimerAsynchronously(this, 0, 20);
 
         actionsAPI = new ActionsAPI();
-
-        CommandAPI cmd = new CommandAPI(this, "optimal")
-                .addAlias("optimalos")
-                .setHelp(false)
-                .setEmptyCommandResponse((sender, label, commandArgs) -> {
-                    sender.sendMessage("ahoj");
-                });
-        cmd.addCommand("smrdi")
-                .setAliases("nebo")
-                .setPermission("test.test")
-                .setUsage("smrdi <player>")
-                .setSubCommandArgs(new SubCommandArg("player", SubCommandArg.CommandArgType.REQUIRED, SubCommandArg.CommandArgValue.PLAYER))
-                .setResponse((sender, label, commandArgs) -> {
-                    sender.sendMessage("You have selected player "+ commandArgs[0].getAsPlayer());
-                });
     }
 
     @Override
