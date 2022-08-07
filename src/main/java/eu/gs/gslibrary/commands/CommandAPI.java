@@ -111,40 +111,41 @@ public class CommandAPI {
                             for (SubCommandArg commandArg : command.getSubCommandArgs()) {
                                 if (i + 1 > commandArgs.size()) {
                                     break;
-                                }
-                                if (commandArg.getType().equals(SubCommandArg.CommandArgType.REQUIRED)) {
-                                    required++;
-                                }
-                                boolean correctType = true;
-                                switch (commandArg.getValue()) {
-                                    case INT:
-                                        if (!commandArgs.get(i).isInt()) correctType = false;
-                                        break;
-                                    case LONG:
-                                        if (!commandArgs.get(i).isLong()) correctType = false;
-                                        break;
-                                    case FLOAT:
-                                        if (!commandArgs.get(i).isFloat()) correctType = false;
-                                        break;
-                                    case DOUBLE:
-                                        if (!commandArgs.get(i).isDouble()) correctType = false;
-                                        break;
-                                    case ENTITY:
-                                        if (!commandArgs.get(i).isEntity()) correctType = false;
-                                        break;
-                                    case PLAYER:
-                                        if (!commandArgs.get(i).isPlayer()) correctType = false;
-                                        break;
-                                    case MATERIAL:
-                                        if (!commandArgs.get(i).isMaterial()) correctType = false;
-                                        break;
-                                }
-                                if (!correctType) {
-                                    invalidValueMessage(sender, commandArg);
-                                    return false;
-                                }
+                                }else {
+                                    if (commandArg.getType().equals(SubCommandArg.CommandArgType.REQUIRED)) {
+                                        required++;
+                                    }
+                                    boolean correctType = true;
+                                    switch (commandArg.getValue()) {
+                                        case INT:
+                                            if (!commandArgs.get(i).isInt()) correctType = false;
+                                            break;
+                                        case LONG:
+                                            if (!commandArgs.get(i).isLong()) correctType = false;
+                                            break;
+                                        case FLOAT:
+                                            if (!commandArgs.get(i).isFloat()) correctType = false;
+                                            break;
+                                        case DOUBLE:
+                                            if (!commandArgs.get(i).isDouble()) correctType = false;
+                                            break;
+                                        case ENTITY:
+                                            if (!commandArgs.get(i).isEntity()) correctType = false;
+                                            break;
+                                        case PLAYER:
+                                            if (!commandArgs.get(i).isPlayer()) correctType = false;
+                                            break;
+                                        case MATERIAL:
+                                            if (!commandArgs.get(i).isMaterial()) correctType = false;
+                                            break;
+                                    }
+                                    if (!correctType) {
+                                        invalidValueMessage(sender, commandArg);
+                                        return false;
+                                    }
 
-                                i++;
+                                    i++;
+                                }
                             }
 
                             if(required < commandArgs.size() || commandArgs.size() > command.getSubCommandArgs().size()) {
