@@ -51,13 +51,13 @@ public class PluginUpdater {
             System.out.println(ChatColor.WHITE+" "+key+": "+ChatColor.GREEN+data.get(key));
         }
         System.out.println("");
-        System.out.println(ChatColor.WHITE+"This plugin is running on "+ChatColor.GREEN+description.getVersion()+ChatColor.WHITE+"...");
-        if(sitesVersion != null) System.out.println(ChatColor.WHITE+"Current plugin version on polymart is "+ChatColor.GREEN+sitesVersion+ChatColor.WHITE+"...");
+        System.out.println(ChatColor.WHITE+" This plugin is running on "+ChatColor.GREEN+description.getVersion()+ChatColor.WHITE+"...");
+        if(sitesVersion != null) System.out.println(ChatColor.WHITE+" Current plugin version on polymart is "+ChatColor.GREEN+sitesVersion+ChatColor.WHITE+"...");
         if(sitesVersion != null) {
             if(pluginVersion == sitesVersion) {
-                System.out.println(ChatColor.DARK_GREEN+"So your plugin is on the latest version...");
+                System.out.println(ChatColor.DARK_GREEN+" So your plugin is on the latest version...");
             }else {
-                System.out.println(ChatColor.DARK_GREEN+"So your plugin is outdated. Please update the plugin...");
+                System.out.println(ChatColor.DARK_GREEN+" So your plugin is outdated. Please update the plugin...");
             }
         }
         System.out.println("");

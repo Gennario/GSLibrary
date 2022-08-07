@@ -1,6 +1,6 @@
 package eu.gs.gslibrary.menu;
 
-import eu.gs.gslibrary.utils.Action;
+import eu.gs.gslibrary.GSLibrary;
 import eu.gs.gslibrary.utils.Pair;
 import eu.gs.gslibrary.utils.replacement.Replacement;
 import org.bukkit.Material;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class GUIConfigUtils {
-
+/*/
     public static void loadGuiDataFromConfig(GUI gui, YamlConfiguration configuration) {
         if (configuration.contains("update-time")) gui.setUpdateTime(configuration.getInt("update-time"));
         if (configuration.contains("title"))
@@ -32,8 +32,8 @@ public final class GUIConfigUtils {
         }
         if (configuration.contains("open-actions")) {
             gui.setOpenResponse((player, event) -> {
-                for (String s : configuration.getStringList("open-actions")) {
-                    Action.run(s, player, 0);
+                for (String s : configuration.getConfigurationSection("open-actions").getKeys(false)) {
+                    GSLibrary.getInstance().getActionsAPI().useAction(player, );
                 }
             });
         }
@@ -126,5 +126,5 @@ public final class GUIConfigUtils {
 
         return guiItem;
     }
-
+/*/
 }
