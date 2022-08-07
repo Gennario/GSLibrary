@@ -2,6 +2,7 @@ package eu.gs.gslibrary.utils.actions;
 
 import com.cryptomorin.xseries.XPotion;
 import com.cryptomorin.xseries.XSound;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
 import eu.gs.gslibrary.utils.api.ActionbarUtils;
 import eu.gs.gslibrary.utils.api.TitleUtils;
 import eu.gs.gslibrary.utils.replacement.Replacement;
@@ -154,8 +155,8 @@ public class ActionsAPI {
         actions.put(identifier, response);
     }
 
-    public void useAction(Player player, ConfigurationSection... actionConfigurations) {
-        for (ConfigurationSection section : actionConfigurations) {
+    public void useAction(Player player, Section... actionConfigurations) {
+        for (Section section : actionConfigurations) {
             String type = section.getString("type");
             if (actions.containsKey(type)) {
                 System.out.println("Action " + type + " doesn't exist! Please try something else...");

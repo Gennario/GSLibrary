@@ -7,8 +7,8 @@ import org.bukkit.entity.Player;
 
 public class CommandArg {
 
-    private CommandAPI api;
-    private String arg;
+    private final CommandAPI api;
+    private final String arg;
 
     public CommandArg(CommandAPI api, String arg) {
         this.arg = arg;
@@ -19,7 +19,8 @@ public class CommandArg {
         try {
             int i = Integer.parseInt(arg);
             return true;
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return false;
     }
 
@@ -27,7 +28,8 @@ public class CommandArg {
         try {
             double i = Double.parseDouble(arg);
             return true;
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return false;
     }
 
@@ -35,7 +37,8 @@ public class CommandArg {
         try {
             float i = Float.parseFloat(arg);
             return true;
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return false;
     }
 
@@ -43,25 +46,25 @@ public class CommandArg {
         try {
             long i = Long.parseLong(arg);
             return true;
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return false;
     }
 
     public boolean isPlayer() {
-        if(Bukkit.getPlayer(arg) != null) return true;
-        return false;
+        return Bukkit.getPlayer(arg) != null;
     }
 
     public boolean isEntity() {
-        if(EntityType.fromName(arg.toUpperCase()) != null) return true;
-        return false;
+        return EntityType.fromName(arg.toUpperCase()) != null;
     }
 
     public boolean isMaterial() {
         try {
             XMaterial.matchXMaterial(arg.toUpperCase()).get();
             return true;
-        }catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return false;
     }
 

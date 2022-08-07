@@ -1,7 +1,7 @@
 package eu.gs.gslibrary.menu;
 
-import eu.gs.gslibrary.utils.replacement.Replacement;
 import eu.gs.gslibrary.utils.Utils;
+import eu.gs.gslibrary.utils.replacement.Replacement;
 import jline.internal.Nullable;
 import lombok.Getter;
 import lombok.Setter;

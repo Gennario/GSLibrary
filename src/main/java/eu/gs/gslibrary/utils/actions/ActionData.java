@@ -1,5 +1,6 @@
 package eu.gs.gslibrary.utils.actions;
 
+import dev.dejvokep.boostedyaml.block.implementation.Section;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.configuration.ConfigurationSection;
@@ -14,13 +15,13 @@ import java.util.Map;
 public class ActionData {
 
     private Map<String, Object> data;
-    private ConfigurationSection section;
+    private Section section;
 
-    public ActionData(ConfigurationSection section) {
+    public ActionData(Section section) {
         data = new HashMap<>();
         this.section = section;
 
-        for (String key : section.getKeys(false)) {
+        for (String key : section.getRoutesAsStrings(false)) {
             data.put(key, section.get(key));
         }
     }

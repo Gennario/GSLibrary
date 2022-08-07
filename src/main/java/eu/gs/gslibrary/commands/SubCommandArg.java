@@ -7,6 +7,14 @@ import lombok.Setter;
 @Setter
 public class SubCommandArg {
 
+    private String name;
+    private CommandArgType type;
+    private CommandArgValue value;
+    public SubCommandArg(String name, CommandArgType type, CommandArgValue value) {
+        this.name = name;
+        this.type = type;
+        this.value = value;
+    }
     public enum CommandArgType {
         OPTIONAL,
         REQUIRED
@@ -21,16 +29,6 @@ public class SubCommandArg {
         PLAYER,
         ENTITY,
         MATERIAL
-    }
-
-    private String name;
-    private CommandArgType type;
-    private CommandArgValue value;
-
-    public SubCommandArg(String name, CommandArgType type, CommandArgValue value) {
-        this.name = name;
-        this.type = type;
-        this.value = value;
     }
 
 }

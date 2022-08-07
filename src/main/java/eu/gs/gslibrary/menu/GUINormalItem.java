@@ -1,10 +1,10 @@
 package eu.gs.gslibrary.menu;
 
 import eu.gs.gslibrary.menu.event.GUIItemResponse;
-import eu.gs.gslibrary.utils.items.HeadManager;
 import eu.gs.gslibrary.utils.Pair;
-import eu.gs.gslibrary.utils.replacement.Replacement;
 import eu.gs.gslibrary.utils.Utils;
+import eu.gs.gslibrary.utils.items.HeadManager;
+import eu.gs.gslibrary.utils.replacement.Replacement;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;

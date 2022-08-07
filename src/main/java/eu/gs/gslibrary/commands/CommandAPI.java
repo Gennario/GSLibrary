@@ -27,7 +27,7 @@ public class CommandAPI {
     private boolean help;
     private CommandResponse emptyCommandResponse;
 
-    private List<SubCommand> subCommands;
+    private final List<SubCommand> subCommands;
 
     public CommandAPI(JavaPlugin plugin, String name) {
         this.plugin = plugin;
@@ -83,23 +83,23 @@ public class CommandAPI {
             constructor.setAccessible(true);
             PluginCommand pluginCommand = constructor.newInstance(name, GSLibrary.getInstance());
             pluginCommand.setExecutor((sender, cmd, label, args) -> {
-                if(args.length == 0) {
-                    if(help) {
+                if (args.length == 0) {
+                    if (help) {
 
-                    }else if(emptyCommandResponse != null) {
+                    } else if (emptyCommandResponse != null) {
                         emptyCommandResponse.cmd(sender, label, null);
                     }
-                }else {
+                } else {
                     String s = args[0];
                     for (SubCommand command : subCommands) {
-                        if(command.getCommand().equalsIgnoreCase(s) || command.getAliases().contains(s.toLowerCase())) {
-                            if(command.getPermission() != null) {
-                                if(!sender.hasPermission(command.getPermission())) return false;
+                        if (command.getCommand().equalsIgnoreCase(s) || command.getAliases().contains(s.toLowerCase())) {
+                            if (command.getPermission() != null) {
+                                if (!sender.hasPermission(command.getPermission())) return false;
                             }
                             List<CommandArg> commandArgs = new ArrayList<>();
                             int c = 0;
                             for (String arg : args) {
-                                if(c == 0) {
+                                if (c == 0) {
                                     c++;
                                     continue;
                                 }
@@ -109,43 +109,47 @@ public class CommandAPI {
                             int i = 0;
                             int required = 0;
                             for (SubCommandArg commandArg : command.getSubCommandArgs()) {
-                                if(i+1 > commandArgs.size()) {
-                                    usageMessage(sender, command);
-                                    return false;
+                                if (i + 1 > commandArgs.size()) {
+                                    break;
                                 }
-                                if(commandArg.getType().equals(SubCommandArg.CommandArgType.REQUIRED)) {
+                                if (commandArg.getType().equals(SubCommandArg.CommandArgType.REQUIRED)) {
                                     required++;
                                 }
                                 boolean correctType = true;
                                 switch (commandArg.getValue()) {
                                     case INT:
-                                        if(!commandArgs.get(i).isInt()) correctType = false;
+                                        if (!commandArgs.get(i).isInt()) correctType = false;
                                         break;
                                     case LONG:
-                                        if(!commandArgs.get(i).isLong()) correctType = false;
+                                        if (!commandArgs.get(i).isLong()) correctType = false;
                                         break;
                                     case FLOAT:
-                                        if(!commandArgs.get(i).isFloat()) correctType = false;
+                                        if (!commandArgs.get(i).isFloat()) correctType = false;
                                         break;
                                     case DOUBLE:
-                                        if(!commandArgs.get(i).isDouble()) correctType = false;
+                                        if (!commandArgs.get(i).isDouble()) correctType = false;
                                         break;
                                     case ENTITY:
-                                        if(!commandArgs.get(i).isEntity()) correctType = false;
+                                        if (!commandArgs.get(i).isEntity()) correctType = false;
                                         break;
                                     case PLAYER:
-                                        if(!commandArgs.get(i).isPlayer()) correctType = false;
+                                        if (!commandArgs.get(i).isPlayer()) correctType = false;
                                         break;
                                     case MATERIAL:
-                                        if(!commandArgs.get(i).isMaterial()) correctType = false;
+                                        if (!commandArgs.get(i).isMaterial()) correctType = false;
                                         break;
                                 }
-                                if(!correctType) {
+                                if (!correctType) {
                                     invalidValueMessage(sender, commandArg);
                                     return false;
                                 }
 
                                 i++;
+                            }
+
+                            if(required < commandArgs.size() || commandArgs.size() > command.getSubCommandArgs().size()) {
+                                usageMessage(sender, command);
+                                return true;
                             }
 
                             command.getResponse().cmd(sender, label, commandArgs.toArray(new CommandArg[0]));
@@ -156,7 +160,7 @@ public class CommandAPI {
                 return false;
             });
             //pluginCommand.setTabCompleter(new GoldsTabCompleter());
-            if(description != null) pluginCommand.setDescription(description);
+            if (description != null) pluginCommand.setDescription(description);
             pluginCommand.setAliases(aliases);
             Field field = SimplePluginManager.class.getDeclaredField("commandMap");
             field.setAccessible(true);

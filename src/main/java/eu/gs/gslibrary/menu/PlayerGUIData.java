@@ -1,8 +1,8 @@
 package eu.gs.gslibrary.menu;
 
 import eu.gs.gslibrary.utils.methods.AsyncMethod;
-import eu.gs.gslibrary.utils.replacement.Replacement;
 import eu.gs.gslibrary.utils.methods.SyncMethod;
+import eu.gs.gslibrary.utils.replacement.Replacement;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
