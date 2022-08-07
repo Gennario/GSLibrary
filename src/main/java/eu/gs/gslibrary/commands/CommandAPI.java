@@ -109,7 +109,7 @@ public class CommandAPI {
                             int i = 0;
                             int required = 0;
                             for (SubCommandArg commandArg : command.getSubCommandArgs()) {
-                                if(i > commandArgs.size()) {
+                                if(i+1 > commandArgs.size()) {
                                     usageMessage(sender, command);
                                     return false;
                                 }
