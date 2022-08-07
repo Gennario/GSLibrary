@@ -20,7 +20,7 @@ public class Language {
         this.plugin = plugin;
         this.name = name;
 
-        config = new Config(plugin, "languages", name, plugin.getResource("languages/"+name+".yml"));
+        config = new Config(plugin, "languages", name, plugin.getResource("languages/" + name + ".yml"));
         try {
             config.load();
         } catch (IOException e) {

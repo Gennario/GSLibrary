@@ -1,19 +1,25 @@
 package eu.gs.gslibrary.storage;
 
-import java.sql.Connection;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.sql.SQLException;
 import java.sql.Statement;
 
+@Getter
+@Setter
 public class StorageTable {
 
-    private final String table;
-    private final Connection connection;
+    private final String table, condition;
+    private StorageAPI storageAPI;
     private StringBuilder stringBuilder;
 
-    public StorageTable(String table, Connection connection) {
+    public StorageTable(String table, String condition) {
         this.table = table;
-        this.connection = connection;
+        this.condition = condition;
         this.stringBuilder = null;
+
+        this.addColumnUnique(condition);
     }
 
     public StorageTable loadColumns(String condition, String... columns) {
@@ -64,11 +70,12 @@ public class StorageTable {
         return this;
     }
 
-    public void create() {
+    public void createMySqlTable() {
+        if (storageAPI.getStorageType() != StorageAPI.StorageType.MYSQL) return;
         stringBuilder.append(")");
 
         try {
-            Statement statement = connection.createStatement();
+            Statement statement = storageAPI.getConnection().createStatement();
             statement.execute("CREATE TABLE IF NOT EXISTS " + table + " " + stringBuilder + ";");
 
             statement.close();

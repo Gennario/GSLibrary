@@ -3,6 +3,7 @@ package eu.gs.gslibrary.storage;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import dev.dejvokep.boostedyaml.YamlDocument;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
 import eu.gs.gslibrary.utils.config.Config;
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
@@ -13,36 +14,44 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Getter
 public class StorageAPI {
+
+    private final Map<String, Storage> storageMap = new ConcurrentHashMap<>();
 
     private final HikariConfig config = new HikariConfig();
     private HikariDataSource dataSource;
 
     private final JavaPlugin plugin;
-    private final Storage storage;
-    private final StorageType type;
-    private final ConfigurationSection sectionMySql, sectionFile;
-    private final String condition;
+    private final StorageType storageType;
+    private final Section sectionMySql, sectionFile;
 
-    private YamlDocument yaml;
+    private YamlDocument yamlDocument;
     private Connection connection;
     private String table;
 
-    public StorageAPI(JavaPlugin plugin, StorageType type, ConfigurationSection sectionFile, ConfigurationSection sectionMySql, String condition, String... columns) throws SQLException {
+    public StorageAPI(JavaPlugin plugin, String type, Section sectionFile, Section sectionMySql, StorageTable... tables) throws SQLException {
         this.plugin = plugin;
-        this.type = type;
         this.sectionFile = sectionFile;
         this.sectionMySql = sectionMySql;
-        this.condition = condition;
-        this.storage = new Storage(this);
+        this.storageType = type == null ? StorageType.FILE : StorageType.valueOf(type.toUpperCase());
 
-        this.connect(columns);
+
+        this.connect();
+
+        /* Load all tables */
+        for (StorageTable storageTable : tables) {
+            storageTable.setStorageAPI(this);
+            storageMap.put(storageTable.getTable(), new Storage(storageTable.getTable(), storageTable.getCondition(), this));
+            storageTable.createMySqlTable();
+        }
     }
 
-    private void connect(String... columns) throws SQLException {
-        if (type == StorageType.FILE) {
+    private void connect() throws SQLException {
+        if (storageType == StorageType.FILE) {
             String name = sectionFile.getString("name");
             Config config = new Config(plugin, "", name);
             config.setUpdate(false);
@@ -52,14 +61,15 @@ public class StorageAPI {
                 e.printStackTrace();
             }
 
-            yaml = config.getYamlDocument();
+            yamlDocument = config.getYamlDocument();
             return;
         }
+
         if (isConnected()) return;
         if (sectionMySql == null) return;
 
         String host = sectionMySql.getString("host");
-        String username = sectionMySql.getString("username");
+        String username = sectionMySql.getString("user");
         String database = sectionMySql.getString("database");
         String password = sectionMySql.getString("password");
         int port = sectionMySql.getInt("port");
@@ -73,8 +83,6 @@ public class StorageAPI {
 
         dataSource = new HikariDataSource(config);
         connection = dataSource.getConnection();
-
-        new StorageTable(table, connection).loadColumns(condition, columns).create();
     }
 
     public void disconnect() {
@@ -85,14 +93,18 @@ public class StorageAPI {
         return connection != null;
     }
 
-    public void execute(Statement statement, String sql, Object... objects) throws SQLException {
+    public void execute(String table, Statement statement, String sql, Object... objects) throws SQLException {
         sql = sql.replace("{table}", table);
         statement.execute(String.format(sql, objects));
     }
 
-    public ResultSet query(Statement statement, String sql, Object... objects) throws SQLException {
+    public ResultSet query(String table, Statement statement, String sql, Object... objects) throws SQLException {
         sql = sql.replace("{table}", table);
         return statement.executeQuery(String.format(sql, objects));
+    }
+
+    public Storage getStorage(String table) {
+        return storageMap.get(table);
     }
 
     public enum StorageType {

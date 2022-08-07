@@ -176,7 +176,7 @@ public class LanguageAPI {
 
     public boolean exist(String name) {
         for (File f : file.listFiles()) {
-            if(f.getName().replace(".yml", "").equals(name)) return true;
+            if(f.getName().replace(".yml", "").equals("name")) return true;
         }
         if(languages.keySet().contains(name)) return true;
         return false;

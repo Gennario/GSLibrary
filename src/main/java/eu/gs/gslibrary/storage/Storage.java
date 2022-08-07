@@ -12,19 +12,23 @@ import java.util.*;
 
 public class Storage {
 
+    private final String table, condition;
     private final StorageAPI api;
-    private final YamlDocument yaml;
+    
+    private final YamlDocument yamlDocument;
+
+    private final StorageAPI.StorageType type;
 
     private final Connection connection;
-    private final StorageAPI.StorageType type;
-    private final String condition;
 
-    public Storage(StorageAPI storageAPI) {
+    public Storage(String table, String condition, StorageAPI storageAPI) {
+        this.table = table;
+        this.condition = condition;
         this.api = storageAPI;
-        this.yaml = storageAPI.getYaml();
+
+        this.yamlDocument = storageAPI.getYamlDocument();
         this.connection = storageAPI.getConnection();
-        this.type = storageAPI.getType();
-        this.condition = storageAPI.getCondition();
+        this.type = storageAPI.getStorageType();
     }
 
     public void insert(final String columns, final Object... parameters) {
@@ -33,11 +37,11 @@ public class Storage {
             int i = 1;
             for (Object parameter : parameters) {
                 if (parameters[0] == parameter) continue;
-                yaml.set(condition + "." + parameters[0] + "." + split[i], parameter);
+                yamlDocument.set(table + "." + parameters[0] + "." + split[i], parameter);
                 i++;
             }
 
-            try { yaml.save(); } catch (IOException e) { e.printStackTrace(); }
+            try { yamlDocument.save(); } catch (IOException e) { e.printStackTrace(); }
             return;
         }
 
@@ -56,7 +60,7 @@ public class Storage {
                 i++;
             }
 
-            api.execute(statement, "INSERT INTO {table}(%s) VALUES (%s);", columns, values.toString());
+            api.execute(table, statement, "INSERT INTO {table}(%s) VALUES (%s);", columns, values.toString());
 
             statement.close();
         } catch (SQLException e) {
@@ -70,12 +74,12 @@ public class Storage {
             int i = 1;
             for (Object parameter : parameters) {
                 if (parameters[0] == parameter) continue;
-                yaml.set(condition + "." + parameters[0] + "." + split[i], parameter);
+                yamlDocument.set(table + "." + parameters[0] + "." + split[i], parameter);
                 i++;
             }
 
             try {
-                yaml.save();
+                yamlDocument.save();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -101,7 +105,7 @@ public class Storage {
                 i++;
             }
 
-            api.execute(statement, "INSERT INTO {table}(%s) VALUES (%s) ON DUPLICATE KEY UPDATE %s;", columns, values.toString(), update.toString());
+            api.execute(table, statement, "INSERT INTO {table}(%s) VALUES (%s) ON DUPLICATE KEY UPDATE %s;", columns, values.toString(), update.toString());
 
             statement.close();
         } catch (SQLException e) {
@@ -113,9 +117,9 @@ public class Storage {
         if (!existsCondition(conditionValue)) return;
 
         if (type == StorageAPI.StorageType.FILE) {
-            yaml.set(condition + "." + conditionValue + "." + column, object);
+            yamlDocument.set(table + "." + conditionValue + "." + column, object);
             try {
-                yaml.save();
+                yamlDocument.save();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -124,7 +128,7 @@ public class Storage {
 
         try {
             Statement statement = connection.createStatement();
-            api.execute(statement, "UPDATE {table} SET " + column + "= '%s' WHERE " + condition + "= '%s';", object, conditionValue);
+            api.execute(table, statement, "UPDATE {table} SET " + column + "= '%s' WHERE " + condition + "= '%s';", object, conditionValue);
 
             statement.close();
         } catch (SQLException e) {
@@ -132,16 +136,16 @@ public class Storage {
         }
     }
 
-    public String getString(String conditionValue, String column) {
+    public String getString(String table, String conditionValue, String column) {
         if (!existsCondition(conditionValue)) return null;
 
         if (type == StorageAPI.StorageType.FILE) {
-            return yaml.getString(condition + "." + conditionValue + "." + column);
+            return yamlDocument.getString(table + "." + conditionValue + "." + column);
         }
 
         try {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = api.query(statement, "SELECT " + column + " FROM {table} WHERE " + condition + "='%s'", conditionValue);
+            ResultSet resultSet = api.query(table, statement, "SELECT " + column + " FROM {table} WHERE " + condition + "='%s'", conditionValue);
             if (resultSet.next()) {
                 return resultSet.getString(column);
             }
@@ -159,12 +163,12 @@ public class Storage {
         if (!existsCondition(conditionValue)) return 0;
 
         if (type == StorageAPI.StorageType.FILE) {
-            return yaml.getInt(condition + "." + conditionValue + "." + column);
+            return yamlDocument.getInt(table + "." + conditionValue + "." + column);
         }
 
         try {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = api.query(statement, "SELECT " + column + " FROM {table} WHERE " + condition + "='%s'", conditionValue);
+            ResultSet resultSet = api.query(table, statement, "SELECT " + column + " FROM {table} WHERE " + condition + "='%s'", conditionValue);
             if (resultSet.next()) {
                 return resultSet.getInt(column);
             }
@@ -182,12 +186,12 @@ public class Storage {
         if (!existsCondition(conditionValue)) return 0;
 
         if (type == StorageAPI.StorageType.FILE) {
-            return yaml.getDouble(condition + "." + conditionValue + "." + column);
+            return yamlDocument.getDouble(table + "." + conditionValue + "." + column);
         }
 
         try {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = api.query(statement, "SELECT " + column + " FROM {table} WHERE " + condition + "='%s'", conditionValue);
+            ResultSet resultSet = api.query(table, statement, "SELECT " + column + " FROM {table} WHERE " + condition + "='%s'", conditionValue);
             if (resultSet.next()) {
                 return resultSet.getDouble(column);
             }
@@ -205,12 +209,12 @@ public class Storage {
         if (!existsCondition(conditionValue)) return 0;
 
         if (type == StorageAPI.StorageType.FILE) {
-            return yaml.getFloat(condition + "." + conditionValue + "." + column);
+            return yamlDocument.getFloat(table + "." + conditionValue + "." + column);
         }
 
         try {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = api.query(statement, "SELECT " + column + " FROM {table} WHERE " + condition + "='%s'", conditionValue);
+            ResultSet resultSet = api.query(table, statement, "SELECT " + column + " FROM {table} WHERE " + condition + "='%s'", conditionValue);
             if (resultSet.next()) {
                 return resultSet.getFloat(column);
             }
@@ -228,12 +232,12 @@ public class Storage {
         if (!existsCondition(conditionValue)) return false;
 
         if (type == StorageAPI.StorageType.FILE) {
-            return yaml.getBoolean(condition + "." + conditionValue + "." + column);
+            return yamlDocument.getBoolean(table + "." + conditionValue + "." + column);
         }
 
         try {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = api.query(statement, "SELECT " + column + " FROM {table} WHERE " + condition + "='%s'", conditionValue);
+            ResultSet resultSet = api.query(table, statement, "SELECT " + column + " FROM {table} WHERE " + condition + "='%s'", conditionValue);
             if (resultSet.next()) {
                 return resultSet.getBoolean(column);
             }
@@ -251,12 +255,12 @@ public class Storage {
         if (!existsCondition(conditionValue)) return null;
 
         if (type == StorageAPI.StorageType.FILE) {
-            return yaml.get(condition + "." + conditionValue + "." + column);
+            return yamlDocument.get(table + "." + conditionValue + "." + column);
         }
 
         try {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = api.query(statement, "SELECT " + column + " FROM {table} WHERE " + condition + "='%s'", conditionValue);
+            ResultSet resultSet = api.query(table, statement, "SELECT " + column + " FROM {table} WHERE " + condition + "='%s'", conditionValue);
             if (resultSet.next()) {
                 return resultSet.getObject(column);
             }
@@ -275,7 +279,7 @@ public class Storage {
         List<String> conditionList = new ArrayList<>();
 
         if (type == StorageAPI.StorageType.FILE) {
-            Section section = yaml.getSection(condition);
+            Section section = yamlDocument.getSection(condition);
             if (section == null) return conditionList;
 
             for (Object key : section.getKeys()) {
@@ -307,14 +311,14 @@ public class Storage {
         if (!existsCondition(conditionValue)) return;
 
         if (type == StorageAPI.StorageType.FILE) {
-            yaml.remove(condition + "." + conditionValue);
-            try { yaml.save(); } catch (IOException e) { e.printStackTrace(); }
+            yamlDocument.remove(table + "." + conditionValue);
+            try { yamlDocument.save(); } catch (IOException e) { e.printStackTrace(); }
             return;
         }
 
         try {
             Statement statement = connection.createStatement();
-            api.execute(statement, "DELETE FROM {table} WHERE " + condition + "='%s';", conditionValue);
+            api.execute(table, statement, "DELETE FROM {table} WHERE " + condition + "='%s';", conditionValue);
 
             statement.close();
         } catch (SQLException e) {
@@ -324,12 +328,12 @@ public class Storage {
 
     public boolean existsCondition(String conditionValue) {
         if (type == StorageAPI.StorageType.FILE) {
-            return yaml.contains(condition + "." + conditionValue);
+            return yamlDocument.contains(table + "." + conditionValue);
         }
 
         try {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = api.query(statement, "SELECT * FROM {table} WHERE " + condition + "='%s'", conditionValue);
+            ResultSet resultSet = api.query(table, statement, "SELECT * FROM {table} WHERE " + condition + "='%s'", conditionValue);
 
             if (resultSet.next()) {
                 resultSet.close();
@@ -352,13 +356,13 @@ public class Storage {
 
         if (type == StorageAPI.StorageType.FILE) {
             HashMap<String, Integer> map = new HashMap<>();
-            Section section = yaml.getSection(condition);
+            Section section = yamlDocument.getSection(condition);
             if (section == null) return list;
 
             for (Object key : section.getKeys()) {
                 if (map.size() == limit) break;
                 String name = (String) key;
-                map.put(name, yaml.getInt(condition + "." + name + "." + column));
+                map.put(name, yamlDocument.getInt(table + "." + name + "." + column));
             }
 
             return sortByValueAscending(map);
@@ -366,7 +370,7 @@ public class Storage {
 
         try {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = api.query(statement, "SELECT " + condition + " FROM {table} ORDER BY " + column + " ASC LIMIT " + limit);
+            ResultSet resultSet = api.query(table, statement, "SELECT " + condition + " FROM {table} ORDER BY " + column + " ASC LIMIT " + limit);
             if (resultSet == null) return list;
             while (resultSet.next()) {
                 list.add(resultSet.getString(condition));
@@ -385,13 +389,13 @@ public class Storage {
         List<String> list = new ArrayList<>();
         if (type == StorageAPI.StorageType.FILE) {
             HashMap<String, Integer> map = new HashMap<>();
-            Section section = yaml.getSection(condition);
+            Section section = yamlDocument.getSection(condition);
             if (section == null) return list;
 
             for (Object key : section.getKeys()) {
                 if (map.size() == limit) break;
                 String name = (String) key;
-                map.put(name, yaml.getInt(condition + "." + name + "." + column));
+                map.put(name, yamlDocument.getInt(table + "." + name + "." + column));
             }
 
             return sortByValueDescending(map);
@@ -399,7 +403,7 @@ public class Storage {
 
         try {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = api.query(statement, "SELECT " + condition + " FROM {table} ORDER BY " + column + " DESC LIMIT " + limit);
+            ResultSet resultSet = api.query(table, statement, "SELECT " + condition + " FROM {table} ORDER BY " + column + " DESC LIMIT " + limit);
             if (resultSet == null) return list;
             while (resultSet.next()) {
                 list.add(resultSet.getString(condition));

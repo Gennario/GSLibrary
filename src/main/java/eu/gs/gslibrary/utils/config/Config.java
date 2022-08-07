@@ -103,12 +103,12 @@ public class Config {
     }
 
     public void load() throws IOException {
-        if(!update) updaterSettings = UpdaterSettings.builder();
+        if (!update) updaterSettings = UpdaterSettings.builder();
         String path;
-        if(this.name == null) {
+        if (this.name == null) {
             path = this.path;
-        }else {
-            path = this.path+"/"+name+".yml";
+        } else {
+            path = this.path + "/" + name + ".yml";
         }
         yamlDocument = YamlDocument.create(new File(plugin.getDataFolder(), path), resource,
                 GeneralSettings.DEFAULT,
