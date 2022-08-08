@@ -103,15 +103,15 @@ public class Config {
     }
 
     public void load() throws IOException {
-        if (!update) {
-            yamlDocument = YamlDocument.create(new File(plugin.getDataFolder(), path), resource);
-            return;
-        }
         String path;
         if (this.name == null) {
             path = this.path;
         } else {
             path = this.path + "/" + name + ".yml";
+        }
+        if (!update) {
+            yamlDocument = YamlDocument.create(new File(plugin.getDataFolder(), path), resource);
+            return;
         }
         yamlDocument = YamlDocument.create(new File(plugin.getDataFolder(), path), resource,
                 GeneralSettings.DEFAULT,
