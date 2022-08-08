@@ -50,7 +50,6 @@ public final class GSLibrary extends JavaPlugin {
 
         actionsAPI = new ActionsAPI();
         conditionsAPI = new ConditionsAPI();
-
     }
 
     @Override

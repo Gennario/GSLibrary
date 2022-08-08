@@ -146,15 +146,18 @@ public class PlayerGUIData {
                                 GUIItem guiItem = pagination.getPreviousPageItem().getKey();
                                 inventory.setItem(integer, guiItem.loadItem(player, replacement));
                             });
+                            System.out.println("previous item");
                         } else if (pagination.getPreviousPageEmptyItem() != null) {
                             gui.getGuiItemMap().getSlotsByKey(pagination.getPreviousPageItem().getValue()).forEach(integer -> {
                                 GUIItem guiItem = pagination.getPreviousPageEmptyItem().getKey();
                                 inventory.setItem(integer, guiItem.loadItem(player, replacement));
                             });
+                            System.out.println("previous empty");
                         } else {
                             gui.getGuiItemMap().getSlotsByKey(pagination.getPreviousPageItem().getValue()).forEach(integer -> {
                                 inventory.setItem(integer, new ItemStack(Material.AIR));
                             });
+                            System.out.println("previous null");
                         }
                     }
                     if (pagination.getNextPageItem() != null) {
