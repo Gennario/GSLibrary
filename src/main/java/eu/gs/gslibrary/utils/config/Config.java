@@ -104,7 +104,7 @@ public class Config {
 
     public void load() throws IOException {
         if (!update) {
-            yamlDocument = YamlDocument.create(new File(plugin.getDataFolder(), path));
+            yamlDocument = YamlDocument.create(new File(plugin.getDataFolder(), path), resource);
             return;
         }
         String path;
