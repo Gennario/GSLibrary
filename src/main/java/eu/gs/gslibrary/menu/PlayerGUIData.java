@@ -1,5 +1,6 @@
 package eu.gs.gslibrary.menu;
 
+import com.google.gson.stream.JsonToken;
 import eu.gs.gslibrary.utils.methods.AsyncMethod;
 import eu.gs.gslibrary.utils.methods.SyncMethod;
 import eu.gs.gslibrary.utils.replacement.Replacement;
@@ -148,6 +149,7 @@ public class PlayerGUIData {
                             gui.getGuiItemMap().getSlotsByKey(pagination.getPreviousPageItem().getValue()).forEach(integer -> {
                                 System.out.println("symbol - "+pagination.getPreviousPageItem().getValue()+",  slot - "+integer);
                                 GUIItem guiItem = pagination.getPreviousPageItem().getKey();
+                                System.out.println(""+(guiItem != null));
                                 inventory.setItem(integer, guiItem.loadItem(player, replacement));
                             });
                         } else if (pagination.getPreviousPageEmptyItem() != null) {
