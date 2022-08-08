@@ -180,7 +180,7 @@ public class CommandAPI {
                                 }
                             }
 
-                            if(required > commandArgs.size() || commandArgs.isEmpty() || commandArgs.size() > command.getSubCommandArgs().size()) {
+                            if(required > commandArgs.size() || (commandArgs.isEmpty() && required != 0) || commandArgs.size() > command.getSubCommandArgs().size()) {
                                 sender.sendMessage(languageAPI.getMessage("commands.usage", null, new Replacement((player, string) -> {
                                     return string.replace("%label%", label).replace("%help%", command.getUsage());
                                 })).toArray(new String[0]));
