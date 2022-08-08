@@ -145,8 +145,8 @@ public class PlayerGUIData {
                         System.out.println("previous vyvolano");
                         if (pagination.canPreviousPage(playerData.getPage())) {
                             System.out.println("previous item");
-                            System.out.println("symbol - "+pagination.getPreviousPageItem().getValue());
                             gui.getGuiItemMap().getSlotsByKey(pagination.getPreviousPageItem().getValue()).forEach(integer -> {
+                                System.out.println("symbol - "+pagination.getPreviousPageItem().getValue()+",  slot - "+integer);
                                 GUIItem guiItem = pagination.getPreviousPageItem().getKey();
                                 inventory.setItem(integer, guiItem.loadItem(player, replacement));
                             });
