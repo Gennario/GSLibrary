@@ -54,7 +54,7 @@ public final class GUIConfigUtils {
                 guiItem.addItem(section1.getInt("priority"), getItem(section1.getSection("item"), null), conditions);
             }
             guiItem.setResponse((player, event) -> {
-                for (String s : section.getStringList("condition_item.actions")) {
+                for (String s : section.getSection("condition_item.actions").getRoutesAsStrings(false)) {
                     GSLibrary.getInstance().getActionsAPI().useAction(player, section.getSection("condition_item.actions." + s));
                 }
             });
@@ -78,7 +78,7 @@ public final class GUIConfigUtils {
                 guiItem.addItem(section1.getInt("priority"), getItem(section1.getSection("item"), replacement), conditions);
             }
             guiItem.setResponse((player, event) -> {
-                for (String s : section.getStringList("condition_item.actions")) {
+                for (String s : section.getSection("condition_item.actions").getRoutesAsStrings(false)) {
                     GSLibrary.getInstance().getActionsAPI().useAction(player, section.getSection("condition_item.actions." + s));
                 }
             });
@@ -117,7 +117,7 @@ public final class GUIConfigUtils {
         if (section.contains("custommodeldata")) guiItem.setCustomModelData(section.getInt("custommodeldata"));
         if (section.contains("update")) guiItem.setUpdate(section.getBoolean("update"));
         guiItem.setResponse((player, event) -> {
-            for (String s : section.getStringList("actions")) {
+            for (String s : section.getSection("actions").getRoutesAsStrings(false)) {
                 GSLibrary.getInstance().getActionsAPI().useAction(player, section.getSection("actions." + s));
             }
         });

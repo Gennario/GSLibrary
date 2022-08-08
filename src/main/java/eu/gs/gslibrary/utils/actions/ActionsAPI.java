@@ -170,7 +170,7 @@ public class ActionsAPI {
     public void useAction(Player player, Section... actionConfigurations) {
         for (Section section : actionConfigurations) {
             String type = section.getString("type");
-            if (actions.containsKey(type)) {
+            if (!actions.containsKey(type)) {
                 System.out.println("Action " + type + " doesn't exist! Please try something else...");
                 return;
             }
