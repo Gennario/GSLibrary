@@ -145,12 +145,7 @@ public class PlayerGUIData {
                         if (pagination.canPreviousPage(playerData.getPage())) {
                             gui.getGuiItemMap().getSlotsByKey(pagination.getPreviousPageItem().getValue()).forEach(integer -> {
                                 GUIItem guiItem = pagination.getPreviousPageItem().getKey();
-                                ItemStack itemStack = null;
-                                try {
-                                    itemStack = guiItem.loadItem(player, replacement);
-                                }catch (Exception e) {
-                                    e.printStackTrace();
-                                }
+                                ItemStack itemStack = guiItem.loadItem(player, replacement);
                                 inventory.setItem(integer, itemStack);
                             });
                         } else if (pagination.getPreviousPageEmptyItem() != null) {
