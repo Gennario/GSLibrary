@@ -42,21 +42,25 @@ public class LanguageAPI {
         loadLanguages();
     }
 
-    public List<String> getMessage(String path, @Nullable Player player) {
+    public List<String> getMessage(String path, @Nullable Player player, @Nullable Replacement replacement) {
         List<String> stringList = getYamlDocument().getStringList(path);
+
+        if(replacement == null) {
+            replacement = new Replacement((player1, string) -> string);
+        }
 
         if (stringList.isEmpty()) {
             String s = getYamlDocument().getString(path);
             stringList.clear();
 
             if (s == null) return stringList;
-            stringList.add(Utils.colorize(player, s));
+            stringList.add(getPrefix() + replacement.replace(player, Utils.colorize(player, s)));
             return stringList;
         }
 
         List<String> strings = new ArrayList<>();
         for (String list : stringList) {
-            strings.add(Utils.colorize(player, list));
+            strings.add(getPrefix() + replacement.replace(player, Utils.colorize(player, list)));
         }
         return strings;
     }
@@ -135,6 +139,10 @@ public class LanguageAPI {
 
     public boolean contains(String path) {
         return getYamlDocument().contains(path);
+    }
+
+    public String getPrefix() {
+        return getColoredString("commands.prefix", null);
     }
 
     public void setActiveLanguage(String name) {

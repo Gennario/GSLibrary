@@ -18,6 +18,8 @@ public class SubCommand {
     private CommandResponse response;
     private boolean commandSizeLimit;
 
+    private String description;
+
     public SubCommand(String command) {
         this.command = command;
         this.aliases = new ArrayList<>();
@@ -52,6 +54,11 @@ public class SubCommand {
 
     public SubCommand setUsage(String usage) {
         this.usage = usage;
+        return this;
+    }
+
+    public SubCommand setDescription(String description) {
+        this.description = description;
         return this;
     }
 

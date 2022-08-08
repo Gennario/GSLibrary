@@ -1,6 +1,9 @@
 package eu.gs.gslibrary.commands;
 
 import eu.gs.gslibrary.GSLibrary;
+import eu.gs.gslibrary.language.Language;
+import eu.gs.gslibrary.language.LanguageAPI;
+import eu.gs.gslibrary.utils.replacement.Replacement;
 import lombok.Getter;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
@@ -28,6 +31,8 @@ public class CommandAPI {
     private CommandResponse emptyCommandResponse;
 
     private final List<SubCommand> subCommands;
+
+    private LanguageAPI languageAPI;
 
     public CommandAPI(JavaPlugin plugin, String name) {
         this.plugin = plugin;
@@ -66,6 +71,11 @@ public class CommandAPI {
         return this;
     }
 
+    public CommandAPI setLanguageAPI(LanguageAPI languageAPI) {
+        this.languageAPI = languageAPI;
+        return this;
+    }
+
     public SubCommand addCommand(String command) {
         SubCommand subCommand = new SubCommand(command);
         subCommands.add(subCommand);
@@ -79,13 +89,30 @@ public class CommandAPI {
 
     public void buildCommand() {
         try {
+            if (help) {
+                addCommand("help")
+                        .setDescription("Cmd for plugin help message")
+                        .setUsage("help [page]")
+                        .setAliases("?")
+                        .setSubCommandArgs(new SubCommandArg("page", SubCommandArg.CommandArgType.OPTIONAL, SubCommandArg.CommandArgValue.INT))
+                        .setResponse((sender, label, commandArgs) -> {
+                            int page = 1;
+                            if(commandArgs.length > 0) {
+                                page = commandArgs[0].getAsInt();
+                            }
+                            CommandHelpMessage.getHelpMessage(sender, page, this, label);
+                        });
+            }
             Constructor<PluginCommand> constructor = PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
             constructor.setAccessible(true);
             PluginCommand pluginCommand = constructor.newInstance(name, GSLibrary.getInstance());
             pluginCommand.setExecutor((sender, cmd, label, args) -> {
                 if (args.length == 0) {
                     if (help) {
-
+                        sender.sendMessage(languageAPI.getMessage("commands.usage", null, new Replacement((player, string) -> {
+                            return string.replace("%label%", label).replace("%usage%", "help [page]");
+                        })).toArray(new String[0]));
+                        return true;
                     } else if (emptyCommandResponse != null) {
                         emptyCommandResponse.cmd(sender, label, null);
                     }
@@ -94,7 +121,10 @@ public class CommandAPI {
                     for (SubCommand command : subCommands) {
                         if (command.getCommand().equalsIgnoreCase(s) || command.getAliases().contains(s.toLowerCase())) {
                             if (command.getPermission() != null) {
-                                if (!sender.hasPermission(command.getPermission())) return false;
+                                if (!sender.hasPermission(command.getPermission())) {
+                                    sender.sendMessage(languageAPI.getMessage("commands.no-perms", null, null).toArray(new String[0]));
+                                    return false;
+                                }
                             }
                             List<CommandArg> commandArgs = new ArrayList<>();
                             int c = 0;
@@ -140,7 +170,9 @@ public class CommandAPI {
                                             break;
                                     }
                                     if (!correctType) {
-                                        invalidValueMessage(sender, commandArg);
+                                        sender.sendMessage(languageAPI.getMessage("commands.invalid-usage", null, new Replacement((player, string) -> {
+                                            return string.replace("%value%", commandArg.getName());
+                                        })).toArray(new String[0]));
                                         return false;
                                     }
 
@@ -149,7 +181,9 @@ public class CommandAPI {
                             }
 
                             if(required > commandArgs.size() || commandArgs.isEmpty() || commandArgs.size() > command.getSubCommandArgs().size()) {
-                                usageMessage(sender, command);
+                                sender.sendMessage(languageAPI.getMessage("commands.usage", null, new Replacement((player, string) -> {
+                                    return string.replace("%label%", label).replace("%usage%", command.getUsage());
+                                })).toArray(new String[0]));
                                 return true;
                             }
 
@@ -170,13 +204,5 @@ public class CommandAPI {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public void usageMessage(CommandSender sender, SubCommand subCommand) {
-        sender.sendMessage("Usage: " + subCommand.getUsage());
-    }
-
-    public void invalidValueMessage(CommandSender sender, SubCommandArg commandArg) {
-        sender.sendMessage("Invalid value arg: " + commandArg.getValue().name().toLowerCase());
     }
 }
