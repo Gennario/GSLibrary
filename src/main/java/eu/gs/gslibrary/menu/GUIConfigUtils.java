@@ -118,7 +118,7 @@ public final class GUIConfigUtils {
         if (section.contains("update")) guiItem.setUpdate(section.getBoolean("update"));
         guiItem.setResponse((player, event) -> {
             if(section.contains("actions")) {
-                for (String s : section.createSection("actions").getRoutesAsStrings(false)) {
+                for (String s : section.getSection("actions").getRoutesAsStrings(false)) {
                     GSLibrary.getInstance().getActionsAPI().useAction(player, section.getSection("actions." + s));
                 }
             }

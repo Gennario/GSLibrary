@@ -103,7 +103,10 @@ public class Config {
     }
 
     public void load() throws IOException {
-        if (!update) updaterSettings = UpdaterSettings.builder();
+        if (!update) {
+            yamlDocument = YamlDocument.create(new File(plugin.getDataFolder(), path));
+            return;
+        }
         String path;
         if (this.name == null) {
             path = this.path;
