@@ -25,6 +25,7 @@ public class Language {
             config.load();
         } catch (IOException e) {
         }
+
     }
 
 }

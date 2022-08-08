@@ -291,7 +291,7 @@ public class Storage {
 
         try {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM " + api.getTable());
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM " + table);
 
             while (resultSet.next()) {
                 String playerName = resultSet.getString(condition);

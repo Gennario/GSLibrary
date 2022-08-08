@@ -61,6 +61,8 @@ public class ItemSystem {
             itemStack = new ItemStack(material, amount, data);
         }
         ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta == null) return itemStack;
+
         if (name != null) itemMeta.setDisplayName(name);
         if (!lore.isEmpty()) itemMeta.setLore(lore);
         if (!enchants.isEmpty()) {
@@ -68,6 +70,7 @@ public class ItemSystem {
                 itemMeta.addEnchant(Objects.requireNonNull(XEnchantment.matchXEnchantment(e.split(";")[0]).get().getEnchant()), Integer.parseInt(e.split(";")[1]), true);
             }
         }
+        if (!unbreakable) itemMeta.setUnbreakable(unbreakable);
         if (!itemFlags.isEmpty()) itemFlags.forEach(flag -> itemMeta.addItemFlags(ItemFlag.valueOf(flag)));
         if (customModelData != 0) itemMeta.setCustomModelData(customModelData);
         itemStack.setItemMeta(itemMeta);

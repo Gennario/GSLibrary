@@ -48,6 +48,8 @@ public class LanguageAPI {
         if (stringList.isEmpty()) {
             String s = getYamlDocument().getString(path);
             stringList.clear();
+
+            if (s == null) return stringList;
             stringList.add(Utils.colorize(player, s));
             return stringList;
         }
@@ -160,8 +162,9 @@ public class LanguageAPI {
     public void loadLanguages() {
         for (File f : file.listFiles()) {
             String name = f.getName().replace(".yml", "");
-            if(languages.containsKey(name)) continue;
+            if (languages.containsKey(name)) continue;
             Language language = new Language(instance, name);
+
             languages.put(name, language);
         }
         GSLibrary.getInstance().getPluginLoaderMap().get(instance).getData().put("Successfully loaded", languages.size()+" languages");

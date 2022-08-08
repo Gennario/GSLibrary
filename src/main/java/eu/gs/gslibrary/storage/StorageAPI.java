@@ -1,19 +1,22 @@
 package eu.gs.gslibrary.storage;
 
+import com.mysql.cj.exceptions.CJCommunicationsException;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import com.zaxxer.hikari.pool.HikariPool;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import eu.gs.gslibrary.utils.config.Config;
 import lombok.Getter;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.net.ConnectException;
+import java.nio.Buffer;
+import java.sql.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -31,9 +34,8 @@ public class StorageAPI {
 
     private YamlDocument yamlDocument;
     private Connection connection;
-    private String table;
 
-    public StorageAPI(JavaPlugin plugin, String type, Section sectionFile, Section sectionMySql, StorageTable... tables) throws SQLException {
+    public StorageAPI(JavaPlugin plugin, String type, Section sectionFile, Section sectionMySql, StorageTable... tables) throws Exception {
         this.plugin = plugin;
         this.sectionFile = sectionFile;
         this.sectionMySql = sectionMySql;
@@ -50,7 +52,7 @@ public class StorageAPI {
         }
     }
 
-    private void connect() throws SQLException {
+    private void connect() throws Exception {
         if (storageType == StorageType.FILE) {
             String name = sectionFile.getString("name");
             Config config = new Config(plugin, "", name);
@@ -75,7 +77,6 @@ public class StorageAPI {
         int port = sectionMySql.getInt("port");
         boolean autoReconnect = sectionMySql.getBoolean("autoReconnect");
         boolean useSsl = sectionMySql.getBoolean("useSSL");
-        this.table = sectionMySql.getString("table");
 
         config.setJdbcUrl("jdbc:mysql://" + host + ":" + port + "/" + database + "?autoReconnect=" + autoReconnect + "&useSSL=" + useSsl);
         config.setUsername(username);

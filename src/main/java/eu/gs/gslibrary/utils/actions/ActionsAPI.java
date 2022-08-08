@@ -3,6 +3,7 @@ package eu.gs.gslibrary.utils.actions;
 import com.cryptomorin.xseries.XPotion;
 import com.cryptomorin.xseries.XSound;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import eu.gs.gslibrary.utils.BungeeUtils;
 import eu.gs.gslibrary.utils.api.ActionbarUtils;
 import eu.gs.gslibrary.utils.api.TitleUtils;
 import eu.gs.gslibrary.utils.replacement.Replacement;
@@ -29,6 +30,13 @@ public class ActionsAPI {
     }
 
     public void loadDefaults() {
+        /* Connect to server action */
+        addAction("connect", (player, identifier, data, replacement1) -> {
+            if (data.isExist("value")) {
+                BungeeUtils.connect(player, replacement.replace(player, data.getString("value")));
+            }
+        });
+
         /* Console and player command */
         addAction("console-cmd", (player, identifier, data, replacement) -> {
             if (data.isExist("value")) {

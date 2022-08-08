@@ -5,7 +5,6 @@ import eu.gs.gslibrary.conditions.ConditionValue;
 import eu.gs.gslibrary.menu.event.GUIItemResponse;
 import eu.gs.gslibrary.utils.Pair;
 import eu.gs.gslibrary.utils.replacement.Replacement;
-import jdk.jfr.internal.tool.Main;
 import lombok.Getter;
 import lombok.Setter;
 import me.clip.placeholderapi.PlaceholderAPI;
