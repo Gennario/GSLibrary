@@ -144,22 +144,22 @@ public class PlayerGUIData {
                     if (pagination.getPreviousPageItem() != null) {
                         System.out.println("previous vyvolano");
                         if (pagination.canPreviousPage(playerData.getPage())) {
+                            System.out.println("previous item");
                             gui.getGuiItemMap().getSlotsByKey(pagination.getPreviousPageItem().getValue()).forEach(integer -> {
                                 GUIItem guiItem = pagination.getPreviousPageItem().getKey();
                                 inventory.setItem(integer, guiItem.loadItem(player, replacement));
                             });
-                            System.out.println("previous item");
                         } else if (pagination.getPreviousPageEmptyItem() != null) {
+                            System.out.println("previous empty");
                             gui.getGuiItemMap().getSlotsByKey(pagination.getPreviousPageItem().getValue()).forEach(integer -> {
                                 GUIItem guiItem = pagination.getPreviousPageEmptyItem().getKey();
                                 inventory.setItem(integer, guiItem.loadItem(player, replacement));
                             });
-                            System.out.println("previous empty");
                         } else {
+                            System.out.println("previous null");
                             gui.getGuiItemMap().getSlotsByKey(pagination.getPreviousPageItem().getValue()).forEach(integer -> {
                                 inventory.setItem(integer, new ItemStack(Material.AIR));
                             });
-                            System.out.println("previous null");
                         }
                     }else {
                         System.out.println("previous je proste null");
