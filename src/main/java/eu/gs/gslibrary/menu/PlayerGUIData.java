@@ -149,8 +149,9 @@ public class PlayerGUIData {
                             gui.getGuiItemMap().getSlotsByKey(pagination.getPreviousPageItem().getValue()).forEach(integer -> {
                                 System.out.println("symbol - "+pagination.getPreviousPageItem().getValue()+",  slot - "+integer);
                                 GUIItem guiItem = pagination.getPreviousPageItem().getKey();
-                                System.out.println(""+(guiItem != null));
-                                inventory.setItem(integer, guiItem.loadItem(player, replacement));
+                                ItemStack itemStack = guiItem.loadItem(player, replacement);
+                                System.out.println(""+(itemStack.getType().name())+", "+(itemStack != null));
+                                inventory.setItem(integer, itemStack);
                             });
                         } else if (pagination.getPreviousPageEmptyItem() != null) {
                             System.out.println("previous empty");
