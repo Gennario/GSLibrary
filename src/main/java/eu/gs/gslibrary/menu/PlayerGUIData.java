@@ -141,13 +141,9 @@ public class PlayerGUIData {
                         i++;
                     }
 
-                    System.out.println("+++++++++++++++++++++++++++++++");
                     if (pagination.getPreviousPageItem() != null) {
-                        System.out.println("previous vyvolano");
                         if (pagination.canPreviousPage(playerData.getPage())) {
-                            System.out.println("previous item");
                             gui.getGuiItemMap().getSlotsByKey(pagination.getPreviousPageItem().getValue()).forEach(integer -> {
-                                System.out.println("symbol - "+pagination.getPreviousPageItem().getValue()+",  slot - "+integer);
                                 GUIItem guiItem = pagination.getPreviousPageItem().getKey();
                                 ItemStack itemStack = null;
                                 try {
@@ -155,23 +151,18 @@ public class PlayerGUIData {
                                 }catch (Exception e) {
                                     e.printStackTrace();
                                 }
-                                System.out.println(""+(itemStack.getType().name())+", "+(itemStack != null));
                                 inventory.setItem(integer, itemStack);
                             });
                         } else if (pagination.getPreviousPageEmptyItem() != null) {
-                            System.out.println("previous empty");
                             gui.getGuiItemMap().getSlotsByKey(pagination.getPreviousPageItem().getValue()).forEach(integer -> {
                                 GUIItem guiItem = pagination.getPreviousPageEmptyItem().getKey();
                                 inventory.setItem(integer, guiItem.loadItem(player, replacement));
                             });
                         } else {
-                            System.out.println("previous null");
                             gui.getGuiItemMap().getSlotsByKey(pagination.getPreviousPageItem().getValue()).forEach(integer -> {
                                 inventory.setItem(integer, new ItemStack(Material.AIR));
                             });
                         }
-                    }else {
-                        System.out.println("previous je proste null");
                     }
                     if (pagination.getNextPageItem() != null) {
                         if (pagination.canNextPage(playerData.getPage(), playerData.getSize())) {

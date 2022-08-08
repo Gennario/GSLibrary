@@ -144,6 +144,9 @@ public class GUINormalItem extends GUIItem {
         if (this.replacement != null) {
             replacement = this.replacement;
         }
+        if(replacement == null) {
+            replacement = new Replacement((player1, string) -> string);
+        }
         ItemStack itemStack = new ItemStack(material);
         if (data > 0) itemStack.setData(new MaterialData(material, data));
         if (skinData != null) {
