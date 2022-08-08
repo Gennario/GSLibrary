@@ -33,11 +33,15 @@ public class ActionsAPI {
         addAction("console-cmd", (player, identifier, data, replacement) -> {
             if (data.isExist("value")) {
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), replacement.replace(player, data.getString("value")));
+            }else {
+                System.out.println("Action mission value");
             }
         });
         addAction("player-cmd", (player, identifier, data, replacement) -> {
             if (data.isExist("value")) {
                 player.chat("/" + replacement.replace(player, data.getString("value")));
+            }else {
+                System.out.println("Action mission value");
             }
         });
 
