@@ -2,6 +2,8 @@ package eu.gs.gslibrary;
 
 import eu.gs.gslibrary.commands.CommandAPI;
 import eu.gs.gslibrary.commands.SubCommandArg;
+import eu.gs.gslibrary.conditions.Condition;
+import eu.gs.gslibrary.conditions.ConditionsAPI;
 import eu.gs.gslibrary.menu.GUI;
 import eu.gs.gslibrary.utils.BungeeUtils;
 import eu.gs.gslibrary.utils.actions.ActionsAPI;
@@ -26,6 +28,7 @@ public final class GSLibrary extends JavaPlugin {
     private CooldownTask cooldownTask;
 
     private ActionsAPI actionsAPI;
+    private ConditionsAPI conditionsAPI;
 
     private Map<JavaPlugin, PluginUpdater> pluginLoaderMap;
 
@@ -46,6 +49,8 @@ public final class GSLibrary extends JavaPlugin {
         cooldownTask.runTaskTimerAsynchronously(this, 0, 20);
 
         actionsAPI = new ActionsAPI();
+        conditionsAPI = new ConditionsAPI();
+
     }
 
     @Override

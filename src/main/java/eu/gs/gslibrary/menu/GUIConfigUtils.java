@@ -3,6 +3,7 @@ package eu.gs.gslibrary.menu;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import eu.gs.gslibrary.GSLibrary;
+import eu.gs.gslibrary.conditions.ConditionValue;
 import eu.gs.gslibrary.utils.Pair;
 import eu.gs.gslibrary.utils.replacement.Replacement;
 import org.bukkit.Material;
@@ -45,10 +46,10 @@ public final class GUIConfigUtils {
             guiItem.setUpdate(section.getBoolean("condition_item.update"));
             for (String key : section.getSection("condition_item.list").getRoutesAsStrings(false)) {
                 Section section1 = section.getSection("condition_item.list." + key);
-                List<GUICondition> conditions = new ArrayList<>();
+                List<ConditionValue> conditions = new ArrayList<>();
                 for (String s : section1.getSection("conditions").getRoutesAsStrings(false)) {
                     Section ss = section1.getSection("conditions." + s);
-                    conditions.add(new GUICondition(ss.getString("type"), ss.getString("input"), ss.getString("output")));
+                    conditions.add(new ConditionValue(ss));
                 }
                 guiItem.addItem(section1.getInt("priority"), getItem(section1.getSection("item"), null), conditions);
             }
@@ -69,10 +70,10 @@ public final class GUIConfigUtils {
             guiItem.setUpdate(section.getBoolean("condition_item.update"));
             for (String key : section.getSection("condition_item.list").getRoutesAsStrings(false)) {
                 Section section1 = section.getSection("condition_item.list." + key);
-                List<GUICondition> conditions = new ArrayList<>();
+                List<ConditionValue> conditions = new ArrayList<>();
                 for (String s : section1.getSection("conditions").getRoutesAsStrings(false)) {
                     Section ss = section1.getSection("conditions." + s);
-                    conditions.add(new GUICondition(ss.getString("type"), ss.getString("input"), ss.getString("output")));
+                    conditions.add(new ConditionValue(ss));
                 }
                 guiItem.addItem(section1.getInt("priority"), getItem(section1.getSection("item"), replacement), conditions);
             }

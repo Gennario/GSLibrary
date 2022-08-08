@@ -148,9 +148,7 @@ public class CommandAPI {
                                 }
                             }
 
-                            System.out.println(required+" -- "+commandArgs.size());
-
-                            if(required > commandArgs.size() || commandArgs.isEmpty() || commandArgs.size()-1 > command.getSubCommandArgs().size()) {
+                            if(required > commandArgs.size() || commandArgs.isEmpty() || commandArgs.size() > command.getSubCommandArgs().size()) {
                                 usageMessage(sender, command);
                                 return true;
                             }
