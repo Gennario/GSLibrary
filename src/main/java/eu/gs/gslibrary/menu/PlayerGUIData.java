@@ -149,7 +149,12 @@ public class PlayerGUIData {
                             gui.getGuiItemMap().getSlotsByKey(pagination.getPreviousPageItem().getValue()).forEach(integer -> {
                                 System.out.println("symbol - "+pagination.getPreviousPageItem().getValue()+",  slot - "+integer);
                                 GUIItem guiItem = pagination.getPreviousPageItem().getKey();
-                                ItemStack itemStack = guiItem.loadItem(player, replacement);
+                                ItemStack itemStack = null;
+                                try {
+                                    itemStack = guiItem.loadItem(player, replacement);
+                                }catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                                 System.out.println(""+(itemStack.getType().name())+", "+(itemStack != null));
                                 inventory.setItem(integer, itemStack);
                             });
