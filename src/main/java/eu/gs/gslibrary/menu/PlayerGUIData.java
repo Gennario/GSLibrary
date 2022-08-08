@@ -140,7 +140,9 @@ public class PlayerGUIData {
                         i++;
                     }
 
+                    System.out.println("+++++++++++++++++++++++++++++++");
                     if (pagination.getPreviousPageItem() != null) {
+                        System.out.println("previous vyvolano");
                         if (pagination.canPreviousPage(playerData.getPage())) {
                             gui.getGuiItemMap().getSlotsByKey(pagination.getPreviousPageItem().getValue()).forEach(integer -> {
                                 GUIItem guiItem = pagination.getPreviousPageItem().getKey();
@@ -159,6 +161,8 @@ public class PlayerGUIData {
                             });
                             System.out.println("previous null");
                         }
+                    }else {
+                        System.out.println("previous je proste null");
                     }
                     if (pagination.getNextPageItem() != null) {
                         if (pagination.canNextPage(playerData.getPage(), playerData.getSize())) {
