@@ -117,8 +117,10 @@ public final class GUIConfigUtils {
         if (section.contains("custommodeldata")) guiItem.setCustomModelData(section.getInt("custommodeldata"));
         if (section.contains("update")) guiItem.setUpdate(section.getBoolean("update"));
         guiItem.setResponse((player, event) -> {
-            for (String s : section.getSection("actions").getRoutesAsStrings(false)) {
-                GSLibrary.getInstance().getActionsAPI().useAction(player, section.getSection("actions." + s));
+            if(section.contains("actions")) {
+                for (String s : section.getSection("actions").getRoutesAsStrings(false)) {
+                    GSLibrary.getInstance().getActionsAPI().useAction(player, section.getSection("actions." + s));
+                }
             }
         });
         if (replacement != null) {
