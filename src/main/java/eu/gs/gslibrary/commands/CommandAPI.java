@@ -5,12 +5,16 @@ import eu.gs.gslibrary.language.Language;
 import eu.gs.gslibrary.language.LanguageAPI;
 import eu.gs.gslibrary.utils.replacement.Replacement;
 import lombok.Getter;
-import org.bukkit.command.CommandMap;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.PluginCommand;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.command.*;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.SimplePluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -140,6 +144,9 @@ public class CommandAPI {
                             int required = 0;
                             for (SubCommandArg commandArg : command.getSubCommandArgs()) {
                                 if (i + 1 > commandArgs.size()) {
+                                    if (commandArg.getType().equals(SubCommandArg.CommandArgType.REQUIRED)) {
+                                        required++;
+                                    }
                                     break;
                                 }else {
                                     if (commandArg.getType().equals(SubCommandArg.CommandArgType.REQUIRED)) {
@@ -197,6 +204,49 @@ public class CommandAPI {
             //pluginCommand.setTabCompleter(new GoldsTabCompleter());
             if (description != null) pluginCommand.setDescription(description);
             pluginCommand.setAliases(aliases);
+            pluginCommand.setTabCompleter((sender, command, label, args) -> {
+                List<String> list = new ArrayList<>();
+
+                if(args.length == 1) {
+                    for (SubCommand subCommand : subCommands) {
+                        list.add(subCommand.getCommand());
+                    }
+                }else {
+                    for (SubCommand subCommand : subCommands) {
+                        if(subCommand.getCommand().equalsIgnoreCase(args[0])) {
+                            int count = args.length-2;
+                            if((subCommand.getSubCommandArgs().size()-1) >= count) {
+                                switch (subCommand.getSubCommandArgs().get(count).getValue()) {
+                                    case STRING:
+                                    case INT:
+                                    case LONG:
+                                    case FLOAT:
+                                    case DOUBLE:
+                                        list.add("[<"+subCommand.getSubCommandArgs().get(count).getName()+">]");
+                                        return list;
+                                    case MATERIAL:
+                                        for (Material material : Material.values()) {
+                                            list.add(material.name());
+                                        }
+                                        return list;
+                                    case ENTITY:
+                                        for (EntityType entityType : EntityType.values()) {
+                                            list.add(entityType.name());
+                                        }
+                                        return list;
+                                    case PLAYER:
+                                        for (Player entityType : Bukkit.getOnlinePlayers()) {
+                                            list.add(entityType.getName());
+                                        }
+                                        return list;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return list;
+            });
             Field field = SimplePluginManager.class.getDeclaredField("commandMap");
             field.setAccessible(true);
             CommandMap commandMap = (CommandMap) field.get(GSLibrary.getInstance().getServer().getPluginManager());

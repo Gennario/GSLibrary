@@ -1,4 +1,4 @@
 name: GSLibrary
 version: '${project.version}'
 main: eu.gs.gslibrary.GSLibrary
-api-version: 1.19
+api-version: 1.13

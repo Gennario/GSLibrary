@@ -21,6 +21,7 @@ public class Language {
         this.name = name;
 
         config = new Config(plugin, "languages", name, plugin.getResource("languages/" + name + ".yml"));
+        config.setUpdate(true);
         try {
             config.load();
         } catch (IOException e) {
