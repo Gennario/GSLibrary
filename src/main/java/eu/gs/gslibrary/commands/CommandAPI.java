@@ -1,20 +1,19 @@
 package eu.gs.gslibrary.commands;
 
-import eu.gs.gslibrary.GSLibrary;
-import eu.gs.gslibrary.language.Language;
 import eu.gs.gslibrary.language.LanguageAPI;
 import eu.gs.gslibrary.utils.replacement.Replacement;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.command.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandMap;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.SimplePluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -101,7 +100,7 @@ public class CommandAPI {
                         .setSubCommandArgs(new SubCommandArg("page", SubCommandArg.CommandArgType.OPTIONAL, SubCommandArg.CommandArgValue.INT))
                         .setResponse((sender, label, commandArgs) -> {
                             int page = 1;
-                            if(commandArgs.length > 0) {
+                            if (commandArgs.length > 0) {
                                 page = commandArgs[0].getAsInt();
                             }
                             CommandHelpMessage.getHelpMessage(sender, page, this, label);
@@ -109,7 +108,7 @@ public class CommandAPI {
             }
             Constructor<PluginCommand> constructor = PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
             constructor.setAccessible(true);
-            PluginCommand pluginCommand = constructor.newInstance(name, GSLibrary.getInstance());
+            PluginCommand pluginCommand = constructor.newInstance(name, plugin);
             pluginCommand.setExecutor((sender, cmd, label, args) -> {
                 if (args.length == 0) {
                     if (help) {
@@ -124,6 +123,10 @@ public class CommandAPI {
                     String s = args[0];
                     for (SubCommand command : subCommands) {
                         if (command.getCommand().equalsIgnoreCase(s) || command.getAliases().contains(s.toLowerCase())) {
+                            if (sender instanceof ConsoleCommandSender && !command.isAllowConsoleSender()) {
+                                sender.sendMessage(languageAPI.getMessage("commands.disabled-console", null, null).toArray(new String[0]));
+                                return false;
+                            }
                             if (command.getPermission() != null) {
                                 if (!sender.hasPermission(command.getPermission())) {
                                     sender.sendMessage(languageAPI.getMessage("commands.no-perms", null, null).toArray(new String[0]));
@@ -148,7 +151,7 @@ public class CommandAPI {
                                         required++;
                                     }
                                     break;
-                                }else {
+                                } else {
                                     if (commandArg.getType().equals(SubCommandArg.CommandArgType.REQUIRED)) {
                                         required++;
                                     }
@@ -172,6 +175,9 @@ public class CommandAPI {
                                         case PLAYER:
                                             if (!commandArgs.get(i).isPlayer()) correctType = false;
                                             break;
+                                        case OFFLINE_PLAYER:
+                                            if (!commandArgs.get(i).isOfflinePlayer()) correctType = false;
+                                            break;
                                         case MATERIAL:
                                             if (!commandArgs.get(i).isMaterial()) correctType = false;
                                             break;
@@ -187,7 +193,7 @@ public class CommandAPI {
                                 }
                             }
 
-                            if(required > commandArgs.size() || (commandArgs.isEmpty() && required != 0) || commandArgs.size() > command.getSubCommandArgs().size()) {
+                            if (required > commandArgs.size() || (commandArgs.isEmpty() && required != 0) || commandArgs.size() > command.getSubCommandArgs().size()) {
                                 sender.sendMessage(languageAPI.getMessage("commands.usage", null, new Replacement((player, string) -> {
                                     return string.replace("%label%", label).replace("%help%", command.getUsage());
                                 })).toArray(new String[0]));
@@ -207,34 +213,44 @@ public class CommandAPI {
             pluginCommand.setTabCompleter((sender, command, label, args) -> {
                 List<String> list = new ArrayList<>();
 
-                if(args.length == 1) {
+                if (args.length == 1) {
                     for (SubCommand subCommand : subCommands) {
                         list.add(subCommand.getCommand());
                     }
-                }else {
+                } else {
                     for (SubCommand subCommand : subCommands) {
-                        if(subCommand.getCommand().equalsIgnoreCase(args[0])) {
-                            int count = args.length-2;
-                            if((subCommand.getSubCommandArgs().size()-1) >= count) {
+                        if (subCommand.getCommand().equalsIgnoreCase(args[0])) {
+                            int count = args.length - 2;
+                            if ((subCommand.getSubCommandArgs().size() - 1) >= count) {
                                 switch (subCommand.getSubCommandArgs().get(count).getValue()) {
                                     case STRING:
                                     case INT:
                                     case LONG:
                                     case FLOAT:
                                     case DOUBLE:
-                                        list.add("[<"+subCommand.getSubCommandArgs().get(count).getName()+">]");
+                                        if(!subCommand.getCustomTabCompleteArgs().isEmpty()) {
+                                            return subCommand.getCustomTabCompleteArgs();
+                                        }
+                                        list.add("[<" + subCommand.getSubCommandArgs().get(count).getName() + ">]");
                                         return list;
                                     case MATERIAL:
+                                        if(!subCommand.getCustomTabCompleteArgs().isEmpty()) {
+                                            return subCommand.getCustomTabCompleteArgs();
+                                        }
                                         for (Material material : Material.values()) {
                                             list.add(material.name());
                                         }
                                         return list;
                                     case ENTITY:
+                                        if(!subCommand.getCustomTabCompleteArgs().isEmpty()) {
+                                            return subCommand.getCustomTabCompleteArgs();
+                                        }
                                         for (EntityType entityType : EntityType.values()) {
                                             list.add(entityType.name());
                                         }
                                         return list;
                                     case PLAYER:
+                                    case OFFLINE_PLAYER:
                                         for (Player entityType : Bukkit.getOnlinePlayers()) {
                                             list.add(entityType.getName());
                                         }
@@ -249,8 +265,8 @@ public class CommandAPI {
             });
             Field field = SimplePluginManager.class.getDeclaredField("commandMap");
             field.setAccessible(true);
-            CommandMap commandMap = (CommandMap) field.get(GSLibrary.getInstance().getServer().getPluginManager());
-            commandMap.register(GSLibrary.getInstance().getDescription().getName(), pluginCommand);
+            CommandMap commandMap = (CommandMap) field.get(plugin.getServer().getPluginManager());
+            commandMap.register(plugin.getDescription().getName(), pluginCommand);
         } catch (Exception e) {
             e.printStackTrace();
         }

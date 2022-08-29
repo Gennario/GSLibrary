@@ -12,9 +12,12 @@ import eu.gs.gslibrary.utils.cooldowns.CooldownTask;
 import eu.gs.gslibrary.utils.updater.PluginUpdater;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -54,6 +57,28 @@ public final class GSLibrary extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+    }
+
+    public GUI getGUI(String name) {
+        return guis.get(name);
+    }
+
+    public List<GUI> getGUIList() {
+        return new ArrayList<>(guis.values());
+    }
+
+    public boolean guiExist(String name) {
+        return guis.containsKey(name);
+    }
+
+    public void unloadGUI(String name) {
+        if(!guiExist(name)) return;
+        guis.remove(name);
+    }
+
+    public void unloadAll(List<String> names) {
+        for (String name : names) {
+            guis.remove(name);
+        }
     }
 }

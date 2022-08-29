@@ -54,13 +54,13 @@ public class LanguageAPI {
             stringList.clear();
 
             if (s == null) return stringList;
-            stringList.add(getPrefix() + replacement.replace(player, Utils.colorize(player, s)));
+            stringList.add(getPrefix() + Utils.colorize(player, replacement.replace(player, s)));
             return stringList;
         }
 
         List<String> strings = new ArrayList<>();
         for (String list : stringList) {
-            strings.add(getPrefix() + replacement.replace(player, Utils.colorize(player, list)));
+            strings.add(getPrefix() + Utils.colorize(player, replacement.replace(player, list)));
         }
         return strings;
     }
@@ -104,7 +104,7 @@ public class LanguageAPI {
     public List<String> getColoredStringList(String path, Player player, Replacement replacement) {
         List<String> list = new ArrayList<>();
         for (String s : getYamlDocument().getStringList(path)) {
-            list.add(replacement.replace(player, Utils.colorize(player, s)));
+            list.add(Utils.colorize(player, replacement.replace(player, s)));
         }
         return list;
     }

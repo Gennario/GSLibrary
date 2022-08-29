@@ -279,12 +279,12 @@ public class Storage {
         List<String> conditionList = new ArrayList<>();
 
         if (type == StorageAPI.StorageType.FILE) {
-            Section section = yamlDocument.getSection(condition);
-            if (section == null) return conditionList;
-
-            for (Object key : section.getKeys()) {
-                conditionList.add((String) key);
+            Section section = yamlDocument.getSection(table);
+            if (section == null) {
+                return conditionList;
             }
+
+            conditionList.addAll(section.getRoutesAsStrings(false));
 
             return conditionList;
         }

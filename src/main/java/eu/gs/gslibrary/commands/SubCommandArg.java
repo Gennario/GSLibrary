@@ -27,6 +27,7 @@ public class SubCommandArg {
         FLOAT,
         LONG,
         PLAYER,
+        OFFLINE_PLAYER,
         ENTITY,
         MATERIAL
     }

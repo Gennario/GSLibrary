@@ -2,8 +2,11 @@ package eu.gs.gslibrary.commands;
 
 import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 public class CommandArg {
 
@@ -55,6 +58,15 @@ public class CommandArg {
         return Bukkit.getPlayer(arg) != null;
     }
 
+    public boolean isOfflinePlayer() {
+        if (Bukkit.getPlayer(arg) != null) {
+            return true;
+        }else if(Bukkit.getOfflinePlayer(arg).hasPlayedBefore()) {
+            return true;
+        }
+        return false;
+    }
+
     public boolean isEntity() {
         return EntityType.fromName(arg.toUpperCase()) != null;
     }
@@ -90,6 +102,10 @@ public class CommandArg {
 
     public Player getAsPlayer() {
         return Bukkit.getPlayer(arg);
+    }
+
+    public OfflinePlayer getAsOfflinePlayer() {
+        return Bukkit.getOfflinePlayer(arg);
     }
 
     public EntityType getAsEntity() {
