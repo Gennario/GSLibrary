@@ -30,10 +30,6 @@ public class TitleUtils {
         }
     }
 
-    public static void sendTitleMessage(Player player, String title, String subtitle) {
-
-    }
-
     public static void sendTitleMessage(Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut) {
         try {
             if (title != null || !title.equals("")) {

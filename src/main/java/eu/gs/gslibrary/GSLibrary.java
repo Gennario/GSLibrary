@@ -5,6 +5,7 @@ import eu.gs.gslibrary.commands.SubCommandArg;
 import eu.gs.gslibrary.conditions.Condition;
 import eu.gs.gslibrary.conditions.ConditionsAPI;
 import eu.gs.gslibrary.menu.GUI;
+import eu.gs.gslibrary.menu.GUIRunnable;
 import eu.gs.gslibrary.utils.BungeeUtils;
 import eu.gs.gslibrary.utils.actions.ActionsAPI;
 import eu.gs.gslibrary.utils.cooldowns.CooldownAPI;
@@ -26,6 +27,7 @@ public final class GSLibrary extends JavaPlugin {
 
     private static GSLibrary instance;
     private Map<String, GUI> guis;
+    private GUIRunnable guiRunnable;
 
     private CooldownAPI cooldownAPI;
     private CooldownTask cooldownTask;
@@ -45,6 +47,9 @@ public final class GSLibrary extends JavaPlugin {
         BungeeUtils.init();
 
         guis = new HashMap<>();
+        guiRunnable = new GUIRunnable();
+        guiRunnable.runTaskTimerAsynchronously(this, 1, 1);
+
         pluginLoaderMap = new HashMap<>();
 
         cooldownAPI = new CooldownAPI();

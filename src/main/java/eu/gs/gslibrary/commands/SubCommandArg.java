@@ -29,7 +29,8 @@ public class SubCommandArg {
         PLAYER,
         OFFLINE_PLAYER,
         ENTITY,
-        MATERIAL
+        MATERIAL,
+        GUI
     }
 
 }

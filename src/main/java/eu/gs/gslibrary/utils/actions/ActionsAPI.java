@@ -5,13 +5,13 @@ import com.cryptomorin.xseries.XSound;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import eu.gs.gslibrary.GSLibrary;
 import eu.gs.gslibrary.utils.BungeeUtils;
+import eu.gs.gslibrary.utils.Utils;
 import eu.gs.gslibrary.utils.api.ActionbarUtils;
 import eu.gs.gslibrary.utils.api.TitleUtils;
 import eu.gs.gslibrary.utils.replacement.Replacement;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
@@ -42,15 +42,50 @@ public class ActionsAPI {
         addAction("console-cmd", (player, identifier, data, replacement) -> {
             if (data.isExist("value")) {
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), replacement.replace(player, data.getString("value")));
-            }else {
-                System.out.println("Action mission value");
+            } else if (data.isExist("values")) {
+                for (String s : data.getListString("values")) {
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), replacement.replace(player, s));
+                }
+            } else {
+                System.out.println("Some console-cmd action are missing correct data");
             }
         });
+
+        /* Console and player command */
+        addAction("message", (player, identifier, data, replacement) -> {
+            if (data.isExist("value")) {
+                player.sendMessage(Utils.colorize(player, replacement.replace(player, data.getString("value"))));
+            } else if (data.isExist("values")) {
+                for (String s : data.getListString("values")) {
+                    player.sendMessage(Utils.colorize(player, replacement.replace(player, s)));
+                }
+            } else {
+                System.out.println("Some console-cmd action are missing correct data");
+            }
+        });
+
+        /* Console and player command */
+        addAction("broadcast", (player, identifier, data, replacement) -> {
+            if (data.isExist("value")) {
+                Bukkit.broadcastMessage(Utils.colorize(player, replacement.replace(player, data.getString("value"))));
+            } else if (data.isExist("values")) {
+                for (String s : data.getListString("values")) {
+                    Bukkit.broadcastMessage(Utils.colorize(player, replacement.replace(player, s)));
+                }
+            } else {
+                System.out.println("Some console-cmd action are missing correct data");
+            }
+        });
+
         addAction("player-cmd", (player, identifier, data, replacement) -> {
             if (data.isExist("value")) {
                 player.chat("/" + replacement.replace(player, data.getString("value")));
-            }else {
-                System.out.println("Action mission value");
+            } else if (data.isExist("values")) {
+                for (String s : data.getListString("values")) {
+                    player.chat("/" + replacement.replace(player, s));
+                }
+            } else {
+                System.out.println("Some player-cmd action are missing correct data");
             }
         });
 
@@ -62,7 +97,14 @@ public class ActionsAPI {
         /* Open gui action */
         addAction("open-gui", (player, identifier, data, replacement1) -> {
             if (data.isExist("value")) {
-                GSLibrary.getInstance().getGUI(replacement.replace(player, data.getString("value"))).open(replacement, true, player);
+                String gui = replacement.replace(player, data.getString("value"));
+                if (GSLibrary.getInstance().guiExist(gui)) {
+                    GSLibrary.getInstance().getGUI(gui).open(replacement, true, player);
+                } else {
+                    System.out.println("Some open-gui action trying to open non existing gui");
+                }
+            } else {
+                System.out.println("Some open-gui action are missing correct data");
             }
         });
 
@@ -70,6 +112,8 @@ public class ActionsAPI {
         addAction("actionbar", (player, identifier, data, replacement) -> {
             if (data.isExist("value")) {
                 ActionbarUtils.sendActionbar(player, replacement.replace(player, data.getString("value")));
+            } else {
+                System.out.println("Some actionbar action are missing correct data");
             }
         });
         addAction("actionbar-all", (player, identifier, data, replacement) -> {
@@ -77,64 +121,68 @@ public class ActionsAPI {
                 for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                     ActionbarUtils.sendActionbar(onlinePlayer, replacement.replace(onlinePlayer, data.getString("value")));
                 }
+            } else {
+                System.out.println("Some actionbar-all action are missing correct data");
             }
         });
 
         /* Title action */
         addAction("title", (player, identifier, data, replacement) -> {
-            if (data.isExist("value")) {
-                String[] split = replacement.replace(player, data.getString("value")).split(";");
-                TitleUtils.sendTitleMessage(player, split[0], split[1]);
+            if (data.isExist("title") && data.isExist("subtitle")) {
+                String title = data.getString("title");
+                String subtitle = data.getString("subtitle");
+                int fadeIn = 20;
+                int stay = 60;
+                int fadeOut = 20;
+                if (data.isExist("fade-in")) fadeIn = data.getInt("fade-in");
+                if (data.isExist("stay")) stay = data.getInt("stay");
+                if (data.isExist("fade-out")) fadeOut = data.getInt("fade-out");
+                TitleUtils.sendTitleMessage(player, title, subtitle, fadeIn, stay, fadeOut);
+            } else {
+                System.out.println("Some title action are missing correct data");
             }
         });
         addAction("title-all", (player, identifier, data, replacement) -> {
-            if (data.isExist("value")) {
-                String[] split = replacement.replace(player, data.getString("value")).split(";");
-                for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                    TitleUtils.sendTitleMessage(onlinePlayer, split[0], split[1]);
+            if (data.isExist("title") && data.isExist("subtitle")) {
+                String title = data.getString("title");
+                String subtitle = data.getString("subtitle");
+                int fadeIn = 20;
+                int stay = 60;
+                int fadeOut = 20;
+                if (data.isExist("fade-in")) fadeIn = data.getInt("fade-in");
+                if (data.isExist("stay")) stay = data.getInt("stay");
+                if (data.isExist("fade-out")) fadeOut = data.getInt("fade-out");
+                for (Player op : Bukkit.getOnlinePlayers()) {
+                    TitleUtils.sendTitleMessage(op, title, subtitle, fadeIn, stay, fadeOut);
                 }
+            } else {
+                System.out.println("Some title action are missing correct data");
             }
         });
 
         /* Sound action */
         addAction("sound", ((player, identifier, data, replacement1) -> {
             if (data.isExist("value")) {
-                String[] split = replacement.replace(player, data.getString("value")).split(";");
-                Sound sound = XSound.valueOf(split[0].toUpperCase()).parseSound();
+                float volume = 60;
+                float pitch = 20;
+                if (data.isExist("volume")) volume = data.getFloat("volume");
+                if (data.isExist("pitch")) pitch = data.getFloat("pitch");
+                Sound sound = XSound.valueOf(data.getString("value")).parseSound();
                 if (sound != null) {
-                    player.playSound(player.getLocation(), sound, Float.parseFloat(split[1]), Float.parseFloat(split[2]));
+                    player.playSound(player.getLocation(), sound, volume, pitch);
                 }
             }
         }));
         addAction("sound-all", ((player, identifier, data, replacement1) -> {
             if (data.isExist("value")) {
-                String[] split = replacement.replace(player, data.getString("value")).split(";");
-                Sound sound = XSound.valueOf(split[0].toUpperCase()).parseSound();
+                float volume = 60;
+                float pitch = 20;
+                if (data.isExist("volume")) volume = data.getFloat("volume");
+                if (data.isExist("pitch")) pitch = data.getFloat("pitch");
+                Sound sound = XSound.valueOf(data.getString("value")).parseSound();
                 if (sound != null) {
                     for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                        onlinePlayer.playSound(onlinePlayer.getLocation(), sound, Float.parseFloat(split[1]), Float.parseFloat(split[2]));
-                    }
-                }
-            }
-        }));
-
-        /* PotionEffect action */
-        addAction("potioneffect", ((player, identifier, data, replacement1) -> {
-            if (data.isExist("value")) {
-                String[] split = replacement.replace(player, data.getString("value")).split(";");
-                PotionEffect effect = XPotion.valueOf(split[0].toUpperCase()).buildPotionEffect(Integer.parseInt(split[1]), Integer.parseInt(split[2]));
-                if (effect != null) {
-                    player.addPotionEffect(effect);
-                }
-            }
-        }));
-        addAction("potioneffect-all", ((player, identifier, data, replacement1) -> {
-            if (data.isExist("value")) {
-                String[] split = replacement.replace(player, data.getString("value")).split(";");
-                PotionEffect effect = XPotion.valueOf(split[0].toUpperCase()).buildPotionEffect(Integer.parseInt(split[1]), Integer.parseInt(split[2]));
-                if (effect != null) {
-                    for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                        onlinePlayer.addPotionEffect(effect);
+                        onlinePlayer.playSound(player.getLocation(), sound, volume, pitch);
                     }
                 }
             }
@@ -155,7 +203,7 @@ public class ActionsAPI {
         }));
 
         /* Fly action */
-        addAction("fly", (player, identifier, data, replacement1) -> {
+        addAction("fly-toggle", (player, identifier, data, replacement1) -> {
             player.setAllowFlight(!player.getAllowFlight());
         });
         addAction("fly-enabled", (player, identifier, data, replacement1) -> {
@@ -164,7 +212,7 @@ public class ActionsAPI {
         addAction("fly-disabled", (player, identifier, data, replacement1) -> {
             player.setAllowFlight(false);
         });
-        addAction("fly-all", (player, identifier, data, replacement1) -> {
+        addAction("fly-toggle-all", (player, identifier, data, replacement1) -> {
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                 onlinePlayer.setAllowFlight(!onlinePlayer.getAllowFlight());
             }

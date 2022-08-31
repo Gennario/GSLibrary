@@ -1,6 +1,8 @@
 package eu.gs.gslibrary.commands;
 
+import eu.gs.gslibrary.GSLibrary;
 import eu.gs.gslibrary.language.LanguageAPI;
+import eu.gs.gslibrary.menu.GUI;
 import eu.gs.gslibrary.utils.replacement.Replacement;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -254,6 +256,9 @@ public class CommandAPI {
                                         for (Player entityType : Bukkit.getOnlinePlayers()) {
                                             list.add(entityType.getName());
                                         }
+                                        return list;
+                                    case GUI:
+                                        list.addAll(GSLibrary.getInstance().getGuis().keySet());
                                         return list;
                                 }
                             }

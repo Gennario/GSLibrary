@@ -3,7 +3,6 @@ package eu.gs.gslibrary.utils.actions;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -38,8 +37,12 @@ public class ActionData {
         return Double.parseDouble((String) data.get(key));
     }
 
-    public double getInt(String key) {
+    public int getInt(String key) {
         return Integer.parseInt((String) data.get(key));
+    }
+
+    public float getFloat(String key) {
+        return Float.parseFloat((String) data.get(key));
     }
 
     public List<Object> getList(String key) {
