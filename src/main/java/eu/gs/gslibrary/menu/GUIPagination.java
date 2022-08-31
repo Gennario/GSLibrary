@@ -1,5 +1,6 @@
 package eu.gs.gslibrary.menu;
 
+import eu.gs.gslibrary.menu.event.GUIPerPlayerPagination;
 import eu.gs.gslibrary.utils.Pair;
 import eu.gs.gslibrary.utils.replacement.Replacement;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class GUIPagination {
     private List<GUIItem> items;
 
     private Map<Player, GUIPaginationPlayerData> paginationPlayerDataMap;
+    private GUIPerPlayerPagination perPlayerPagination;
 
     private boolean update;
 
@@ -47,7 +49,7 @@ public class GUIPagination {
 
         List<GUIItem> list = new ArrayList<>();
         int i = 0;
-        for (GUIItem item : items) {
+        for (GUIItem item : getItems(player)) {
             if (item.loadItem(player, new Replacement((player1, string) -> string)) != null) {
                 if (i >= (page) * slots.size()) return list;
                 if (i >= ((page - 1) * slots.size())) {
@@ -65,6 +67,11 @@ public class GUIPagination {
         playerData.loadSize();
     }
 
+    public List<GUIItem> getItems(Player player) {
+        if(perPlayerPagination != null) return perPlayerPagination.item(player, this);
+        return items;
+    }
+
     public void updatePlayerData(Player player) {
         GUIPaginationPlayerData playerData = paginationPlayerDataMap.get(player);
         playerData.loadSize();
@@ -72,6 +79,11 @@ public class GUIPagination {
 
     public GUIPagination setItems(List<GUIItem> items) {
         this.items = items;
+        return this;
+    }
+
+    public GUIPagination setPerPlayerPagination(GUIPerPlayerPagination perPlayerPagination) {
+        this.perPlayerPagination = perPlayerPagination;
         return this;
     }
 

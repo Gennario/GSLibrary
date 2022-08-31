@@ -45,7 +45,7 @@ public class GUIPaginationPlayerData {
 
     public void loadSize() {
         int i = 0;
-        for (GUIItem item : pagination.getItems()) {
+        for (GUIItem item : pagination.getItems(player)) {
             if (item.loadItem(player, new Replacement((player1, string) -> string)) != null) {
                 i++;
             }

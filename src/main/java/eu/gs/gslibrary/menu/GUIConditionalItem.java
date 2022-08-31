@@ -46,8 +46,6 @@ public class GUIConditionalItem extends GUIItem {
         for (Pair<List<ConditionValue>, GUIItem> pair : guiItems.values()) {
             boolean have = true;
             for (ConditionValue condition : pair.getKey()) {
-                condition.setInput(PlaceholderAPI.setPlaceholders(player, condition.getInput()));
-                condition.setOutput(PlaceholderAPI.setPlaceholders(player, condition.getOutput()));
                 if (!GSLibrary.getInstance().getConditionsAPI().check(player, condition, replacement)) {
                     have = false;
                     break;
