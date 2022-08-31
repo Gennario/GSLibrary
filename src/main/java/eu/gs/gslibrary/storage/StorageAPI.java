@@ -6,6 +6,8 @@ import com.zaxxer.hikari.HikariDataSource;
 import com.zaxxer.hikari.pool.HikariPool;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import eu.gs.gslibrary.storage.type.StorageFile;
+import eu.gs.gslibrary.storage.type.StorageMySQL;
 import eu.gs.gslibrary.utils.config.Config;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -47,7 +49,11 @@ public class StorageAPI {
         /* Load all tables */
         for (StorageTable storageTable : tables) {
             storageTable.setStorageAPI(this);
-            storageMap.put(storageTable.getTable(), new Storage(storageTable.getTable(), storageTable.getCondition(), this));
+            if (storageType == StorageType.FILE) {
+                storageMap.put(storageTable.getTable(), new StorageFile(storageTable.getTable(), storageTable.getCondition(), this));
+            } else if (storageType == StorageType.MYSQL) {
+                storageMap.put(storageTable.getTable(), new StorageMySQL(storageTable.getTable(), storageTable.getCondition(), this));
+            }
             storageTable.createMySqlTable();
         }
     }

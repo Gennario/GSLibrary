@@ -1,5 +1,6 @@
 package eu.gs.gslibrary.menu;
 
+import com.google.common.collect.Multimap;
 import eu.gs.gslibrary.menu.event.GUIItemResponse;
 import eu.gs.gslibrary.utils.Pair;
 import eu.gs.gslibrary.utils.Utils;
@@ -91,8 +92,11 @@ public class GUINormalItem extends GUIItem {
             for (Enchantment enchantment : meta.getEnchants().keySet()) {
                 registerEnchantment(enchantment, meta.getEnchants().get(enchantment));
             }
-            for (Attribute attribute : meta.getAttributeModifiers().keySet()) {
-                registerAttributeModifier(attribute, meta.getAttributeModifiers().get(attribute));
+
+            Multimap<Attribute, AttributeModifier> attributeModifiers = meta.getAttributeModifiers();
+            if (attributeModifiers == null) return;
+            for (Attribute attribute : attributeModifiers.keySet()) {
+                registerAttributeModifier(attribute, attributeModifiers.get(attribute));
             }
         }
     }

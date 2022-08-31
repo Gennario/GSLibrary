@@ -3,6 +3,7 @@ package eu.gs.gslibrary.utils.actions;
 import com.cryptomorin.xseries.XPotion;
 import com.cryptomorin.xseries.XSound;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import eu.gs.gslibrary.GSLibrary;
 import eu.gs.gslibrary.utils.BungeeUtils;
 import eu.gs.gslibrary.utils.api.ActionbarUtils;
 import eu.gs.gslibrary.utils.api.TitleUtils;
@@ -56,6 +57,13 @@ public class ActionsAPI {
         /* Close inventory action */
         addAction("close-inv", (player, identifier, data, replacement) -> {
             player.closeInventory();
+        });
+
+        /* Open gui action */
+        addAction("open-gui", (player, identifier, data, replacement1) -> {
+            if (data.isExist("value")) {
+                GSLibrary.getInstance().getGUI(replacement.replace(player, data.getString("value"))).open(replacement, true, player);
+            }
         });
 
         /* Actionbar action */
