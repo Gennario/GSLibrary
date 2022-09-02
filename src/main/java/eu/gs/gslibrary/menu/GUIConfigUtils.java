@@ -53,11 +53,13 @@ public final class GUIConfigUtils {
                 }
                 guiItem.addItem(section1.getInt("priority"), getItem(section1.getSection("item"), null), conditions);
             }
-            guiItem.setResponse((player, event) -> {
-                for (String s : section.getSection("condition_item.actions").getRoutesAsStrings(false)) {
-                    GSLibrary.getInstance().getActionsAPI().useAction(player, section.getSection("condition_item.actions." + s));
-                }
-            });
+            if (section.contains("condition_item.actions")) {
+                guiItem.setResponse((player, event) -> {
+                    for (String s : section.getSection("condition_item.actions").getRoutesAsStrings(false)) {
+                        GSLibrary.getInstance().getActionsAPI().useAction(player, section.getSection("condition_item.actions." + s));
+                    }
+                });
+            }
             return guiItem;
         } else {
             return getItem(section, null);
