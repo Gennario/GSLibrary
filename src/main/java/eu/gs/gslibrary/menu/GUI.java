@@ -92,6 +92,13 @@ public abstract class GUI implements Listener {
             @Override
             public void action() {
                 for (Player player : players) {
+                    PlayerGUIHistory playerGUIHistory = null;
+                    if(!GSLibrary.getInstance().getPlayerGUIHistory().containsKey(player)) {
+                        playerGUIHistory = new PlayerGUIHistory(player);
+                    }else {
+                        playerGUIHistory = GSLibrary.getInstance().getPlayerGUIHistory().get(player);
+                    }
+                    playerGUIHistory.setCurrent(gui);
                     PlayerGUIData playerGUIData = null;
                     if (playerGUIDataMap.containsKey(player)) {
                         playerGUIData = playerGUIDataMap.get(player);

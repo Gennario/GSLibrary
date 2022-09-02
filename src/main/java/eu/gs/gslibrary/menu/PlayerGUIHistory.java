@@ -1,10 +1,13 @@
 package eu.gs.gslibrary.menu;
 
+import eu.gs.gslibrary.GSLibrary;
+import lombok.Getter;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class PlayerGUIHistory {
 
     private final Player player;
@@ -16,6 +19,8 @@ public class PlayerGUIHistory {
 
         previous = new ArrayList<>();
         following = new ArrayList<>();
+
+        GSLibrary.getInstance().getPlayerGUIHistory().put(player, this);
     }
 
     public void setCurrent(GUI gui) {
@@ -29,7 +34,7 @@ public class PlayerGUIHistory {
     }
 
     public GUI back() {
-        if(previous.isEmpty()) return null;
+        if(previous.isEmpty()) return current;
         GUI gui = previous.get(0);
 
         following.add(0, gui);
@@ -39,7 +44,7 @@ public class PlayerGUIHistory {
     }
 
     public GUI forward() {
-        if(following.isEmpty()) return null;
+        if(following.isEmpty()) return current;
         GUI gui = following.get(0);
 
         previous.add(0, gui);

@@ -129,4 +129,20 @@ public final class GUIConfigUtils {
 
         return guiItem;
     }
+
+    public static GUIPagination loadItemsToPagination(Section section, Replacement replacement, GUIPagination pagination) {
+        GUIItem nextItem = getItemFromString(section.getSection("next_page.item"), replacement);
+        GUIItem nextHideItem = getItemFromString(section.getSection("next_page.hide"), replacement);
+        String nextSymbol = section.getString("next_page.symbol");
+        GUIItem previousItem = getItemFromString(section.getSection("previous_page.item"), replacement);
+        GUIItem previousHideItem = getItemFromString(section.getSection("previous_page.hide"), replacement);
+        String previousSymbol = section.getString("previous_page.symbol");
+
+        pagination.setNextPageItem(new Pair<>(nextItem, nextSymbol), replacement)
+                .setNextPageEmptyItem(new Pair<>(nextHideItem, nextSymbol))
+                .setPreviousPageItem(new Pair<>(previousItem, previousSymbol), replacement)
+                .setPreviousPageEmptyItem(new Pair<>(previousHideItem, previousSymbol));
+
+        return pagination;
+    }
 }

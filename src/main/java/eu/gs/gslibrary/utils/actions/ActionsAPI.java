@@ -4,11 +4,13 @@ import com.cryptomorin.xseries.XPotion;
 import com.cryptomorin.xseries.XSound;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import eu.gs.gslibrary.GSLibrary;
+import eu.gs.gslibrary.menu.PlayerGUIHistory;
 import eu.gs.gslibrary.utils.BungeeUtils;
 import eu.gs.gslibrary.utils.Utils;
 import eu.gs.gslibrary.utils.api.ActionbarUtils;
 import eu.gs.gslibrary.utils.api.TitleUtils;
 import eu.gs.gslibrary.utils.replacement.Replacement;
+import jdk.jfr.internal.tool.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
@@ -95,7 +97,7 @@ public class ActionsAPI {
         });
 
         /* Open gui action */
-        addAction("open-gui", (player, identifier, data, replacement1) -> {
+        addAction("open-gui", (player, identifier, data, replacement) -> {
             if (data.isExist("value")) {
                 String gui = replacement.replace(player, data.getString("value"));
                 if (GSLibrary.getInstance().guiExist(gui)) {
@@ -105,6 +107,26 @@ public class ActionsAPI {
                 }
             } else {
                 System.out.println("Some open-gui action are missing correct data");
+            }
+        });
+
+        /* Open gui action */
+        addAction("gui-back", (player, identifier, data, replacement) -> {
+            if(GSLibrary.getInstance().getPlayerGUIHistory().containsKey(player)) {
+                PlayerGUIHistory playerGUIHistory = GSLibrary.getInstance().getPlayerGUIHistory().get(player);
+                if(playerGUIHistory.getCurrent() != null) {
+                    playerGUIHistory.back().guiOpen(player);
+                }
+            }
+        });
+
+        /* Open gui action */
+        addAction("gui-forward", (player, identifier, data, replacement) -> {
+            if(GSLibrary.getInstance().getPlayerGUIHistory().containsKey(player)) {
+                PlayerGUIHistory playerGUIHistory = GSLibrary.getInstance().getPlayerGUIHistory().get(player);
+                if(playerGUIHistory.getCurrent() != null) {
+                    playerGUIHistory.forward().guiOpen(player);
+                }
             }
         });
 

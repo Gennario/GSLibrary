@@ -6,6 +6,9 @@ import eu.gs.gslibrary.conditions.Condition;
 import eu.gs.gslibrary.conditions.ConditionsAPI;
 import eu.gs.gslibrary.menu.GUI;
 import eu.gs.gslibrary.menu.GUIRunnable;
+import eu.gs.gslibrary.menu.PlayerGUIHistory;
+import eu.gs.gslibrary.menu.event.GUIPerPlayerItemResponse;
+import eu.gs.gslibrary.menu.event.GUIPerPlayerPagination;
 import eu.gs.gslibrary.utils.BungeeUtils;
 import eu.gs.gslibrary.utils.actions.ActionsAPI;
 import eu.gs.gslibrary.utils.cooldowns.CooldownAPI;
@@ -14,6 +17,7 @@ import eu.gs.gslibrary.utils.updater.PluginUpdater;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
@@ -28,6 +32,7 @@ public final class GSLibrary extends JavaPlugin {
     private static GSLibrary instance;
     private Map<String, GUI> guis;
     private GUIRunnable guiRunnable;
+    private Map<Player, PlayerGUIHistory> playerGUIHistory;
 
     private CooldownAPI cooldownAPI;
     private CooldownTask cooldownTask;
@@ -49,6 +54,7 @@ public final class GSLibrary extends JavaPlugin {
         guis = new HashMap<>();
         guiRunnable = new GUIRunnable();
         guiRunnable.runTaskTimerAsynchronously(this, 1, 1);
+        playerGUIHistory = new HashMap<>();
 
         pluginLoaderMap = new HashMap<>();
 
@@ -58,6 +64,7 @@ public final class GSLibrary extends JavaPlugin {
 
         actionsAPI = new ActionsAPI();
         conditionsAPI = new ConditionsAPI();
+
     }
 
     @Override
