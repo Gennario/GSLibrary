@@ -14,11 +14,16 @@ public class ConditionValue {
     private ConditionsAPI conditionsAPI;
     private Condition condition;
     private Replacement replacement;
+    private boolean negative;
 
     public ConditionValue(Section section) {
         conditionsAPI = GSLibrary.getInstance().getConditionsAPI();
 
         type = section.getString("type", "null");
+        if(type.startsWith("!")) {
+            type = type.replaceFirst("!", "");
+            negative = true;
+        }
         input = section.getString("input", "null");
         output = section.getString("output", "null");
 
@@ -34,6 +39,10 @@ public class ConditionValue {
         conditionsAPI = GSLibrary.getInstance().getConditionsAPI();
 
         this.type = type;
+        if(type.startsWith("!")) {
+            type = type.replaceFirst("!", "");
+            negative = true;
+        }
         this.input = input;
         this.output = output;
 

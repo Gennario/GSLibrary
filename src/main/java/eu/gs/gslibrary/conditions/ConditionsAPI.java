@@ -121,6 +121,10 @@ public class ConditionsAPI {
 
         Condition condition = conditionValue.getCondition();
 
+        if(conditionValue.isNegative()) {
+            return !condition.getConditionResponse().check(input, output, player, replacement);
+        }
+
         return condition.getConditionResponse().check(input, output, player, replacement);
     }
 
