@@ -26,6 +26,8 @@ import java.util.Map;
 @Setter
 public abstract class GUI implements Listener {
 
+    private final String type;
+
     private GUITitle guiTitle;
     private Rows rows;
     private GUIItemMap guiItemMap;
@@ -41,6 +43,7 @@ public abstract class GUI implements Listener {
     private int updateTime, updateTick;
 
     public GUI(String type, GUIItemMap guiItemMap) {
+        this.type = type;
         playerGUIDataMap = new HashMap<>();
         items = new HashMap<>();
         paginations = new ArrayList<>();

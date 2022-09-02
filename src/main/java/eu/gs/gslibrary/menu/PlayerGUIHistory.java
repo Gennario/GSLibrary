@@ -12,7 +12,7 @@ public class PlayerGUIHistory {
 
     private final Player player;
     private GUI current;
-    private List<GUI> previous, following;
+    private List<String> previous, following;
 
     public PlayerGUIHistory(Player player) {
         this.player = player;
@@ -25,7 +25,7 @@ public class PlayerGUIHistory {
 
     public void setCurrent(GUI gui) {
         if(current != null) {
-            previous.add(0, current);
+            previous.add(0, current.getType());
         }
         if(!following.contains(gui)) {
             following.clear();
@@ -35,9 +35,9 @@ public class PlayerGUIHistory {
 
     public GUI back() {
         if(previous.isEmpty()) return current;
-        GUI gui = previous.get(0);
+        GUI gui = GSLibrary.getInstance().getGUI(previous.get(0));
 
-        following.add(0, gui);
+        following.add(0, gui.getType());
         previous.remove(0);
 
         return gui;
@@ -45,9 +45,9 @@ public class PlayerGUIHistory {
 
     public GUI forward() {
         if(following.isEmpty()) return current;
-        GUI gui = following.get(0);
+        GUI gui = GSLibrary.getInstance().getGUI(following.get(0));
 
-        previous.add(0, gui);
+        previous.add(0, gui.getType());
         following.remove(0);
 
         return gui;

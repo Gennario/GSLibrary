@@ -18,9 +18,9 @@ public class ConditionValue {
     public ConditionValue(Section section) {
         conditionsAPI = GSLibrary.getInstance().getConditionsAPI();
 
-        type = section.getString("type");
-        input = section.getString("input");
-        output = section.getString("output");
+        type = section.getString("type", "null");
+        input = section.getString("input", "null");
+        output = section.getString("output", "null");
 
         if(!conditionsAPI.getConditions().containsKey(type)) {
             System.out.println("Condition "+type+" doesn't exist!");
