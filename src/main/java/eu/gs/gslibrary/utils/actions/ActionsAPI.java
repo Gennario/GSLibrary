@@ -1,6 +1,5 @@
 package eu.gs.gslibrary.utils.actions;
 
-import com.cryptomorin.xseries.XPotion;
 import com.cryptomorin.xseries.XSound;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import eu.gs.gslibrary.GSLibrary;
@@ -10,12 +9,10 @@ import eu.gs.gslibrary.utils.Utils;
 import eu.gs.gslibrary.utils.api.ActionbarUtils;
 import eu.gs.gslibrary.utils.api.TitleUtils;
 import eu.gs.gslibrary.utils.replacement.Replacement;
-import jdk.jfr.internal.tool.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -112,9 +109,9 @@ public class ActionsAPI {
 
         /* Open gui action */
         addAction("gui-back", (player, identifier, data, replacement) -> {
-            if(GSLibrary.getInstance().getPlayerGUIHistory().containsKey(player)) {
+            if (GSLibrary.getInstance().getPlayerGUIHistory().containsKey(player)) {
                 PlayerGUIHistory playerGUIHistory = GSLibrary.getInstance().getPlayerGUIHistory().get(player);
-                if(playerGUIHistory.getCurrent() != null) {
+                if (playerGUIHistory.getCurrent() != null) {
                     playerGUIHistory.back().guiOpen(player);
                 }
             }
@@ -122,9 +119,9 @@ public class ActionsAPI {
 
         /* Open gui action */
         addAction("gui-forward", (player, identifier, data, replacement) -> {
-            if(GSLibrary.getInstance().getPlayerGUIHistory().containsKey(player)) {
+            if (GSLibrary.getInstance().getPlayerGUIHistory().containsKey(player)) {
                 PlayerGUIHistory playerGUIHistory = GSLibrary.getInstance().getPlayerGUIHistory().get(player);
-                if(playerGUIHistory.getCurrent() != null) {
+                if (playerGUIHistory.getCurrent() != null) {
                     playerGUIHistory.forward().guiOpen(player);
                 }
             }
@@ -247,6 +244,17 @@ public class ActionsAPI {
 
     public void useAction(Player player, Section... actionConfigurations) {
         for (Section section : actionConfigurations) {
+            if (section.contains("conditions")) {
+                boolean allow = true;
+                for (String s : section.getSection("conditions").getRoutesAsStrings(false)) {
+                    if (!GSLibrary.getInstance().getConditionsAPI().check(player, section.getSection("conditions." + s), replacement))
+                        allow = false;
+                }
+                if (!allow) {
+                    continue;
+                }
+            }
+
             String type = section.getString("type");
             if (!actions.containsKey(type)) {
                 System.out.println("Action " + type + " doesn't exist! Please try something else...");
