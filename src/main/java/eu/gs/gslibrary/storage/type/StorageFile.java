@@ -2,8 +2,8 @@ package eu.gs.gslibrary.storage.type;
 
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
-import eu.gs.gslibrary.storage.Storage;
 import eu.gs.gslibrary.storage.StorageAPI;
+import eu.gs.gslibrary.storage.StorageTable;
 
 import java.io.IOException;
 import java.util.*;
@@ -11,66 +11,90 @@ import java.util.*;
 public class StorageFile implements Storage {
 
     private final String table, condition;
+    private final StorageTable storageTable;
+    private final StorageAPI storageAPI;
 
     private final YamlDocument yamlDocument;
 
-    public StorageFile(String table, String condition, StorageAPI storageAPI) {
+    public StorageFile(String table, String condition, StorageAPI storageAPI, StorageTable storageTable) {
         this.table = table;
         this.condition = condition;
+        this.storageTable = storageTable;
+        this.storageAPI = storageAPI;
 
-        this.yamlDocument = storageAPI.getYamlDocument();
+        this.yamlDocument = storageAPI.getYamlFile();
     }
 
     @Override
     public void insert(final String columns, final Object... parameters) {
-        String[] split = columns.split(",");
-        int i = 1;
-        for (Object parameter : parameters) {
-            if (parameters[0] == parameter) continue;
-            yamlDocument.set(table + "." + parameters[0] + "." + split[i], parameter);
-            i++;
-        }
+        run(() -> {
+            String[] split = columns.split(",");
+            int i = 1;
+            int a = -1;
+            int b = 0;
 
-        try {
-            yamlDocument.save();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            for (Object parameter : parameters) {
+                if (parameters[0] == parameter) continue;
+
+                if (a != -1 || parameter.equals("-")) {
+                    b++;
+
+                    if (b == 1) a = i;
+
+                    try {
+                        yamlDocument.set(table + "." + parameters[0] + "." + split[a] + "." + split[i + 1], parameters[i + 1]);
+                        i++;
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        i--;
+                    }
+
+                    continue;
+                }
+
+                yamlDocument.set(table + "." + parameters[0] + "." + split[i], parameter);
+                i++;
+            }
+
+            try {
+                yamlDocument.save();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override
     public void insertUpdate(final String columns, final Object... parameters) {
-        String[] split = columns.split(",");
-        int i = 1;
-        for (Object parameter : parameters) {
-            if (parameters[0] == parameter) continue;
-            yamlDocument.set(table + "." + parameters[0] + "." + split[i], parameter);
-            i++;
-        }
-
-        try {
-            yamlDocument.save();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        insert(columns, parameters);
     }
 
+    /* Empty condition */
     @Override
     public void set(String conditionValue, String column, Object object) {
-        if (!existsCondition(conditionValue)) return;
+        run(() -> {
+            if (!existsCondition(conditionValue)) return;
 
-        yamlDocument.set(table + "." + conditionValue + "." + column, object);
-        try {
-            yamlDocument.save();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+            yamlDocument.set(table + "." + conditionValue + "." + column, object);
+            try {
+                yamlDocument.save();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override
     public String getString(String conditionValue, String column) {
         if (!existsCondition(conditionValue)) return null;
+
+        if (column.contains("-")) {
+            StringBuilder string = new StringBuilder();
+            for (String s : column.split("-")) {
+                string.append(".").append(s);
+            }
+
+            return yamlDocument.getString(table + "." + conditionValue + string);
+        }
 
         return yamlDocument.getString(table + "." + conditionValue + "." + column);
     }
@@ -79,6 +103,15 @@ public class StorageFile implements Storage {
     public int getInt(String conditionValue, String column) {
         if (!existsCondition(conditionValue)) return 0;
 
+        if (column.contains("-")) {
+            StringBuilder string = new StringBuilder();
+            for (String s : column.split("-")) {
+                string.append(".").append(s);
+            }
+
+            return yamlDocument.getInt(table + "." + conditionValue + string);
+        }
+
         return yamlDocument.getInt(table + "." + conditionValue + "." + column);
     }
 
@@ -86,12 +119,30 @@ public class StorageFile implements Storage {
     public double getDouble(String conditionValue, String column) {
         if (!existsCondition(conditionValue)) return 0;
 
+        if (column.contains("-")) {
+            StringBuilder string = new StringBuilder();
+            for (String s : column.split("-")) {
+                string.append(".").append(s);
+            }
+
+            return yamlDocument.getDouble(table + "." + conditionValue + string);
+        }
+
         return yamlDocument.getDouble(table + "." + conditionValue + "." + column);
     }
 
     @Override
-    public double getFloat(String conditionValue, String column) {
+    public float getFloat(String conditionValue, String column) {
         if (!existsCondition(conditionValue)) return 0;
+
+        if (column.contains("-")) {
+            StringBuilder string = new StringBuilder();
+            for (String s : column.split("-")) {
+                string.append(".").append(s);
+            }
+
+            return yamlDocument.getFloat(table + "." + conditionValue + string);
+        }
 
         return yamlDocument.getFloat(table + "." + conditionValue + "." + column);
     }
@@ -100,12 +151,30 @@ public class StorageFile implements Storage {
     public boolean getBoolean(String conditionValue, String column) {
         if (!existsCondition(conditionValue)) return false;
 
+        if (column.contains("-")) {
+            StringBuilder string = new StringBuilder();
+            for (String s : column.split("-")) {
+                string.append(".").append(s);
+            }
+
+            return yamlDocument.getBoolean(table + "." + conditionValue + string);
+        }
+
         return yamlDocument.getBoolean(table + "." + conditionValue + "." + column);
     }
 
     @Override
     public Object getObject(String conditionValue, String column) {
         if (!existsCondition(conditionValue)) return null;
+
+        if (column.contains("-")) {
+            StringBuilder string = new StringBuilder();
+            for (String s : column.split("-")) {
+                string.append(".").append(s);
+            }
+
+            return yamlDocument.get(table + "." + conditionValue + string);
+        }
 
         return yamlDocument.get(table + "." + conditionValue + "." + column);
     }
@@ -127,16 +196,16 @@ public class StorageFile implements Storage {
 
     @Override
     public void removeCondition(String conditionValue) {
-        if (!existsCondition(conditionValue)) return;
+        run(() -> {
+            if (!existsCondition(conditionValue)) return;
 
-        yamlDocument.remove(table + "." + conditionValue);
-        try {
-            yamlDocument.save();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
+            yamlDocument.remove(table + "." + conditionValue);
+            try {
+                yamlDocument.save();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override
@@ -177,6 +246,71 @@ public class StorageFile implements Storage {
         }
 
         return sortByValueDescending(map);
+
+    }
+
+    /* With condition */
+    @Override
+    public void set(String condition, String conditionValue, String column, Object object) {
+        set(conditionValue, column, object);
+    }
+
+    @Override
+    public String getString(String condition, String conditionValue, String column) {
+        return getString(conditionValue, column);
+    }
+
+    @Override
+    public int getInt(String condition, String conditionValue, String column) {
+        return getInt(conditionValue, column);
+    }
+
+    @Override
+    public double getDouble(String condition, String conditionValue, String column) {
+        return getDouble(conditionValue, column);
+    }
+
+    @Override
+    public float getFloat(String condition, String conditionValue, String column) {
+        return getFloat(conditionValue, column);
+    }
+
+    @Override
+    public boolean getBoolean(String condition, String conditionValue, String column) {
+        return getBoolean(conditionValue, column);
+    }
+
+    @Override
+    public Object getObject(String condition, String conditionValue, String column) {
+        return getObject(conditionValue, column);
+    }
+
+
+    @Override
+    public List<String> getConditions(String condition) {
+        return getConditions();
+    }
+
+    @Override
+    public void removeCondition(String condition, String conditionValue) {
+        removeCondition(conditionValue);
+    }
+
+    @Override
+    public boolean existsCondition(String condition, String conditionValue) {
+        return existsCondition(conditionValue);
+    }
+
+    @Override
+    public List<String> getTopConditionAscending(String condition, String column, int limit) {
+        return getTopConditionAscending(column, limit);
+
+
+    }
+
+    @Override
+    public List<String> getTopConditionDescending(String condition, String column, int limit) {
+        return getTopConditionDescending(column, limit);
 
     }
 

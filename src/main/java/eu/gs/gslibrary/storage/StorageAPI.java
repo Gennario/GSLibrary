@@ -1,98 +1,101 @@
 package eu.gs.gslibrary.storage;
 
-import com.mysql.cj.exceptions.CJCommunicationsException;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import com.zaxxer.hikari.pool.HikariPool;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import eu.gs.gslibrary.GSLibrary;
+import eu.gs.gslibrary.storage.json.StorageJson;
+import eu.gs.gslibrary.storage.type.Storage;
 import eu.gs.gslibrary.storage.type.StorageFile;
 import eu.gs.gslibrary.storage.type.StorageMySQL;
-import eu.gs.gslibrary.utils.config.Config;
 import lombok.Getter;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.IOException;
-import java.net.ConnectException;
-import java.nio.Buffer;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Getter
 public class StorageAPI {
 
+    private final JavaPlugin instance;
+
     private final Map<String, Storage> storageMap = new ConcurrentHashMap<>();
-
     private final HikariConfig config = new HikariConfig();
-    private HikariDataSource dataSource;
-
-    private final JavaPlugin plugin;
     private final StorageType storageType;
-    private final Section sectionMySql, sectionFile;
-
-    private YamlDocument yamlDocument;
+    private final Section sectionMySql, sectionFile, sectionJson;
+    private StorageJson storageJson;
+    private HikariDataSource dataSource;
+    private YamlDocument yamlFile, yamlJson;
     private Connection connection;
 
-    public StorageAPI(JavaPlugin plugin, String type, Section sectionFile, Section sectionMySql, StorageTable... tables) throws Exception {
-        this.plugin = plugin;
+    public StorageAPI(JavaPlugin plugin, String type, Section sectionFile, Section sectionMySql, Section sectionJson, StorageTable... tables) {
+        this.instance = plugin;
         this.sectionFile = sectionFile;
         this.sectionMySql = sectionMySql;
-        this.storageType = type == null ? StorageType.FILE : StorageType.valueOf(type.toUpperCase());
+        this.sectionJson = sectionJson;
+        this.storageType = type == null ? StorageAPI.StorageType.FILE : StorageAPI.StorageType.valueOf(type.toUpperCase());
 
 
         this.connect();
 
         /* Load all tables */
+        if (storageType == StorageType.JSON) {
+            storageJson = new StorageJson(this);
+            return;
+        }
+
+
         for (StorageTable storageTable : tables) {
             storageTable.setStorageAPI(this);
             if (storageType == StorageType.FILE) {
-                storageMap.put(storageTable.getTable(), new StorageFile(storageTable.getTable(), storageTable.getCondition(), this));
+                storageMap.put(storageTable.getTable(), new StorageFile(storageTable.getTable(), storageTable.getCondition(), this, storageTable));
             } else if (storageType == StorageType.MYSQL) {
-                storageMap.put(storageTable.getTable(), new StorageMySQL(storageTable.getTable(), storageTable.getCondition(), this));
+                storageMap.put(storageTable.getTable(), new StorageMySQL(storageTable.getTable(), storageTable.getCondition(), this, storageTable));
             }
+
+            System.out.println(connection);
             storageTable.createMySqlTable();
         }
     }
 
-    private void connect() throws Exception {
-        if (storageType == StorageType.FILE) {
-            String name = sectionFile.getString("name");
-            Config config = new Config(plugin, "", name);
-            config.setUpdate(false);
-            try {
-                config.load();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    private void connect() {
+        List<String> dataList = GSLibrary.getInstance().getPluginLoaderMap().get(instance).getDataList();
+        StorageConnect connect = new StorageConnect(instance, dataList);
 
-            yamlDocument = config.getYamlDocument();
+        if (storageType == StorageType.FILE) {
+            YamlDocument yaml = connect.connectFile(sectionFile);
+            if (yaml == null) return;
+
+            yamlFile = yaml;
+            return;
+        } else if (storageType == StorageType.JSON) {
+            YamlDocument yaml = connect.connectJson(sectionJson);
+            if (yaml == null) return;
+
+            yamlJson = yaml;
             return;
         }
 
-        if (isConnected()) return;
-        if (sectionMySql == null) return;
+        if (connection != null) return;
+        HikariDataSource dataSource = connect.connectMySql(sectionMySql);
+        if (dataSource == null) return;
 
-        String host = sectionMySql.getString("host");
-        String username = sectionMySql.getString("user");
-        String database = sectionMySql.getString("database");
-        String password = sectionMySql.getString("password");
-        int port = sectionMySql.getInt("port");
-        boolean autoReconnect = sectionMySql.getBoolean("autoReconnect");
-        boolean useSsl = sectionMySql.getBoolean("useSSL");
-
-        config.setJdbcUrl("jdbc:mysql://" + host + ":" + port + "/" + database + "?autoReconnect=" + autoReconnect + "&useSSL=" + useSsl);
-        config.setUsername(username);
-        config.setPassword(password);
-
-        dataSource = new HikariDataSource(config);
-        connection = dataSource.getConnection();
+        this.dataSource = dataSource;
+        try {
+            this.connection = dataSource.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void disconnect() {
+        if (dataSource == null) return;
         dataSource.close();
     }
 
@@ -115,6 +118,6 @@ public class StorageAPI {
     }
 
     public enum StorageType {
-        MYSQL, FILE
+        MYSQL, FILE, JSON
     }
 }
