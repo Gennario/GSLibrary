@@ -265,4 +265,27 @@ public class ActionsAPI {
         }
     }
 
+    public void useAction(Player player, Replacement replacement, Section... actionConfigurations) {
+        for (Section section : actionConfigurations) {
+            if (section.contains("conditions")) {
+                boolean allow = true;
+                for (String s : section.getSection("conditions").getRoutesAsStrings(false)) {
+                    if (!GSLibrary.getInstance().getConditionsAPI().check(player, section.getSection("conditions." + s), replacement))
+                        allow = false;
+                }
+                if (!allow) {
+                    continue;
+                }
+            }
+
+            String type = section.getString("type");
+            if (!actions.containsKey(type)) {
+                System.out.println("Action " + type + " doesn't exist! Please try something else...");
+                return;
+            }
+            ActionData data = new ActionData(section);
+            actions.get(type).action(player, type, data, replacement);
+        }
+    }
+
 }

@@ -14,6 +14,17 @@ public final class TimeUtils {
         return false;
     }
 
+    public static long calculateRemainTime(Date date, TimeUnit timeUnit){
+        java.util.Date currentDate = new Date();
+        try {
+            long diffInMillies = date.getTime() - currentDate.getTime();
+            return timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     public static int decodeTime(String timeString) {
         int time = 0;
         if (timeString.contains("+")) {
@@ -48,7 +59,14 @@ public final class TimeUtils {
         long minute = TimeUnit.SECONDS.toMinutes(seconds) - (TimeUnit.SECONDS.toHours(seconds) * 60);
         long second = TimeUnit.SECONDS.toSeconds(seconds) - (TimeUnit.SECONDS.toMinutes(seconds) * 60);
 
+        int weeks = 0;
+        if(day > 7) {
+            weeks = (int) Math.floor((double) day/7d);
+            day = day-(weeks*7);
+        }
+
         String s = "";
+        if (weeks > 0) s += weeks + "w ";
         if (day > 0) s += day + "d ";
         if (hours > 0) s += hours + "h ";
         if (minute > 0) s += minute + "m ";
