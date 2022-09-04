@@ -4,12 +4,14 @@ import eu.gs.gslibrary.menu.event.GUIItemResponse;
 import eu.gs.gslibrary.menu.event.GUIPerPlayerItemResponse;
 import eu.gs.gslibrary.utils.replacement.Replacement;
 import org.bukkit.Material;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class GUIPerPlayerItem extends GUIItem {
 
     private GUIPerPlayerItemResponse guiPerPlayerItemResponse;
+    private GUIItemResponse response;
     private boolean update;
 
     public GUIPerPlayerItem() {
@@ -39,11 +41,12 @@ public class GUIPerPlayerItem extends GUIItem {
 
     @Override
     public GUIItemResponse getResponse() {
-        return null;
+        return response;
     }
 
     @Override
     public GUIItem setResponse(GUIItemResponse response) {
-        return null;
+        this.response = response;
+        return this;
     }
 }

@@ -19,7 +19,7 @@ public class ConditionValue {
     public ConditionValue(Section section) {
         conditionsAPI = GSLibrary.getInstance().getConditionsAPI();
 
-        type = section.getString("type", "null");
+        type = section.getString("type", "null").toLowerCase();;
         if(type.startsWith("!")) {
             type = type.replaceFirst("!", "");
             negative = true;
@@ -38,7 +38,7 @@ public class ConditionValue {
     public ConditionValue(String type, String input, String output) {
         conditionsAPI = GSLibrary.getInstance().getConditionsAPI();
 
-        this.type = type;
+        this.type = type.toLowerCase();;
         if(type.startsWith("!")) {
             type = type.replaceFirst("!", "");
             negative = true;

@@ -1,5 +1,6 @@
 package eu.gs.gslibrary.menu;
 
+import com.cryptomorin.xseries.XMaterial;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import eu.gs.gslibrary.GSLibrary;
@@ -16,6 +17,12 @@ import java.util.List;
 
 public final class GUIConfigUtils {
 
+    /**
+     * It loads the GUI data from the configuration file
+     *
+     * @param gui The GUI object to load the data into.
+     * @param configuration The YamlDocument that contains the configuration.
+     */
     public static void loadGuiDataFromConfig(GUI gui, YamlDocument configuration) {
         if (configuration.contains("update-time")) gui.setUpdateTime(configuration.getInt("update-time"));
         if (configuration.contains("title"))
@@ -40,6 +47,12 @@ public final class GUIConfigUtils {
         }
     }
 
+    /**
+     * It gets an item from a section
+     *
+     * @param section The section of the config file that contains the item.
+     * @return A GUIItem
+     */
     public static GUIItem getItemFromString(Section section) {
         if (section.contains("condition_item")) {
             GUIConditionalItem guiItem = new GUIConditionalItem();
@@ -51,7 +64,7 @@ public final class GUIConfigUtils {
                     Section ss = section1.getSection("conditions." + s);
                     conditions.add(new ConditionValue(ss));
                 }
-                guiItem.addItem(section1.getInt("priority"), getItem(section1.getSection("item"), null), conditions);
+                guiItem.addItem(section1.getInt("priority"), (GUINormalItem) getItem(section1.getSection("item"), null), conditions);
             }
             if (section.contains("condition_item.actions")) {
                 guiItem.setResponse((player, event) -> {
@@ -66,6 +79,14 @@ public final class GUIConfigUtils {
         }
     }
 
+    /**
+     * It gets an item from a section, and if the section contains a condition_item, it will return a GUIConditionalItem,
+     * otherwise it will return a GUIItem
+     *
+     * @param section The section of the config file that contains the item.
+     * @param replacement This is a Replacement object, which is used to replace variables in the item.
+     * @return A GUIItem
+     */
     public static GUIItem getItemFromString(Section section, Replacement replacement) {
         if (section.contains("condition_item")) {
             GUIConditionalItem guiItem = new GUIConditionalItem();
@@ -77,13 +98,16 @@ public final class GUIConfigUtils {
                     Section ss = section1.getSection("conditions." + s);
                     conditions.add(new ConditionValue(ss));
                 }
-                guiItem.addItem(section1.getInt("priority"), getItem(section1.getSection("item"), replacement), conditions);
+                guiItem.addItem(section1.getInt("priority"), (GUINormalItem) getItem(section1.getSection("item"), replacement), conditions);
             }
-            guiItem.setResponse((player, event) -> {
-                for (String s : section.getSection("condition_item.actions").getRoutesAsStrings(false)) {
-                    GSLibrary.getInstance().getActionsAPI().useAction(player, section.getSection("condition_item.actions." + s));
-                }
-            });
+
+            if (section.contains("condition_item.actions")) {
+                guiItem.setResponse((player, event) -> {
+                    for (String s : section.getSection("condition_item.actions").getRoutesAsStrings(false)) {
+                        GSLibrary.getInstance().getActionsAPI().useAction(player, replacement, section.getSection("condition_item.actions." + s));
+                    }
+                });
+            }
             return guiItem;
         } else {
             return getItem(section, replacement);
@@ -93,9 +117,9 @@ public final class GUIConfigUtils {
     private static GUIItem getItem(Section section, Replacement replacement) {
         GUINormalItem guiItem = null;
         if (section.contains("data")) {
-            guiItem = new GUINormalItem(Material.valueOf(section.getString("material")), section.getByte("data"));
+            guiItem = new GUINormalItem(XMaterial.matchXMaterial(section.getString("material")).get().parseMaterial(), section.getByte("data"));
         } else {
-            guiItem = new GUINormalItem(Material.valueOf(section.getString("material")));
+            guiItem = new GUINormalItem(XMaterial.matchXMaterial(section.getString("material")).get().parseMaterial());
         }
         if (section.contains("skin")) guiItem.setHeadSkinPlayer(section.getString("skin"));
         if (section.contains("base64")) guiItem.setHeadSkinBase64(section.getString("base64"));
