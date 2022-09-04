@@ -91,12 +91,12 @@ public class ConditionsAPI {
         if(replacement == null) replacement = new Replacement((player1, string) -> string);
 
         boolean negative = false;
-        String type = section.getString("type");
+        String type = section.getString("type").toLowerCase();
         if(type.startsWith("!")) {
             type = type.replaceFirst("!", "");
             negative = true;
         }
-        String input = Utils.colorize(player, section.getString("input", "null"));
+        String input = Utils.colorize(player, replacement.replace(player, section.getString("input", "null")));
         String output = section.getString("output", "null");
 
         if(!conditions.containsKey(type)) {
