@@ -155,9 +155,9 @@ public class GUINormalItem extends GUIItem {
         if (data > 0) itemStack.setData(new MaterialData(material, data));
         if (skinData != null) {
             if (skinData.startsWith("player---")) {
-                itemStack = HeadManager.convert(HeadManager.HeadType.PLAYER_HEAD, Utils.colorize(player, skinData.replaceFirst("player---", "")));
+                itemStack = HeadManager.convert(HeadManager.HeadType.PLAYER_HEAD, Utils.colorize(player, replacement.replace(player, skinData.replaceFirst("player---", ""))));
             } else if (skinData.startsWith("base64---")) {
-                itemStack = HeadManager.convert(HeadManager.HeadType.BASE64, Utils.colorize(player, skinData.replaceFirst("base64---", "")));
+                itemStack = HeadManager.convert(HeadManager.HeadType.BASE64, Utils.colorize(player, replacement.replace(player, skinData.replaceFirst("base64---", ""))));
             }
         }
         if (amount > 0) itemStack.setAmount(amount);
