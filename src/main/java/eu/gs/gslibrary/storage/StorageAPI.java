@@ -1,7 +1,5 @@
 package eu.gs.gslibrary.storage;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import eu.gs.gslibrary.GSLibrary;
@@ -10,6 +8,7 @@ import eu.gs.gslibrary.storage.type.Storage;
 import eu.gs.gslibrary.storage.type.StorageFile;
 import eu.gs.gslibrary.storage.type.StorageMySQL;
 import lombok.Getter;
+import me.zort.sqllib.SQLDatabaseConnectionImpl;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.Connection;
@@ -26,11 +25,11 @@ public class StorageAPI {
     private final JavaPlugin instance;
 
     private final Map<String, Storage> storageMap = new ConcurrentHashMap<>();
-    private final HikariConfig config = new HikariConfig();
     private final StorageType storageType;
     private final Section sectionMySql, sectionFile, sectionJson;
     private StorageJson storageJson;
-    private HikariDataSource dataSource;
+
+    private SQLDatabaseConnectionImpl databaseConnection;
     private YamlDocument yamlFile, yamlJson;
     private Connection connection;
 
@@ -46,7 +45,7 @@ public class StorageAPI {
 
         /* Load all tables */
         if (storageType == StorageType.JSON) {
-            storageJson = new StorageJson(this);
+            storageJson = new StorageJson(this, yamlJson);
             return;
         }
 
@@ -83,20 +82,16 @@ public class StorageAPI {
         }
 
         if (connection != null) return;
-        HikariDataSource dataSource = connect.connectMySql(sectionMySql);
-        if (dataSource == null) return;
+        SQLDatabaseConnectionImpl databaseConnection = connect.connectMySql(sectionMySql);
+        if (databaseConnection == null) return;
 
-        this.dataSource = dataSource;
-        try {
-            this.connection = dataSource.getConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        this.databaseConnection = databaseConnection;
+        this.connection = databaseConnection.getConnection();
     }
 
     public void disconnect() {
-        if (dataSource == null) return;
-        dataSource.close();
+        if (databaseConnection == null) return;
+        databaseConnection.disconnect();
     }
 
     public boolean isConnected() {
@@ -118,6 +113,8 @@ public class StorageAPI {
     }
 
     public enum StorageType {
-        MYSQL, FILE, JSON
+        MYSQL, FILE, JSON;
+
+        public static StorageType type;
     }
 }
