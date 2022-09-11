@@ -18,6 +18,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
@@ -85,11 +86,13 @@ public final class GSLibrary extends JavaPlugin {
 
     public void unloadGUI(String name) {
         if(!guiExist(name)) return;
+        HandlerList.unregisterAll(getGUI(name));
         guis.remove(name);
     }
 
     public void unloadAll(List<String> names) {
         for (String name : names) {
+            HandlerList.unregisterAll(getGUI(name));
             guis.remove(name);
         }
     }

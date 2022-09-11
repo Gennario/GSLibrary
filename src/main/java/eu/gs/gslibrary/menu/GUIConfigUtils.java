@@ -7,9 +7,11 @@ import eu.gs.gslibrary.GSLibrary;
 import eu.gs.gslibrary.conditions.ConditionValue;
 import eu.gs.gslibrary.utils.Pair;
 import eu.gs.gslibrary.utils.replacement.Replacement;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 
 import java.util.ArrayList;
@@ -33,7 +35,7 @@ public final class GUIConfigUtils {
 
         if (configuration.contains("close-actions")) {
             gui.setCloseResponse((player, event) -> {
-                for (String s : configuration.getStringList("close-actions")) {
+                for (String s : configuration.getSection("close-actions").getRoutesAsStrings(false)) {
                     GSLibrary.getInstance().getActionsAPI().useAction(player, configuration.getSection("close-actions." + s));
                 }
             });

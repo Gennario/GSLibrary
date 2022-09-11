@@ -21,6 +21,7 @@ public class Cooldown {
 
     private Map<Player, Pair<Integer, CooldownDoneResponse>> data;
 
+    // A constructor.
     public Cooldown(String name, int time) {
         this.name = name;
         this.time = time;
@@ -30,6 +31,10 @@ public class Cooldown {
         this.data = new HashMap<>();
     }
 
+    /**
+     * For each player in the data map, get the time left, decrement it, and if it's 0, stop the player, otherwise, if the
+     * player has a tickable, tick it, and then put the player back into the map with the new time
+     */
     public void update() {
         for (Player player : data.keySet()) {
             int t = data.get(player).getKey();
@@ -43,14 +48,33 @@ public class Cooldown {
         }
     }
 
+    /**
+     * It creates a new Pair object with the time and null, and then puts it into the data HashMap with the player as the
+     * key
+     *
+     * @param player The player to start the cooldown for.
+     */
     public void start(Player player) {
         data.put(player, new Pair<>(time, null));
     }
 
+    /**
+     * It takes a player and a special time, and adds them to a map
+     *
+     * @param player The player to start the special attack for.
+     * @param specialTime The time in seconds that the special bar will last.
+     */
     public void start(Player player, int specialTime) {
         data.put(player, new Pair<>(specialTime, null));
     }
 
+    /**
+     * It starts the cooldown for the player, and when the cooldown is done, it calls the response
+     *
+     * @param player The player who's cooldown is being started.
+     * @param specialTime The time in seconds that the cooldown will last.
+     * @param response The response that will be called when the cooldown is done.
+     */
     public void start(Player player, int specialTime, CooldownDoneResponse response) {
         data.put(player, new Pair<>(specialTime, response));
         response.start();

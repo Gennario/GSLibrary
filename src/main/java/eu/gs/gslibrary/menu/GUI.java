@@ -16,6 +16,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,12 +62,25 @@ public abstract class GUI implements Listener {
 
     public abstract void guiOpen(Player player);
 
+    /**
+     * It takes a key and a GUIItem, and then it puts the GUIItem in all the slots that are associated with that key
+     *
+     * @param c       The key of the item
+     * @param guiItem The GUIItem to set
+     */
     public void setItem(String c, GUIItem guiItem) {
         for (Integer integer : guiItemMap.getSlotsByKey(c)) {
             items.put(integer, guiItem);
         }
     }
 
+    /**
+     * It sets the item in the GUI by the key, and sets the response to the item
+     *
+     * @param c        The key of the item
+     * @param guiItem  The GUIItem object you want to set.
+     * @param response The response that will be executed when the item is clicked.
+     */
     public void setItem(String c, GUIItem guiItem, GUIItemResponse response) {
         guiItem.setResponse(response);
         for (Integer integer : guiItemMap.getSlotsByKey(c)) {
@@ -74,6 +88,14 @@ public abstract class GUI implements Listener {
         }
     }
 
+    /**
+     * It sets the item in the GUI
+     *
+     * @param c         The key of the item
+     * @param guiItem   The GUIItem object you want to set.
+     * @param positions The positions you want the item to be in.
+     * @param response  The response that will be executed when the item is clicked.
+     */
     public void setItem(String c, GUIItem guiItem, List<Integer> positions, GUIItemResponse response) {
         guiItem.setResponse(response);
         int position = 1;
@@ -85,20 +107,30 @@ public abstract class GUI implements Listener {
         }
     }
 
+    /**
+     * Adds a pagination to the list of paginations.
+     *
+     * @param pagination The pagination to add.
+     */
     public void addPagination(GUIPagination pagination) {
         paginations.add(pagination);
     }
 
+    /**
+     * It opens the GUI for the specified players
+     *
+     * @param replacement This is the replacement object that will be used to replace the placeholders in the GUI.
+     */
     public void open(Replacement replacement, Player... players) {
         GUI gui = this;
         new AsyncMethod() {
             @Override
             public void action() {
                 for (Player player : players) {
-                    PlayerGUIHistory playerGUIHistory = null;
-                    if(!GSLibrary.getInstance().getPlayerGUIHistory().containsKey(player)) {
+                    PlayerGUIHistory playerGUIHistory;
+                    if (!GSLibrary.getInstance().getPlayerGUIHistory().containsKey(player)) {
                         playerGUIHistory = new PlayerGUIHistory(player);
-                    }else {
+                    } else {
                         playerGUIHistory = GSLibrary.getInstance().getPlayerGUIHistory().get(player);
                     }
                     playerGUIHistory.setCurrent(gui);
@@ -118,27 +150,44 @@ public abstract class GUI implements Listener {
         };
     }
 
+    /**
+     * It opens the GUI for the specified players
+     *
+     * @param replacement The replacement to use for the GUI.
+     * @param resetPage   If true, the page will be reset to 1.
+     */
     public void open(Replacement replacement, boolean resetPage, Player... players) {
         GUI gui = this;
         new AsyncMethod() {
             @Override
             public void action() {
-                for (Player player : players) {
-                    PlayerGUIData playerGUIData = null;
-                    if (playerGUIDataMap.containsKey(player)) {
-                        playerGUIData = playerGUIDataMap.get(player);
-                    } else {
-                        playerGUIData = new PlayerGUIData(gui, player, replacement);
-                        playerGUIDataMap.put(player, playerGUIData);
-                        playerGUIData.load();
-                    }
-                    if (resetPage) {
-                        for (GUIPagination pagination : paginations) {
-                            pagination.getPaginationPlayerDataMap().get(player).setPage(1);
+                try {
+                    for (Player player : players) {
+                        PlayerGUIHistory playerGUIHistory;
+                        if (!GSLibrary.getInstance().getPlayerGUIHistory().containsKey(player)) {
+                            playerGUIHistory = new PlayerGUIHistory(player);
+                        } else {
+                            playerGUIHistory = GSLibrary.getInstance().getPlayerGUIHistory().get(player);
                         }
+                        playerGUIHistory.setCurrent(gui);
+                        PlayerGUIData playerGUIData = null;
+                        if (playerGUIDataMap.containsKey(player)) {
+                            playerGUIData = playerGUIDataMap.get(player);
+                        } else {
+                            playerGUIData = new PlayerGUIData(gui, player, replacement);
+                            playerGUIDataMap.put(player, playerGUIData);
+                            playerGUIData.load();
+                        }
+                        if (resetPage) {
+                            for (GUIPagination pagination : paginations) {
+                                pagination.getPaginationPlayerDataMap().get(player).setPage(1);
+                            }
+                        }
+                        playerGUIData.updateGui(true);
+                        playerGUIData.open();
                     }
-                    playerGUIData.updateGui(true);
-                    playerGUIData.open();
+                }catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         };
@@ -161,7 +210,9 @@ public abstract class GUI implements Listener {
                     Player player = (Player) event.getPlayer();
                     if (playerGUIDataMap.containsKey(player)) {
                         if (event.getInventory().equals(playerGUIDataMap.get(player).getInventory())) {
-                            if (openResponse != null) openResponse.onOpen(player, event);
+                            if (openResponse != null) {
+                                openResponse.onOpen(player, event);
+                            }
                         }
                     }
                 }
@@ -171,19 +222,18 @@ public abstract class GUI implements Listener {
 
     @EventHandler
     public void onClose(InventoryCloseEvent event) {
-        new AsyncMethod() {
-            @Override
-            public void action() {
-                if (event.getPlayer() instanceof Player) {
-                    Player player = (Player) event.getPlayer();
-                    if (playerGUIDataMap.containsKey(player)) {
-                        if (event.getPlayer().getOpenInventory().getTopInventory().equals(playerGUIDataMap.get(player).getInventory())) {
-                            if (closeResponse != null) closeResponse.onClose(player, event);
-                        }
+        if (event.getPlayer() instanceof Player) {
+            Player player = (Player) event.getPlayer();
+            Inventory inventory = event.getPlayer().getOpenInventory().getTopInventory();
+            if (playerGUIDataMap.containsKey(player)) {
+                PlayerGUIData guiData = playerGUIDataMap.get(player);
+                if (inventory.equals(guiData.getInventory())) {
+                    if (closeResponse != null) {
+                        closeResponse.onClose(player, event);
                     }
                 }
             }
-        };
+        }
     }
 
     @EventHandler

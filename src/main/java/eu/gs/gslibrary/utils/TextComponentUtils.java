@@ -19,10 +19,23 @@ public class TextComponentUtils {
         return textComponent;
     }
 
+    /**
+     * It sets the hover text of a TextComponent
+     *
+     * @param textComponent The TextComponent you want to set the hover text for.
+     * @param hover The text to be displayed when the player hovers over the text.
+     */
     public void setHover(TextComponent textComponent, String hover) {
         textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(hover)));
     }
 
+    /**
+     * It sets the click event of a text component to a new click event with the specified action type and value
+     *
+     * @param textComponent The TextComponent you want to set the click event for.
+     * @param actionType The type of action to perform when the player clicks the text.
+     * @param value The value of the click event.
+     */
     public void setClick(TextComponent textComponent, ClickEvent.Action actionType, String value) {
         textComponent.setClickEvent(new ClickEvent(actionType, value));
     }

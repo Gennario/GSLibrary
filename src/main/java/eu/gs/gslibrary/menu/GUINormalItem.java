@@ -192,6 +192,28 @@ public class GUINormalItem extends GUIItem {
         return itemStack;
     }
 
+    public GUIItem clone() {
+        GUINormalItem guiNormalItem = new GUINormalItem(material);
+
+        if(slotChar != null) guiNormalItem.setSlotChar(slotChar);
+        guiNormalItem.setUpdate(update);
+        if(response != null) guiNormalItem.setResponse(response);
+        if(material != null) guiNormalItem.setMaterial(material);
+        if(skinData != null) guiNormalItem.setSkinData(skinData);
+        guiNormalItem.setData(data);
+        guiNormalItem.setAmount(amount);
+        guiNormalItem.setCustomModelData(customModelData);
+        if(name != null) guiNormalItem.setName(name);
+        if(lore != null) guiNormalItem.setLore(new ArrayList<>(lore));
+        guiNormalItem.setUnbreakable(unbreakable);
+        if(enchantments != null) guiNormalItem.setEnchantments(new ArrayList<>(enchantments));
+        if(itemFlags != null) guiNormalItem.setItemFlags(new ArrayList<>(itemFlags));
+        if(attributeModifiers != null) guiNormalItem.setAttributeModifiers(attributeModifiers);
+        if(replacement != null) guiNormalItem.setReplacement(replacement);
+
+        return guiNormalItem;
+    }
+
     public GUINormalItem setAmount(int amount) {
         this.amount = amount;
         return this;
