@@ -5,21 +5,27 @@ import lombok.Setter;
 
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
 public class StorageTable {
 
-    private final String table, condition;
+    private final String table;
+    private String condition;
     private StorageAPI storageAPI;
     private StringBuilder stringBuilder;
 
-    public StorageTable(String table, String condition) {
+    private final List<String> columns = new ArrayList<>();
+
+    public StorageTable(String table, String conditionUniquePrimaryKey) {
         this.table = table;
-        this.condition = condition;
+        this.condition = conditionUniquePrimaryKey;
         this.stringBuilder = null;
 
-        this.addColumnUnique(condition);
+        if (conditionUniquePrimaryKey.isEmpty()) return;
+        this.addColumnUnique(conditionUniquePrimaryKey);
     }
 
     public StorageTable loadColumns(String condition, String... columns) {
@@ -27,11 +33,20 @@ public class StorageTable {
         for (String column : columns) {
             String[] split = column.split("//");
             switch (split[1].toLowerCase()) {
-                case "string": case "text": this.addColumn(StorageSQLType.STRING, split[0]);
-                case "int": case "integer": this.addColumn(StorageSQLType.INTEGER, split[0]);
-                case "boolean": this.addColumn(StorageSQLType.BOOLEAN, split[0]);
-                case "float": this.addColumn(StorageSQLType.FLOAT, split[0]);
-                case "double": this.addColumn(StorageSQLType.DOUBLE, split[0]);
+                case "condition":
+                    this.addColumnCondition(split[0]);
+                case "string":
+                case "text":
+                    this.addColumn(StorageSQLType.STRING, split[0]);
+                case "int":
+                case "integer":
+                    this.addColumn(StorageSQLType.INTEGER, split[0]);
+                case "boolean":
+                    this.addColumn(StorageSQLType.BOOLEAN, split[0]);
+                case "float":
+                    this.addColumn(StorageSQLType.FLOAT, split[0]);
+                case "double":
+                    this.addColumn(StorageSQLType.DOUBLE, split[0]);
             }
         }
         return this;
@@ -43,6 +58,20 @@ public class StorageTable {
         } else {
             stringBuilder.append(", ").append(column).append(" varchar(32) UNIQUE PRIMARY KEY");
         }
+
+        columns.add(column);
+        return this;
+    }
+
+    public StorageTable addColumnCondition(String column) {
+        if (stringBuilder == null) {
+            stringBuilder = new StringBuilder("(" + column + " varchar(32)");
+        } else {
+            stringBuilder.append(", ").append(column).append(" varchar(32)");
+        }
+
+        this.condition = column;
+        columns.add(column);
         return this;
     }
 
@@ -55,7 +84,10 @@ public class StorageTable {
             } else {
                 stringBuilder.append(", ").append(column).append(" ").append(type);
             }
+
+            this.columns.add(column);
         }
+
         return this;
     }
 
@@ -67,6 +99,8 @@ public class StorageTable {
         } else {
             stringBuilder.append(", ").append(column).append(" ").append(type);
         }
+
+        this.columns.add(column);
         return this;
     }
 

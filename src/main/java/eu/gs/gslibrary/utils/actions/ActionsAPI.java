@@ -250,6 +250,9 @@ public class ActionsAPI {
                     if (!GSLibrary.getInstance().getConditionsAPI().check(player, section.getSection("conditions." + s), replacement))
                         allow = false;
                 }
+
+                System.out.println(allow);
+
                 if (!allow) {
                     continue;
                 }

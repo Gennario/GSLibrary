@@ -1,7 +1,6 @@
 package eu.gs.gslibrary.utils.updater;
 
 import eu.gs.gslibrary.GSLibrary;
-import eu.gs.gslibrary.utils.Pair;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.ChatColor;
@@ -26,7 +25,7 @@ public class PluginUpdater {
     private JavaPlugin plugin;
 
     private Map<String, String> data;
-    private List<String> optimalovoData;
+    private List<String> dataList;
 
     private String pluginVersion, sitesVersion;
 
@@ -34,7 +33,7 @@ public class PluginUpdater {
         this.resourceId = resourceId;
         this.plugin = plugin;
         this.data = new HashMap<>();
-        this.optimalovoData = new ArrayList<>();
+        this.dataList = new ArrayList<>();
 
         try {
             checkVersions();
@@ -55,8 +54,8 @@ public class PluginUpdater {
         for (String key : data.keySet()) {
             System.out.println(ChatColor.WHITE + " " + key + ": " + ChatColor.GREEN + data.get(key));
         }
-        for (String optimalovoDatum : optimalovoData) {
-            System.out.println(ChatColor.WHITE + optimalovoDatum);
+        for (String s : dataList) {
+            System.out.println(ChatColor.WHITE + s);
         }
         System.out.println("");
         System.out.println(ChatColor.WHITE + "This plugin is running on " + ChatColor.GREEN + description.getVersion() + ChatColor.WHITE + "...");

@@ -2,12 +2,10 @@ package eu.gs.gslibrary.commands;
 
 import eu.gs.gslibrary.GSLibrary;
 import eu.gs.gslibrary.language.LanguageAPI;
-import eu.gs.gslibrary.menu.GUI;
 import eu.gs.gslibrary.utils.replacement.Replacement;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
@@ -28,15 +26,11 @@ public class CommandAPI {
 
     private final JavaPlugin plugin;
     private final String name;
-
+    private final List<SubCommand> subCommands;
     private String description;
     private List<String> aliases;
-
     private boolean help;
     private CommandResponse emptyCommandResponse;
-
-    private final List<SubCommand> subCommands;
-
     private LanguageAPI languageAPI;
 
     public CommandAPI(JavaPlugin plugin, String name) {
@@ -230,13 +224,13 @@ public class CommandAPI {
                                     case LONG:
                                     case FLOAT:
                                     case DOUBLE:
-                                        if(!subCommand.getCustomTabCompleteArgs().isEmpty()) {
+                                        if (!subCommand.getCustomTabCompleteArgs().isEmpty()) {
                                             return subCommand.getCustomTabCompleteArgs();
                                         }
                                         list.add("[<" + subCommand.getSubCommandArgs().get(count).getName() + ">]");
                                         return list;
                                     case MATERIAL:
-                                        if(!subCommand.getCustomTabCompleteArgs().isEmpty()) {
+                                        if (!subCommand.getCustomTabCompleteArgs().isEmpty()) {
                                             return subCommand.getCustomTabCompleteArgs();
                                         }
                                         for (Material material : Material.values()) {
@@ -244,7 +238,7 @@ public class CommandAPI {
                                         }
                                         return list;
                                     case ENTITY:
-                                        if(!subCommand.getCustomTabCompleteArgs().isEmpty()) {
+                                        if (!subCommand.getCustomTabCompleteArgs().isEmpty()) {
                                             return subCommand.getCustomTabCompleteArgs();
                                         }
                                         for (EntityType entityType : EntityType.values()) {
