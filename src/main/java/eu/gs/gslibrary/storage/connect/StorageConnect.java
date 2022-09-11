@@ -37,7 +37,7 @@ public class StorageConnect {
 
         SQLDatabaseOptions options = new SQLDatabaseOptions();
         options.setLogSqlErrors(false);
-        options.setDebug(true);
+        options.setDebug(false);
 
         SQLDatabaseConnectionImpl connection = SQLConnectionBuilder.of(host, port, database, username, password)
                 .withParam("autoReconnect", "" + autoReconnect)

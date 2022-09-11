@@ -1,4 +1,8 @@
 name: GSLibrary
+description: Provided by Gennario's Studios development team
 version: '${project.version}'
 main: eu.gs.gslibrary.GSLibrary
 api-version: 1.13
+authors:
+  - Gennario
+  - Optimal
