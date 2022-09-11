@@ -3,8 +3,8 @@ package eu.gs.gslibrary.storage;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import eu.gs.gslibrary.GSLibrary;
-import eu.gs.gslibrary.storage.json.StorageJson;
-import eu.gs.gslibrary.storage.type.Storage;
+import eu.gs.gslibrary.storage.connect.StorageConnect;
+import eu.gs.gslibrary.storage.connect.StorageTable;
 import eu.gs.gslibrary.storage.type.StorageFile;
 import eu.gs.gslibrary.storage.type.StorageMySQL;
 import lombok.Getter;
@@ -27,7 +27,6 @@ public class StorageAPI {
     private final Map<String, Storage> storageMap = new ConcurrentHashMap<>();
     private final StorageType storageType;
     private final Section sectionMySql, sectionFile, sectionJson;
-    private StorageJson storageJson;
 
     private SQLDatabaseConnectionImpl databaseConnection;
     private YamlDocument yamlFile, yamlJson;
@@ -43,13 +42,6 @@ public class StorageAPI {
 
         this.connect();
 
-        /* Load all tables */
-        if (storageType == StorageType.JSON) {
-            storageJson = new StorageJson(this, yamlJson);
-            return;
-        }
-
-
         for (StorageTable storageTable : tables) {
             storageTable.setStorageAPI(this);
             if (storageType == StorageType.FILE) {
@@ -58,7 +50,6 @@ public class StorageAPI {
                 storageMap.put(storageTable.getTable(), new StorageMySQL(storageTable.getTable(), storageTable.getCondition(), this, storageTable));
             }
 
-            System.out.println(connection);
             storageTable.createMySqlTable();
         }
     }
@@ -72,12 +63,6 @@ public class StorageAPI {
             if (yaml == null) return;
 
             yamlFile = yaml;
-            return;
-        } else if (storageType == StorageType.JSON) {
-            YamlDocument yaml = connect.connectJson(sectionJson);
-            if (yaml == null) return;
-
-            yamlJson = yaml;
             return;
         }
 
@@ -113,7 +98,7 @@ public class StorageAPI {
     }
 
     public enum StorageType {
-        MYSQL, FILE, JSON;
+        MYSQL, FILE;
 
         public static StorageType type;
     }

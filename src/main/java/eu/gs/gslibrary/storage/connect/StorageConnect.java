@@ -1,4 +1,4 @@
-package eu.gs.gslibrary.storage;
+package eu.gs.gslibrary.storage.connect;
 
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
@@ -37,6 +37,7 @@ public class StorageConnect {
 
         SQLDatabaseOptions options = new SQLDatabaseOptions();
         options.setLogSqlErrors(false);
+        options.setDebug(true);
 
         SQLDatabaseConnectionImpl connection = SQLConnectionBuilder.of(host, port, database, username, password)
                 .withParam("autoReconnect", "" + autoReconnect)

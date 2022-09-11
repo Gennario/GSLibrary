@@ -1,5 +1,6 @@
-package eu.gs.gslibrary.storage;
+package eu.gs.gslibrary.storage.connect;
 
+import eu.gs.gslibrary.storage.StorageAPI;
 import lombok.Getter;
 import lombok.Setter;
 

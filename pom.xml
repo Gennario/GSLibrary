@@ -117,7 +117,7 @@
         <dependency>
             <groupId>com.github.ZorTik</groupId>
             <artifactId>AdvancedSQLClient</artifactId>
-            <version>0.3.5</version>
+            <version>0.3.7</version>
         </dependency>
         <dependency>
             <groupId>com.github.cryptomorin</groupId>
