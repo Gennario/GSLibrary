@@ -4,7 +4,9 @@ Library for all plugins created by Gennario's Studios..
 Authors: Gennario, Optimal
 
 ## Downloads:
-- soon..
+- https://www.spigotmc.org/resources/105336/
+- https://polymart.org/resource/2882/
+- https://builtbybit.com/resources/25209/
 
 ### Maven:
 ```xml
