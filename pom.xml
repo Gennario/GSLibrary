@@ -6,7 +6,7 @@
 
     <groupId>eu.gs</groupId>
     <artifactId>GSLibrary</artifactId>
-    <version>BETA-1.0.0</version>
+    <version>BETA-1.0v2</version>
     <packaging>jar</packaging>
 
     <name>GSLibrary</name>
