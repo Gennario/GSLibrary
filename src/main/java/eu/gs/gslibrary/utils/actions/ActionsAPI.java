@@ -242,6 +242,7 @@ public class ActionsAPI {
         actions.put(identifier, response);
     }
 
+
     public void useAction(Player player, Section... actionConfigurations) {
         for (Section section : actionConfigurations) {
             if (section.contains("conditions")) {
