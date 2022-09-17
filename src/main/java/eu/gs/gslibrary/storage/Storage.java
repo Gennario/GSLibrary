@@ -67,7 +67,11 @@ public interface Storage {
 
     default void run(Runnable runnable) {
         try {
-            CompletableFuture.runAsync(runnable);
+            CompletableFuture.runAsync(runnable).whenComplete(((unused, throwable) -> {
+                if (throwable != null) {
+                    throwable.printStackTrace();
+                }
+            }));
         } catch (Exception e) {
             try {
                 Bukkit.getScheduler().runTask(GSLibrary.getInstance(), runnable);
