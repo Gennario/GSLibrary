@@ -252,8 +252,6 @@ public class ActionsAPI {
                         allow = false;
                 }
 
-                System.out.println(allow);
-
                 if (!allow) {
                     continue;
                 }

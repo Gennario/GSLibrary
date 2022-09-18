@@ -36,61 +36,64 @@ public class PlayerGUIData {
     }
 
     public void load() {
-        inventory = Bukkit.createInventory(player, gui.getInventoryType(), replacement.replace(player, Utils.colorize(player, gui.getGuiTitle())));
-        if (inventory.getType().equals(InventoryType.CHEST) || inventory.getType().equals(InventoryType.ENDER_CHEST) || inventory.getType().equals(InventoryType.SHULKER_BOX)) {
-            inventory = Bukkit.createInventory(player, gui.getRows().getSlots(), replacement.replace(player, Utils.colorize(player, gui.getGuiTitle())));
-        }
-
-        for (Integer integer : gui.getItems().keySet()) {
-            GUIItem guiItem = gui.getItems().get(integer);
-            ItemStack stack = guiItem.loadItem(player, replacement);
-            inventory.setItem(integer, stack);
-        }
-
-        for (GUIPagination pagination : gui.getPaginations()) {
-            if (!pagination.getPaginationPlayerDataMap().containsKey(player)) {
-                pagination.loadPlayerData(player);
+        try {
+            inventory = Bukkit.createInventory(player, gui.getInventoryType(), replacement.replace(player, Utils.colorize(player, gui.getGuiTitle())));
+            if (inventory.getType().equals(InventoryType.CHEST) || inventory.getType().equals(InventoryType.ENDER_CHEST) || inventory.getType().equals(InventoryType.SHULKER_BOX)) {
+                inventory = Bukkit.createInventory(player, gui.getRows().getSlots(), replacement.replace(player, Utils.colorize(player, gui.getGuiTitle())));
             }
 
-            GUIPaginationPlayerData playerData = pagination.getPaginationPlayerDataMap().get(player);
-
-            int i = 0;
-            for (GUIItem pageItem : pagination.getPageItems(player)) {
-                int slot = pagination.getSlots().get(i);
-                playerData.addGUIItem(slot, pageItem);
-                inventory.setItem(slot, pageItem.loadItem(player, replacement));
-                i++;
+            for (Integer integer : gui.getItems().keySet()) {
+                GUIItem guiItem = gui.getItems().get(integer);
+                ItemStack stack = guiItem.loadItem(player, replacement);
+                inventory.setItem(integer, stack);
             }
 
-            if (pagination.getPreviousPageItem() != null) {
-                if (pagination.canPreviousPage(playerData.getPage())) {
-                    gui.getGuiItemMap().getSlotsByKey(pagination.getPreviousPageItem().getValue()).forEach(integer -> {
-                        GUIItem guiItem = pagination.getPreviousPageItem().getKey();
-                        inventory.setItem(integer, guiItem.loadItem(player, replacement));
-                    });
-                } else if (pagination.getPreviousPageEmptyItem() != null) {
-                    gui.getGuiItemMap().getSlotsByKey(pagination.getPreviousPageItem().getValue()).forEach(integer -> {
-                        GUIItem guiItem = pagination.getPreviousPageEmptyItem().getKey();
-                        inventory.setItem(integer, guiItem.loadItem(player, replacement));
-                    });
+            for (GUIPagination pagination : gui.getPaginations()) {
+                if (!pagination.getPaginationPlayerDataMap().containsKey(player)) {
+                    pagination.loadPlayerData(player);
+                }
+
+                GUIPaginationPlayerData playerData = pagination.getPaginationPlayerDataMap().get(player);
+
+                int i = 0;
+                for (GUIItem pageItem : pagination.getPageItems(player)) {
+                    int slot = pagination.getSlots().get(i);
+                    playerData.addGUIItem(slot, pageItem);
+                    inventory.setItem(slot, pageItem.loadItem(player, replacement));
+                    i++;
+                }
+
+                if (pagination.getPreviousPageItem() != null) {
+                    if (pagination.canPreviousPage(playerData.getPage())) {
+                        gui.getGuiItemMap().getSlotsByKey(pagination.getPreviousPageItem().getValue()).forEach(integer -> {
+                            GUIItem guiItem = pagination.getPreviousPageItem().getKey();
+                            inventory.setItem(integer, guiItem.loadItem(player, replacement));
+                        });
+                    } else if (pagination.getPreviousPageEmptyItem() != null) {
+                        gui.getGuiItemMap().getSlotsByKey(pagination.getPreviousPageItem().getValue()).forEach(integer -> {
+                            GUIItem guiItem = pagination.getPreviousPageEmptyItem().getKey();
+                            inventory.setItem(integer, guiItem.loadItem(player, replacement));
+                        });
+                    }
+                }
+
+                if (pagination.getNextPageItem() != null) {
+                    if (pagination.canNextPage(playerData.getPage(), playerData.getSize())) {
+                        gui.getGuiItemMap().getSlotsByKey(pagination.getNextPageItem().getValue()).forEach(integer -> {
+                            GUIItem guiItem = pagination.getNextPageItem().getKey();
+                            inventory.setItem(integer, guiItem.loadItem(player, replacement));
+                        });
+                    } else if (pagination.getNextPageEmptyItem() != null) {
+                        gui.getGuiItemMap().getSlotsByKey(pagination.getNextPageItem().getValue()).forEach(integer -> {
+                            GUIItem guiItem = pagination.getNextPageEmptyItem().getKey();
+                            inventory.setItem(integer, guiItem.loadItem(player, replacement));
+                        });
+                    }
                 }
             }
-
-            if (pagination.getNextPageItem() != null) {
-                if (pagination.canNextPage(playerData.getPage(), playerData.getSize())) {
-                    gui.getGuiItemMap().getSlotsByKey(pagination.getNextPageItem().getValue()).forEach(integer -> {
-                        GUIItem guiItem = pagination.getNextPageItem().getKey();
-                        inventory.setItem(integer, guiItem.loadItem(player, replacement));
-                    });
-                } else if (pagination.getNextPageEmptyItem() != null) {
-                    gui.getGuiItemMap().getSlotsByKey(pagination.getNextPageItem().getValue()).forEach(integer -> {
-                        GUIItem guiItem = pagination.getNextPageEmptyItem().getKey();
-                        inventory.setItem(integer, guiItem.loadItem(player, replacement));
-                    });
-                }
-            }
+        }catch (Exception e) {
+            e.printStackTrace();
         }
-
     }
 
     public void updateGui(boolean resetItems) {

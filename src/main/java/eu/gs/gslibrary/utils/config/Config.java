@@ -127,7 +127,18 @@ public class Config {
         } else {
             path = this.path + "/" + name + ".yml";
         }
-        if(new File(plugin.getDataFolder()+path).exists()) return;
+        if(new File(plugin.getDataFolder()+path).exists()) {
+            if (!update) {
+                yamlDocument = YamlDocument.create(new File(plugin.getDataFolder(), path));
+                return;
+            }
+            yamlDocument = YamlDocument.create(new File(plugin.getDataFolder(), path),
+                    GeneralSettings.DEFAULT,
+                    loaderSettings.build(),
+                    DumperSettings.DEFAULT,
+                    updaterSettings.build());
+            return;
+        }
         if (!update) {
             yamlDocument = YamlDocument.create(new File(plugin.getDataFolder(), path), resource);
             return;
