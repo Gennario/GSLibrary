@@ -120,4 +120,23 @@ public class Config {
                 updaterSettings.build());
     }
 
+    public void loadIfNotExist() throws IOException {
+        String path;
+        if (this.name == null) {
+            path = this.path;
+        } else {
+            path = this.path + "/" + name + ".yml";
+        }
+        if(new File(plugin.getDataFolder()+path).exists()) return;
+        if (!update) {
+            yamlDocument = YamlDocument.create(new File(plugin.getDataFolder(), path), resource);
+            return;
+        }
+        yamlDocument = YamlDocument.create(new File(plugin.getDataFolder(), path), resource,
+                GeneralSettings.DEFAULT,
+                loaderSettings.build(),
+                DumperSettings.DEFAULT,
+                updaterSettings.build());
+    }
+
 }

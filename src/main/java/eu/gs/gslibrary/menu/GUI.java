@@ -29,7 +29,7 @@ public abstract class GUI implements Listener {
 
     private final String type;
 
-    private GUITitle guiTitle;
+    private String guiTitle;
     private Rows rows;
     private GUIItemMap guiItemMap;
     private InventoryType inventoryType;

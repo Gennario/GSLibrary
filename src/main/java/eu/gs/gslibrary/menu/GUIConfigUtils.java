@@ -27,8 +27,9 @@ public final class GUIConfigUtils {
      */
     public static void loadGuiDataFromConfig(GUI gui, YamlDocument configuration) {
         if (configuration.contains("update-time")) gui.setUpdateTime(configuration.getInt("update-time"));
-        if (configuration.contains("title"))
-            gui.setGuiTitle(new GUITitle(GUITitle.TitleType.NORMAL, "0--" + configuration.getString("title")));
+        if (configuration.contains("title")) {
+            gui.setGuiTitle(configuration.getString("title", "title"));
+        }
         if (configuration.contains("rows")) gui.setRows(Rows.valueOf(configuration.getString("rows")));
         if (configuration.contains("type"))
             gui.setInventoryType(InventoryType.valueOf(configuration.getString("type")));

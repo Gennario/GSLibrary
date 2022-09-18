@@ -1,6 +1,7 @@
 package eu.gs.gslibrary.menu;
 
 import com.google.gson.stream.JsonToken;
+import eu.gs.gslibrary.utils.Utils;
 import eu.gs.gslibrary.utils.methods.AsyncMethod;
 import eu.gs.gslibrary.utils.methods.SyncMethod;
 import eu.gs.gslibrary.utils.replacement.Replacement;
@@ -35,9 +36,9 @@ public class PlayerGUIData {
     }
 
     public void load() {
-        inventory = Bukkit.createInventory(player, gui.getInventoryType(), gui.getGuiTitle().next(player, replacement));
+        inventory = Bukkit.createInventory(player, gui.getInventoryType(), replacement.replace(player, Utils.colorize(player, gui.getGuiTitle())));
         if (inventory.getType().equals(InventoryType.CHEST) || inventory.getType().equals(InventoryType.ENDER_CHEST) || inventory.getType().equals(InventoryType.SHULKER_BOX)) {
-            inventory = Bukkit.createInventory(player, gui.getRows().getSlots(), gui.getGuiTitle().next(player, replacement));
+            inventory = Bukkit.createInventory(player, gui.getRows().getSlots(), replacement.replace(player, Utils.colorize(player, gui.getGuiTitle())));
         }
 
         for (Integer integer : gui.getItems().keySet()) {
