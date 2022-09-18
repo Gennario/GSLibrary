@@ -8,8 +8,9 @@ Authors: Gennario, Optimal
 - https://polymart.org/resource/2882/
 - https://builtbybit.com/resources/25209/
 
-Current version: **BETA-1.0v2**
+-----------------------------------------------
 
+Current version: **BETA-1.0v2**
 ### Maven:
 ```xml
 	<repositories>
