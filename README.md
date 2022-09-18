@@ -24,6 +24,7 @@ Current version: **BETA-1.0v2**
 	    <groupId>com.github.Gennario</groupId>
 	    <artifactId>GSLibrary</artifactId>
 	    <version>VERSION</version>
+            <scope>provided</scope>
 	</dependency>
 ```
 
