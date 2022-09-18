@@ -8,6 +8,8 @@ Authors: Gennario, Optimal
 - https://polymart.org/resource/2882/
 - https://builtbybit.com/resources/25209/
 
+Current version: **BETA-1.0v2**
+
 ### Maven:
 ```xml
 	<repositories>
@@ -20,7 +22,7 @@ Authors: Gennario, Optimal
 	<dependency>
 	    <groupId>com.github.Gennario</groupId>
 	    <artifactId>GSLibrary</artifactId>
-	    <version>70f2ca2ef9</version>
+	    <version>VERSION</version>
 	</dependency>
 ```
 
@@ -34,6 +36,6 @@ Authors: Gennario, Optimal
 	}
   
 	dependencies {
-	        implementation 'com.github.Gennario:GSLibrary:70f2ca2ef9'
+	        implementation 'com.github.Gennario:GSLibrary:VERSION'
 	}
 ```
