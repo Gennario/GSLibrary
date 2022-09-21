@@ -58,7 +58,7 @@ public class StorageConnect {
         if (!section.isString("name")) return null;
 
         try {
-            Config config = new Config(instance, "", section.getString("name"));
+            Config config = new Config(instance, "storages", section.getString("name"));
             config.setUpdate(false);
             try {
                 config.load();
@@ -80,7 +80,7 @@ public class StorageConnect {
         if (!section.isString("name")) return null;
 
         try {
-            Config config = new Config(instance, "", section.getString("name"));
+            Config config = new Config(instance, "storages", section.getString("name"));
             config.setUpdate(false);
             try {
                 config.load();
