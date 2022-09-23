@@ -10,7 +10,7 @@ Authors: Gennario, Optimal
 
 -----------------------------------------------
 
-Current version: **BETA-1.0v2**
+Current version: **BETA-1.0v3**
 ### Maven:
 ```xml
 	<repositories>
