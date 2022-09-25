@@ -4,6 +4,8 @@ import eu.gs.gslibrary.GSLibrary;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.concurrent.CompletableFuture;
+
 /**
  * It's a class that allows you to run runnables on the main thread or in a separate thread
  */
@@ -45,14 +47,14 @@ public class Scheduler {
     }
 
     /**
-     * It runs a runnable every interval ticks, after a delay of delay ticks
+     * It runs a task on the main thread, and repeats it every X ticks
      *
      * @param runnable The runnable to run.
      * @param delay    The amount of ticks to wait before running the task.
      * @param interval The interval in ticks to wait between each execution of the task.
      * @return A BukkitTask object.
      */
-    public static BukkitTask sync(Runnable runnable, int delay, int interval) {
+    public static BukkitTask syncTimer(Runnable runnable, int delay, int interval) {
         return Bukkit.getScheduler().runTaskTimer(GSLibrary.getInstance(), runnable, delay, interval);
     }
 
@@ -142,7 +144,7 @@ public class Scheduler {
      * @param interval The interval in ticks to wait between each execution of the task.
      * @return A BukkitTask object.
      */
-    public static BukkitTask async(Runnable runnable, int delay, int interval) {
+    public static BukkitTask asyncTimer(Runnable runnable, int delay, int interval) {
         return Bukkit.getScheduler().runTaskTimerAsynchronously(GSLibrary.getInstance(), runnable, delay, interval);
     }
 
@@ -184,5 +186,17 @@ public class Scheduler {
      */
     public static void asyncDelay(Runnable runnable, int delay) {
         Bukkit.getScheduler().scheduleAsyncDelayedTask(GSLibrary.getInstance(), runnable, delay);
+    }
+
+    /**
+     * Run the given runnable asynchronously, and if it throws an exception, print the stack trace.
+     *
+     * @param runnable The runnable to run.
+     */
+    public static void completableFeather(Runnable runnable) {
+        CompletableFuture.runAsync(runnable).whenComplete(((unused, throwable) -> {
+            if (throwable == null) return;
+            throwable.printStackTrace();
+        }));
     }
 }
