@@ -99,16 +99,26 @@ public class MathUtils {
         return locations;
     }
 
-    public static List<Location> drawCircle(Location location, int points, double radius, String direcion) {
+    public static List<Location> drawCircle(Location location, int points, double radius, String direcion, String type) {
         Location origin = location.clone();
         List<Location> locations = new ArrayList<>();
         for (int i = 0; i < points; i++) {
             double angle = 2 * Math.PI * i / points;
             if (direcion.equals("RIGHT")) {
-                Location point = origin.clone().add(radius * Math.cos(angle), 0.0d, radius * Math.sin(angle));
+                Location point = null;
+                if(type.equalsIgnoreCase("VERTICAL")) {
+                    point = origin.clone().add(radius * Math.cos(angle), radius * Math.sin(angle),  0.0d);
+                }else {
+                    point = origin.clone().add(radius * Math.cos(angle), 0.0d, radius * Math.sin(angle));
+                }
                 locations.add(point);
             } else if (direcion.equals("LEFT")) {
-                Location point = origin.clone().add(radius * Math.sin(angle), 0.0d, radius * Math.cos(angle));
+                Location point = null;
+                if(type.equalsIgnoreCase("VERTICAL")) {
+                    point = origin.clone().add(0.0d, radius * Math.sin(angle), radius * Math.cos(angle));
+                }else {
+                    point = origin.clone().add(radius * Math.sin(angle), 0.0d, radius * Math.cos(angle));
+                }
                 locations.add(point);
             }
         }

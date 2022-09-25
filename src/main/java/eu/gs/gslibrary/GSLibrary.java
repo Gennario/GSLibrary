@@ -1,14 +1,18 @@
 package eu.gs.gslibrary;
 
-import eu.gs.gslibrary.commands.CommandAPI;
-import eu.gs.gslibrary.commands.SubCommandArg;
-import eu.gs.gslibrary.conditions.Condition;
+import com.cryptomorin.xseries.XMaterial;
 import eu.gs.gslibrary.conditions.ConditionsAPI;
 import eu.gs.gslibrary.menu.GUI;
 import eu.gs.gslibrary.menu.GUIRunnable;
 import eu.gs.gslibrary.menu.PlayerGUIHistory;
-import eu.gs.gslibrary.menu.event.GUIPerPlayerItemResponse;
-import eu.gs.gslibrary.menu.event.GUIPerPlayerPagination;
+import eu.gs.gslibrary.particles.Particle;
+import eu.gs.gslibrary.particles.ParticleCreator;
+import eu.gs.gslibrary.particles.ParticleEffect;
+import eu.gs.gslibrary.particles.ParticlesRunnable;
+import eu.gs.gslibrary.particles.animations.AnimatedCircle;
+import eu.gs.gslibrary.particles.animations.Circle;
+import eu.gs.gslibrary.particles.animations.Point;
+import eu.gs.gslibrary.particles.animations.RotatingCircle;
 import eu.gs.gslibrary.utils.BungeeUtils;
 import eu.gs.gslibrary.utils.actions.ActionsAPI;
 import eu.gs.gslibrary.utils.cooldowns.CooldownAPI;
@@ -17,14 +21,13 @@ import eu.gs.gslibrary.utils.updater.PluginUpdater;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 @Setter
@@ -43,6 +46,9 @@ public final class GSLibrary extends JavaPlugin {
 
     private Map<JavaPlugin, PluginUpdater> pluginLoaderMap;
 
+    private Map<UUID, ParticleEffect> particleEffectsMap;
+    private ParticlesRunnable particlesRunnable;
+
     public static GSLibrary getInstance() {
         return instance;
     }
@@ -59,6 +65,10 @@ public final class GSLibrary extends JavaPlugin {
 
         pluginLoaderMap = new HashMap<>();
 
+        particleEffectsMap = new HashMap<>();
+        particlesRunnable = new ParticlesRunnable();
+        particlesRunnable.runTaskTimerAsynchronously(this, 1, 1);
+
         cooldownAPI = new CooldownAPI();
         cooldownTask = new CooldownTask();
         cooldownTask.runTaskTimerAsynchronously(this, 0, 20);
@@ -66,6 +76,15 @@ public final class GSLibrary extends JavaPlugin {
         actionsAPI = new ActionsAPI();
         conditionsAPI = new ConditionsAPI();
 
+        Location location = Bukkit.getPlayer("Gennario").getLocation();
+        ParticleCreator particleCreator = new ParticleCreator(xyz.xenondevs.particle.ParticleEffect.REDSTONE)
+                .setAmount(1)
+                .setDustData(74, 255, 92, 1.4f);
+        new ParticleEffect(location)
+                .setParticle(new Particle(particleCreator))
+                .setViewDistance(20)
+                .setParticleAnimationExtender(new AnimatedCircle(40, 2.0, AnimatedCircle.CircleType.VERTICAL, AnimatedCircle.CircleDirection.LEFT))
+                .start();
     }
 
     @Override

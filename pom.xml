@@ -6,7 +6,7 @@
 
     <groupId>eu.gs</groupId>
     <artifactId>GSLibrary</artifactId>
-    <version>BETA-1.0v2</version>
+    <version>BETA-1.0v3</version>
     <packaging>jar</packaging>
 
     <name>GSLibrary</name>
@@ -128,6 +128,11 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20220320</version>
+        </dependency>
+        <dependency>
+            <groupId>xyz.xenondevs</groupId>
+            <artifactId>particle</artifactId>
+            <version>1.8.1</version>
         </dependency>
     </dependencies>
 </project>
