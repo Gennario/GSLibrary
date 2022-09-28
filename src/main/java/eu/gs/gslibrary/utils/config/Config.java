@@ -107,7 +107,7 @@ public class Config {
         if (this.name == null) {
             path = this.path;
         } else {
-            path = this.path + "/" + name + ".yml";
+            path = this.path + File.separator + name + ".yml";
         }
         if (!update) {
             yamlDocument = YamlDocument.create(new File(plugin.getDataFolder(), path), resource);
@@ -125,9 +125,9 @@ public class Config {
         if (this.name == null) {
             path = this.path;
         } else {
-            path = this.path + "/" + name + ".yml";
+            path = this.path + File.separator + name + ".yml";
         }
-        if(new File(plugin.getDataFolder()+path).exists()) {
+        if(new File(plugin.getDataFolder()+"/"+path).exists()) {
             if (!update) {
                 yamlDocument = YamlDocument.create(new File(plugin.getDataFolder(), path));
                 return;

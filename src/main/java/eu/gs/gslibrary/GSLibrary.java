@@ -9,9 +9,7 @@ import eu.gs.gslibrary.particles.Particle;
 import eu.gs.gslibrary.particles.ParticleCreator;
 import eu.gs.gslibrary.particles.ParticleEffect;
 import eu.gs.gslibrary.particles.ParticlesRunnable;
-import eu.gs.gslibrary.particles.animations.Circle;
-import eu.gs.gslibrary.particles.animations.Point;
-import eu.gs.gslibrary.particles.animations.RotatingCircle;
+import eu.gs.gslibrary.particles.animations.*;
 import eu.gs.gslibrary.utils.BungeeUtils;
 import eu.gs.gslibrary.utils.actions.ActionsAPI;
 import eu.gs.gslibrary.utils.cooldowns.CooldownAPI;
@@ -77,28 +75,27 @@ public final class GSLibrary extends JavaPlugin {
 
         Location location = Bukkit.getPlayer("Gennario").getLocation();
         ParticleCreator particleCreator = new ParticleCreator(xyz.xenondevs.particle.ParticleEffect.REDSTONE)
-                .setAmount(1)
-                .setDustData(74, 255, 92, 0.4f);
+                .setDustData(74, 255, 92, 1f);
         new ParticleEffect(location)
                 .setParticle(new Particle(particleCreator))
+                .setViewDistance(10)
+                .setParticleAnimationExtender(new ShiningRound(50, 1.5, 20, 2, 1))
+                .start();
+        /*new ParticleEffect(location)
+                .setParticle(new Particle(particleCreator))
                 .setViewDistance(20)
-                .setParticleAnimationExtender(new RotatingCircle(80, 2.0, 100, RotatingCircle.CircleType.VERTICAL, RotatingCircle.CircleDirection.LEFT))
+                .setParticleAnimationExtender(new RotatingAnimatedCircle(80, 1.0, 120, RotatingCircle.CircleType.VERTICAL, RotatingCircle.CircleDirection.LEFT))
                 .start();
         new ParticleEffect(location)
                 .setParticle(new Particle(particleCreator))
                 .setViewDistance(20)
-                .setParticleAnimationExtender(new RotatingCircle(80, 2.0, 120, RotatingCircle.CircleType.VERTICAL, RotatingCircle.CircleDirection.LEFT))
+                .setParticleAnimationExtender(new RotatingAnimatedCircle(80, 1.0, 100, RotatingCircle.CircleType.HORIZONTAL, RotatingCircle.CircleDirection.LEFT))
                 .start();
         new ParticleEffect(location)
                 .setParticle(new Particle(particleCreator))
                 .setViewDistance(20)
-                .setParticleAnimationExtender(new RotatingCircle(80, 2.0, 100, RotatingCircle.CircleType.HORIZONTAL, RotatingCircle.CircleDirection.LEFT))
-                .start();
-        new ParticleEffect(location)
-                .setParticle(new Particle(particleCreator))
-                .setViewDistance(20)
-                .setParticleAnimationExtender(new RotatingCircle(80, 2.0, 120, RotatingCircle.CircleType.HORIZONTAL, RotatingCircle.CircleDirection.RIGHT))
-                .start();
+                .setParticleAnimationExtender(new RotatingAnimatedCircle(80, 1.0, 120, RotatingCircle.CircleType.HORIZONTAL, RotatingCircle.CircleDirection.RIGHT))
+                .start();*/
     }
 
     @Override

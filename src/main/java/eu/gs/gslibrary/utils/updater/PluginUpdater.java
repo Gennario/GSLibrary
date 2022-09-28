@@ -12,10 +12,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 @Setter
@@ -62,7 +59,7 @@ public class PluginUpdater {
         if (sitesVersion != null)
             System.out.println(ChatColor.WHITE + "Current plugin version on polymart is " + ChatColor.GREEN + sitesVersion + ChatColor.WHITE + "...");
         if (sitesVersion != null) {
-            if (pluginVersion == sitesVersion) {
+            if (Objects.equals(pluginVersion, sitesVersion)) {
                 System.out.println(ChatColor.DARK_GREEN + "So your plugin is on the latest version...");
             } else {
                 System.out.println(ChatColor.DARK_GREEN + "So your plugin is outdated. Please update the plugin...");
