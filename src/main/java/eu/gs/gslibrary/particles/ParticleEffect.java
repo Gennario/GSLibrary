@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import sun.security.tools.keytool.Main;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,14 @@ public class ParticleEffect {
 
     private int viewDistance;
 
+    public enum ShowMode {
+        NOTHING,
+        WHITELIST,
+        BLACKLIST
+    }
+    private ShowMode showMode;
+    private List<String> showList;
+
     private boolean run;
 
     public ParticleEffect(Location location) {
@@ -31,6 +41,8 @@ public class ParticleEffect {
         this.location = location;
 
         this.viewDistance = 30;
+        this.showMode = ShowMode.NOTHING;
+        this.showList = new ArrayList<>();
 
         GSLibrary.getInstance().getParticleEffectsMap().put(id, this);
     }
@@ -42,6 +54,8 @@ public class ParticleEffect {
         this.particle = particle;
 
         this.viewDistance = 30;
+        this.showMode = ShowMode.NOTHING;
+        this.showList = new ArrayList<>();
 
         GSLibrary.getInstance().getParticleEffectsMap().put(id, this);
     }
@@ -54,6 +68,8 @@ public class ParticleEffect {
         this.particleAnimationExtender = particleAnimationExtender;
 
         this.viewDistance = 30;
+        this.showMode = ShowMode.NOTHING;
+        this.showList = new ArrayList<>();
 
         GSLibrary.getInstance().getParticleEffectsMap().put(id, this);
     }
@@ -67,6 +83,17 @@ public class ParticleEffect {
     public List<Player> getPlayers(Location location) {
         List<Player> players = new ArrayList<>();
         for (Player player : location.getWorld().getPlayers()) {
+            if(showMode.equals(ShowMode.WHITELIST) || showMode.equals(ShowMode.BLACKLIST)) {
+                switch (showMode) {
+                    case BLACKLIST:
+                        if(showList.contains(player.getName())) continue;
+                        break;
+                    case WHITELIST:
+                        if(!showList.contains(player.getName())) continue;
+                        break;
+                }
+            }
+
             Location playerLocation = player.getLocation().clone();
             playerLocation.setY(location.clone().getY());
             if(location.distance(playerLocation) <= viewDistance) {
@@ -79,6 +106,31 @@ public class ParticleEffect {
     public ParticleEffect start() {
         if(particleAnimationExtender == null || particle == null || location == null) return this;
         run = true;
+        return this;
+    }
+
+    public ParticleEffect startForTime(int ticks) {
+        if(particleAnimationExtender == null || particle == null || location == null) return this;
+        run = true;
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                stop();
+            }
+        }.runTaskLater(GSLibrary.getInstance(), ticks);
+        return this;
+    }
+
+    public ParticleEffect startOnce(int ticks) {
+        if(particleAnimationExtender == null || particle == null || location == null) return this;
+        run = true;
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                stop();
+                delete();
+            }
+        }.runTaskLater(GSLibrary.getInstance(), ticks);
         return this;
     }
 
