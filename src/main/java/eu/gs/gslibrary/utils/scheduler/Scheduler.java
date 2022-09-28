@@ -62,40 +62,44 @@ public class Scheduler {
      * It runs a runnable every interval ticks
      *
      * @param runnable The runnable to run.
-     * @param interval The interval in ticks to wait between each execution of the runnable.
+     * @param interval The interval in ticks between each execution of the runnable.
+     * @return The task ID.
      */
-    public static void syncRepeating(Runnable runnable, int interval) {
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(GSLibrary.getInstance(), runnable, 0, interval);
+    public static int syncRepeating(Runnable runnable, int interval) {
+        return Bukkit.getScheduler().scheduleSyncRepeatingTask(GSLibrary.getInstance(), runnable, 0, interval);
     }
 
     /**
-     * It runs a runnable on the main thread, and repeats it every interval ticks
+     * It runs a runnable every interval ticks, after a delay of delay ticks
      *
      * @param runnable The runnable to run.
-     * @param delay    The amount of ticks to wait before running the task.
-     * @param interval The interval in ticks between each execution of the runnable.
+     * @param delay The delay in ticks before the task is run.
+     * @param interval The interval in ticks between each execution of the task.
+     * @return The task ID.
      */
-    public static void syncRepeating(Runnable runnable, int delay, int interval) {
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(GSLibrary.getInstance(), runnable, delay, interval);
+    public static int syncRepeating(Runnable runnable, int delay, int interval) {
+        return Bukkit.getScheduler().scheduleSyncRepeatingTask(GSLibrary.getInstance(), runnable, delay, interval);
     }
 
     /**
      * It runs a runnable on the main thread
      *
-     * @param runnable The runnable to run.
+     * @param runnable The runnable to be executed.
+     * @return The task ID.
      */
-    public static void syncDelay(Runnable runnable) {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(GSLibrary.getInstance(), runnable, 0);
+    public static int syncDelay(Runnable runnable) {
+        return Bukkit.getScheduler().scheduleSyncDelayedTask(GSLibrary.getInstance(), runnable, 0);
     }
 
     /**
      * It runs a runnable after a delay
      *
      * @param runnable The runnable to run.
-     * @param delay    The amount of ticks to wait before running the runnable.
+     * @param delay The delay in ticks before the task is run.
+     * @return The task ID.
      */
-    public static void syncDelay(Runnable runnable, int delay) {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(GSLibrary.getInstance(), runnable, delay);
+    public static int syncDelay(Runnable runnable, int delay) {
+        return Bukkit.getScheduler().scheduleSyncDelayedTask(GSLibrary.getInstance(), runnable, delay);
     }
 
 
@@ -152,40 +156,44 @@ public class Scheduler {
      * It runs a runnable every interval ticks
      *
      * @param runnable The runnable to run.
-     * @param interval The amount of ticks between each run of the runnable.
+     * @param interval The interval in ticks between each execution of the runnable.
+     * @return The task ID.
      */
-    public static void asyncRepeating(Runnable runnable, int interval) {
-        Bukkit.getScheduler().scheduleAsyncRepeatingTask(GSLibrary.getInstance(), runnable, 0, interval);
+    public static int asyncRepeating(Runnable runnable, int interval) {
+        return Bukkit.getScheduler().scheduleAsyncRepeatingTask(GSLibrary.getInstance(), runnable, 0, interval);
     }
 
     /**
-     * It runs a runnable asynchronously, repeating it every interval ticks after a delay
+     * It runs a runnable asynchronously, repeating it every interval ticks, after a delay of delay ticks
      *
-     * @param runnable The runnable to run.
-     * @param delay    The amount of ticks to wait before running the task.
+     * @param runnable The runnable to run
+     * @param delay The delay in ticks before the task is run.
      * @param interval The interval in ticks between each execution of the runnable.
+     * @return The task ID.
      */
-    public static void asyncRepeating(Runnable runnable, int delay, int interval) {
-        Bukkit.getScheduler().scheduleAsyncRepeatingTask(GSLibrary.getInstance(), runnable, delay, interval);
+    public static int asyncRepeating(Runnable runnable, int delay, int interval) {
+        return Bukkit.getScheduler().scheduleAsyncRepeatingTask(GSLibrary.getInstance(), runnable, delay, interval);
     }
 
     /**
      * It runs a runnable on the next tick
      *
-     * @param runnable The runnable to run.
+     * @param runnable The runnable to be executed.
+     * @return The task ID.
      */
-    public static void asyncDelay(Runnable runnable) {
-        Bukkit.getScheduler().scheduleAsyncDelayedTask(GSLibrary.getInstance(), runnable, 0);
+    public static int asyncDelay(Runnable runnable) {
+        return Bukkit.getScheduler().scheduleAsyncDelayedTask(GSLibrary.getInstance(), runnable, 0);
     }
 
     /**
-     * It runs a runnable after a delay
+     * It runs a runnable asynchronously after a delay
      *
-     * @param runnable The runnable to run.
-     * @param delay    The amount of ticks to wait before running the runnable.
+     * @param runnable The runnable to run
+     * @param delay The delay in ticks before the task is run.
+     * @return The task ID.
      */
-    public static void asyncDelay(Runnable runnable, int delay) {
-        Bukkit.getScheduler().scheduleAsyncDelayedTask(GSLibrary.getInstance(), runnable, delay);
+    public static int asyncDelay(Runnable runnable, int delay) {
+        return Bukkit.getScheduler().scheduleAsyncDelayedTask(GSLibrary.getInstance(), runnable, delay);
     }
 
     /**
