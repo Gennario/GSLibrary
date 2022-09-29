@@ -148,7 +148,7 @@ public class ParticleCreator {
                 setNoteColor(section.getInt("note_data.note"));
             }
         }else if (section.contains("block_texture")) {
-            if(section.contains("block_texture.material") && section.contains("block_texture.data")) {
+            if(section.contains("block_texture.material")) {
                 setBlockTexture(XMaterial.valueOf(section.getString("block_texture.material")),
                         section.getByte("block_texture.data"));
             }
