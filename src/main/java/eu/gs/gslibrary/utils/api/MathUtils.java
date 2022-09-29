@@ -10,39 +10,55 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * It's a utility class that contains methods for generating random numbers, converting seconds to minutes, drawing arcs,
+ * drawing lines, drawing circles, and calculating the Y value of a point on an arc
+ */
 @UtilityClass
 public class MathUtils {
+
     private static final Random rand = new Random();
 
-    /**
-     * @return random int between min and max
-     */
 
+    /**
+     * > Generate a random integer between min and max, inclusive
+     *
+     * @param min The minimum number that can be generated.
+     * @param max The maximum number that can be generated.
+     * @return A random integer between min and max.
+     */
     public static int randomInt(int min, int max) {
         return rand.nextInt((max - min) + 1) + min;
     }
 
-    /**
-     * @return random boolean value
-     */
 
+    /**
+     * Returns a random boolean value.
+     *
+     * @return A random boolean value.
+     */
     public static boolean randomBool() {
         return rand.nextBoolean();
     }
 
-    /**
-     * @return random float between 0 and 1
-     */
 
+    /**
+     * It returns a random float between 0 and 1.
+     *
+     * @return A random float between 0 and 1.
+     */
     public static float randomFloat() {
         Random rnd = new Random();
         return rnd.nextFloat();
     }
 
-    /**
-     * @return Converted seconds to minutes and seconds
-     */
 
+    /**
+     * It converts seconds to minutes and seconds.
+     *
+     * @param sec The number of seconds to convert to minutes.
+     * @return The method returns a string that is the time in minutes and seconds.
+     */
     public static String secToMin(int sec) {
         if (sec == 0) return "00:00";
         String s1 = Integer.toString(sec / 60);
@@ -53,6 +69,15 @@ public class MathUtils {
     }
 
 
+    /**
+     * It draws a line between two points, then adds a height to each point based on the arc formula
+     *
+     * @param from The starting location
+     * @param to The location to draw the arc to
+     * @param points The amount of points you want to draw.
+     * @param offset The height of the arc
+     * @return A list of locations
+     */
     public static List<Location> calculateArc(Location from, Location to, int points, double offset) {
         List<Location> locations = new ArrayList<>();
 
@@ -70,6 +95,16 @@ public class MathUtils {
         return locations;
     }
 
+    /**
+     * It calculates the Y value of a point on an arc
+     *
+     * @param points The amount of points in the arc.
+     * @param point The current point in the arc
+     * @param offset The offset of the arc.
+     * @param from The location to start the arc from.
+     * @param to The location to teleport to
+     * @return The y-coordinate of the point on the arc.
+     */
     private static double calculateArcPointLocation(int points, int point, double offset, Location from, Location to) {
         int originalPoint = point;
         boolean bigger = point > (points / 2);
@@ -83,6 +118,14 @@ public class MathUtils {
         return finalY;
     }
 
+    /**
+     * It takes two locations, and returns a list of locations that are spaced out by a certain distance
+     *
+     * @param point1 The first point of the line
+     * @param point2 The second point of the line.
+     * @param space The distance between each point
+     * @return A list of locations
+     */
     public static List<Location> drawLine(Location point1, Location point2, double space) {
         List<Location> locations = new ArrayList<>();
         World world = point1.getWorld();
@@ -99,12 +142,22 @@ public class MathUtils {
         return locations;
     }
 
-    public static List<Location> drawCircle(Location location, int points, double radius, String direcion, String type) {
+    /**
+     * It draws a circle with the given radius, points, direction and type
+     *
+     * @param location The center of the circle
+     * @param points The amount of points you want to draw.
+     * @param radius The radius of the circle
+     * @param direction The direction of the circle.
+     * @param type The type of circle you want to draw.
+     * @return A list of locations.
+     */
+    public static List<Location> drawCircle(Location location, int points, double radius, String direction, String type) {
         Location origin = location.clone();
         List<Location> locations = new ArrayList<>();
         for (int i = 0; i < points; i++) {
             double angle = 2 * Math.PI * i / points;
-            if (direcion.equals("RIGHT")) {
+            if (direction.equals("RIGHT")) {
                 Location point = null;
                 if(type.equalsIgnoreCase("VERTICAL")) {
                     point = origin.clone().add(radius * Math.cos(angle), radius * Math.sin(angle),  0.0d);
@@ -112,7 +165,7 @@ public class MathUtils {
                     point = origin.clone().add(radius * Math.cos(angle), 0.0d, radius * Math.sin(angle));
                 }
                 locations.add(point);
-            } else if (direcion.equals("LEFT")) {
+            } else if (direction.equals("LEFT")) {
                 Location point = null;
                 if(type.equalsIgnoreCase("VERTICAL")) {
                     point = origin.clone().add(0.0d, radius * Math.sin(angle), radius * Math.cos(angle));

@@ -11,6 +11,7 @@ import eu.gs.gslibrary.particles.ParticleEffect;
 import eu.gs.gslibrary.particles.ParticlesRunnable;
 import eu.gs.gslibrary.particles.animations.*;
 import eu.gs.gslibrary.utils.BungeeUtils;
+import eu.gs.gslibrary.utils.PlaceholderAPIUtils;
 import eu.gs.gslibrary.utils.actions.ActionsAPI;
 import eu.gs.gslibrary.utils.cooldowns.CooldownAPI;
 import eu.gs.gslibrary.utils.cooldowns.CooldownTask;
@@ -54,6 +55,7 @@ public final class GSLibrary extends JavaPlugin {
     public void onEnable() {
         instance = this;
         BungeeUtils.init();
+        PlaceholderAPIUtils.init();
 
         guis = new HashMap<>();
         guiRunnable = new GUIRunnable();

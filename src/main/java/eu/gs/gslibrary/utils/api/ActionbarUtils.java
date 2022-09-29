@@ -1,39 +1,24 @@
 package eu.gs.gslibrary.utils.api;
 
-import com.cryptomorin.xseries.ReflectionUtils;
 import eu.gs.gslibrary.utils.Utils;
 import lombok.experimental.UtilityClass;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
+/**
+ * It sends an actionbar message to the player
+ */
 @UtilityClass
 public class ActionbarUtils {
 
-    private static Method a;
-    private static Constructor<?> constructor;
-
-    static {
-        try {
-            constructor = ReflectionUtils.getNMSClass("PacketPlayOutChat").getConstructor(ReflectionUtils.getNMSClass("IChatBaseComponent"), byte.class);
-            a = ReflectionUtils.getNMSClass("IChatBaseComponent").getDeclaredClasses()[0].getMethod("a", String.class);
-
-        } catch (NoSuchMethodException | SecurityException e) {
-            e.printStackTrace();
-        }
-    }
-
+    /**
+     * It sends an actionbar message to the player
+     *
+     * @param player The player you want to send the actionbar to.
+     * @param message The message you want to send to the player.
+     */
     public static void sendActionbar(Player player, String message) {
-        try {
-            Object icbc = a.invoke(null, "{\"text\":\"" + Utils.colorize(null, message) + "\"}");
-            Object packet = constructor.newInstance(icbc, (byte) 2);
-
-            ReflectionUtils.sendPacket(player, packet);
-
-        } catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException e) {
-            e.printStackTrace();
-        }
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorize(player, message)));
     }
 }

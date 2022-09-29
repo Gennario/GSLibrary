@@ -156,7 +156,7 @@ public class ActionsAPI {
                 if (data.isExist("fade-in")) fadeIn = data.getInt("fade-in");
                 if (data.isExist("stay")) stay = data.getInt("stay");
                 if (data.isExist("fade-out")) fadeOut = data.getInt("fade-out");
-                TitleUtils.sendTitleMessage(player, title, subtitle, fadeIn, stay, fadeOut);
+                TitleUtils.sendTitle(player, title, subtitle, fadeIn, stay, fadeOut);
             } else {
                 System.out.println("Some title action are missing correct data");
             }
@@ -172,7 +172,7 @@ public class ActionsAPI {
                 if (data.isExist("stay")) stay = data.getInt("stay");
                 if (data.isExist("fade-out")) fadeOut = data.getInt("fade-out");
                 for (Player op : Bukkit.getOnlinePlayers()) {
-                    TitleUtils.sendTitleMessage(op, title, subtitle, fadeIn, stay, fadeOut);
+                    TitleUtils.sendTitle(op, title, subtitle, fadeIn, stay, fadeOut);
                 }
             } else {
                 System.out.println("Some title action are missing correct data");
