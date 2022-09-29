@@ -73,14 +73,14 @@ public final class GSLibrary extends JavaPlugin {
         actionsAPI = new ActionsAPI();
         conditionsAPI = new ConditionsAPI();
 
-        Location location = Bukkit.getPlayer("Gennario").getLocation();
+        /* location = Bukkit.getPlayer("Gennario").getLocation();
         ParticleCreator particleCreator = new ParticleCreator(xyz.xenondevs.particle.ParticleEffect.REDSTONE)
                 .setDustData(74, 255, 92, 1f);
         new ParticleEffect(location)
                 .setParticle(new Particle(particleCreator))
                 .setViewDistance(10)
                 .setParticleAnimationExtender(new ShiningRound(50, 1.5, 20, 2, 1))
-                .start();
+                .start();*/
         /*new ParticleEffect(location)
                 .setParticle(new Particle(particleCreator))
                 .setViewDistance(20)
