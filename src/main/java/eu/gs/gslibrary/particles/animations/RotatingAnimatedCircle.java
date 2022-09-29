@@ -14,8 +14,8 @@ public class RotatingAnimatedCircle extends ParticleAnimationExtender {
 
     private int points, rotatePoints, point;
     private double radius;
-    private RotatingCircle.CircleType circleType;
-    private RotatingCircle.CircleDirection circleDirection;
+    private RotatingAnimatedCircle.CircleType circleType;
+    private RotatingAnimatedCircle.CircleDirection circleDirection;
     private Map<ParticleEffect, List<Location>> locationsMap;
     double angle;
 
@@ -29,7 +29,7 @@ public class RotatingAnimatedCircle extends ParticleAnimationExtender {
         RIGHT
     }
 
-    public RotatingAnimatedCircle(int points, double radius, int rotatePoints, RotatingCircle.CircleType circleType, RotatingCircle.CircleDirection circleDirection) {
+    public RotatingAnimatedCircle(int points, double radius, int rotatePoints, RotatingAnimatedCircle.CircleType circleType, RotatingAnimatedCircle.CircleDirection circleDirection) {
         this.points = points;
         this.radius = radius;
         this.rotatePoints = rotatePoints;

@@ -19,7 +19,7 @@ public class ParticleEffect {
 
     private Location location;
     private Particle particle;
-    private ParticleAnimationExtender particleAnimationExtender;
+    private List<ParticleAnimationExtender> particleAnimationExtenders;
 
     private int viewDistance;
 
@@ -28,6 +28,7 @@ public class ParticleEffect {
         WHITELIST,
         BLACKLIST
     }
+
     private ShowMode showMode;
     private List<String> showList;
 
@@ -41,6 +42,8 @@ public class ParticleEffect {
         this.viewDistance = 30;
         this.showMode = ShowMode.NOTHING;
         this.showList = new ArrayList<>();
+
+        particleAnimationExtenders = new ArrayList<>();
 
         GSLibrary.getInstance().getParticleEffectsMap().put(id, this);
     }
@@ -58,12 +61,12 @@ public class ParticleEffect {
         GSLibrary.getInstance().getParticleEffectsMap().put(id, this);
     }
 
-    public ParticleEffect(Location location, Particle particle, ParticleAnimationExtender particleAnimationExtender) {
+    public ParticleEffect(Location location, Particle particle, List<ParticleAnimationExtender> particleAnimationExtenders) {
         id = UUID.randomUUID();
 
         this.location = location;
         this.particle = particle;
-        this.particleAnimationExtender = particleAnimationExtender;
+        this.particleAnimationExtenders = particleAnimationExtenders;
 
         this.viewDistance = 30;
         this.showMode = ShowMode.NOTHING;
@@ -73,28 +76,30 @@ public class ParticleEffect {
     }
 
     public void tick() {
-        if(run) {
-            particleAnimationExtender.tick(this);
+        if (run) {
+            for (ParticleAnimationExtender extender : particleAnimationExtenders) {
+                extender.tick(this);
+            }
         }
     }
 
     public List<Player> getPlayers(Location location) {
         List<Player> players = new ArrayList<>();
         for (Player player : location.getWorld().getPlayers()) {
-            if(showMode.equals(ShowMode.WHITELIST) || showMode.equals(ShowMode.BLACKLIST)) {
+            if (showMode.equals(ShowMode.WHITELIST) || showMode.equals(ShowMode.BLACKLIST)) {
                 switch (showMode) {
                     case BLACKLIST:
-                        if(showList.contains(player.getName())) continue;
+                        if (showList.contains(player.getName())) continue;
                         break;
                     case WHITELIST:
-                        if(!showList.contains(player.getName())) continue;
+                        if (!showList.contains(player.getName())) continue;
                         break;
                 }
             }
 
             Location playerLocation = player.getLocation().clone();
             playerLocation.setY(location.clone().getY());
-            if(location.distance(playerLocation) <= viewDistance) {
+            if (location.distance(playerLocation) <= viewDistance) {
                 players.add(player);
             }
         }
@@ -102,13 +107,13 @@ public class ParticleEffect {
     }
 
     public ParticleEffect start() {
-        if(particleAnimationExtender == null || particle == null || location == null) return this;
+        if (particleAnimationExtenders == null || particle == null || location == null) return this;
         run = true;
         return this;
     }
 
     public ParticleEffect startForTime(int ticks) {
-        if(particleAnimationExtender == null || particle == null || location == null) return this;
+        if (particleAnimationExtenders == null || particle == null || location == null) return this;
         run = true;
         new BukkitRunnable() {
             @Override
@@ -120,7 +125,7 @@ public class ParticleEffect {
     }
 
     public ParticleEffect startOnce(int ticks) {
-        if(particleAnimationExtender == null || particle == null || location == null) return this;
+        if (particleAnimationExtenders == null || particle == null || location == null) return this;
         run = true;
         new BukkitRunnable() {
             @Override
@@ -158,11 +163,6 @@ public class ParticleEffect {
 
     public ParticleEffect setParticle(Particle particle) {
         this.particle = particle;
-        return this;
-    }
-
-    public ParticleEffect setParticleAnimationExtender(ParticleAnimationExtender particleAnimationExtender) {
-        this.particleAnimationExtender = particleAnimationExtender;
         return this;
     }
 }

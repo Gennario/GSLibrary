@@ -2,6 +2,7 @@ package eu.gs.gslibrary.particles;
 
 import com.cryptomorin.xseries.XMaterial;
 import dev.dejvokep.boostedyaml.YamlDocument;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
 import eu.gs.gslibrary.utils.LocationUtils;
 import eu.gs.gslibrary.utils.Utils;
 import lombok.Getter;
@@ -128,38 +129,38 @@ public class ParticleCreator {
         return this;
     }
 
-    public void loadFromConfig(YamlDocument yamlDocument) {
-        setType(ParticleEffect.valueOf(yamlDocument.getString("type")));
-        if (yamlDocument.contains("speed")) setSpeed(yamlDocument.getFloat("speed"));
-        if (yamlDocument.contains("offset")) {
-            if (yamlDocument.contains("offset.x")) setOffsetX(yamlDocument.getFloat("offset.x"));
-            if (yamlDocument.contains("offset.y")) setOffsetY(yamlDocument.getFloat("offset.y"));
-            if (yamlDocument.contains("offset.z")) setOffsetZ(yamlDocument.getFloat("offset.z"));
+    public void loadFromConfig(Section section) {
+        setType(ParticleEffect.valueOf(section.getString("type")));
+        if (section.contains("speed")) setSpeed(section.getFloat("speed"));
+        if (section.contains("offset")) {
+            if (section.contains("offset.x")) setOffsetX(section.getFloat("offset.x"));
+            if (section.contains("offset.y")) setOffsetY(section.getFloat("offset.y"));
+            if (section.contains("offset.z")) setOffsetZ(section.getFloat("offset.z"));
         }
-        if (yamlDocument.contains("amount")) setAmount(yamlDocument.getInt("amount"));
-        if (yamlDocument.contains("dust_data")) {
-            if(yamlDocument.contains("dust_data.color") && yamlDocument.contains("dust_data.size")) {
-                String[] colors = yamlDocument.getString("dust_data.color").split(":");
-                setDustData(Integer.parseInt(colors[0]), Integer.parseInt(colors[1]), Integer.parseInt(colors[2]), yamlDocument.getFloat("dust_data.size"));
+        if (section.contains("amount")) setAmount(section.getInt("amount"));
+        if (section.contains("dust_data")) {
+            if(section.contains("dust_data.color") && section.contains("dust_data.size")) {
+                String[] colors = section.getString("dust_data.color").split(":");
+                setDustData(Integer.parseInt(colors[0]), Integer.parseInt(colors[1]), Integer.parseInt(colors[2]), section.getFloat("dust_data.size"));
             }
-        }else if (yamlDocument.contains("note_data")) {
-            if(yamlDocument.contains("note_data.note")) {
-                setNoteColor(yamlDocument.getInt("note_data.note"));
+        }else if (section.contains("note_data")) {
+            if(section.contains("note_data.note")) {
+                setNoteColor(section.getInt("note_data.note"));
             }
-        }else if (yamlDocument.contains("block_texture")) {
-            if(yamlDocument.contains("block_texture.material") && yamlDocument.contains("block_texture.data")) {
-                setBlockTexture(XMaterial.valueOf(yamlDocument.getString("block_texture.material")),
-                        yamlDocument.getByte("block_texture.data"));
+        }else if (section.contains("block_texture")) {
+            if(section.contains("block_texture.material") && section.contains("block_texture.data")) {
+                setBlockTexture(XMaterial.valueOf(section.getString("block_texture.material")),
+                        section.getByte("block_texture.data"));
             }
-        }else if (yamlDocument.contains("item_texture")) {
-            if(yamlDocument.contains("item_texture.material")) {
-                setItemTexture(XMaterial.valueOf(yamlDocument.getString("item_texture.material")));
+        }else if (section.contains("item_texture")) {
+            if(section.contains("item_texture.material")) {
+                setItemTexture(XMaterial.valueOf(section.getString("item_texture.material")));
             }
-        }else if (yamlDocument.contains("vibration_data")) {
-            if(yamlDocument.contains("vibration_data.start") && yamlDocument.contains("vibration_data.end") && yamlDocument.contains("vibration_data.ticks")) {
-                setVibrationData(LocationUtils.getLocation(yamlDocument.getString("vibration_data.start")),
-                        LocationUtils.getLocation(yamlDocument.getString("vibration_data.end")),
-                        yamlDocument.getInt("vibration_data.ticks"));
+        }else if (section.contains("vibration_data")) {
+            if(section.contains("vibration_data.start") && section.contains("vibration_data.end") && section.contains("vibration_data.ticks")) {
+                setVibrationData(LocationUtils.getLocation(section.getString("vibration_data.start")),
+                        LocationUtils.getLocation(section.getString("vibration_data.end")),
+                        section.getInt("vibration_data.ticks"));
             }
         }
     }
