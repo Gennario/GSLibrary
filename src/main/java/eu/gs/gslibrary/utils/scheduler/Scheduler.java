@@ -296,5 +296,14 @@ public class Scheduler {
         }));
     }
 
+    /**
+     * It cancels a task with the given id
+     *
+     * @param id The id of the task to cancel.
+     */
+    public static void cancelTask(int id) {
+        Bukkit.getScheduler().cancelTask(id);
+    }
+
 
 }
