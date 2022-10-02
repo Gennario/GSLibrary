@@ -5,7 +5,9 @@ import com.cryptomorin.xseries.XMaterial;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import eu.gs.gslibrary.utils.Utils;
+import eu.gs.gslibrary.utils.replacement.Replacement;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -115,8 +117,68 @@ public class ItemSystem {
         ItemStack itemStack = null;
         if (section.getString("base64") != null) {
             itemStack = HeadManager.convert(HeadManager.HeadType.BASE64, section.getString("base64"));
-        } else if (section.getString("skin") != null) {
-            itemStack = HeadManager.convert(HeadManager.HeadType.PLAYER_HEAD, section.getString("skin"));
+        } else if (section.getString("player") != null) {
+            itemStack = HeadManager.convert(HeadManager.HeadType.PLAYER_HEAD, section.getString("player"));
+        } else {
+            itemStack = new ItemStack(material, amount, data);
+        }
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta == null) return itemStack;
+
+        if (name != null) itemMeta.setDisplayName(name);
+        if (!lore.isEmpty()) itemMeta.setLore(lore);
+        if (!enchants.isEmpty()) {
+            for (String e : enchants) {
+                itemMeta.addEnchant(Objects.requireNonNull(XEnchantment.matchXEnchantment(e.split(";")[0]).get().getEnchant()), Integer.parseInt(e.split(";")[1]), true);
+            }
+        }
+        if (!unbreakable) itemMeta.setUnbreakable(unbreakable);
+        if (!itemFlags.isEmpty()) itemFlags.forEach(flag -> itemMeta.addItemFlags(ItemFlag.valueOf(flag)));
+        if (customModelData != 0) itemMeta.setCustomModelData(customModelData);
+        itemStack.setItemMeta(itemMeta);
+
+        return itemStack;
+    }
+
+    public static ItemStack itemFromConfig(Section section, Player player, Replacement replacement) {
+
+        Material material = XMaterial.matchXMaterial(section.getString("material")).get().parseMaterial();
+        int amount = 1;
+        if (section.getString("amount") != null) amount = section.getInt("amount");
+        byte data = 0;
+        if (section.getString("data") != null) data = section.getByte("data");
+        String name = null;
+        if (section.getString("name") != null) name = Utils.colorize(player, replacement.replace(player, section.getString("name")));
+        List<String> lore = new ArrayList<>();
+        if (section.getString("lore") != null) {
+            for (String line : section.getStringList("lore")) {
+                lore.add(Utils.colorize(null, replacement.replace(player, line.replace('&', '§'))));
+            }
+        }
+        List<String> enchants = new ArrayList<>();
+        if (section.getString("enchants") != null) {
+            enchants.addAll(section.getStringList("enchants"));
+        }
+        List<String> itemFlags = new ArrayList<>();
+        if (section.getString("itemflags") != null) {
+            itemFlags.addAll(section.getStringList("itemflags"));
+        }
+        int customModelData = 0;
+        if (section.getString("custommodeldata") != null) {
+            customModelData = section.getInt("custommodeldata");
+        }
+        boolean unbreakable = false;
+        if (section.getString("unbreakable") != null) {
+            unbreakable = section.getBoolean("unbreakable");
+        }
+
+        // ITEM GENERATE
+
+        ItemStack itemStack = null;
+        if (section.getString("base64") != null) {
+            itemStack = HeadManager.convert(HeadManager.HeadType.BASE64, replacement.replace(player, section.getString("base64")));
+        } else if (section.getString("player") != null) {
+            itemStack = HeadManager.convert(HeadManager.HeadType.PLAYER_HEAD, replacement.replace(player, section.getString("player")));
         } else {
             itemStack = new ItemStack(material, amount, data);
         }
