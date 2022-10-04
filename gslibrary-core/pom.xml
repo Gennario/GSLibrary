@@ -162,6 +162,21 @@
             <artifactId>gslibrary-nms-v1_9_R2</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <dependency>
+            <groupId>eu.gs</groupId>
+            <artifactId>gslibrary-nms-v1_10_R1</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eu.gs</groupId>
+            <artifactId>gslibrary-nms-v1_11_R1</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eu.gs</groupId>
+            <artifactId>gslibrary-nms-v1_12_R1</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
     </dependencies>
 
 </project>
