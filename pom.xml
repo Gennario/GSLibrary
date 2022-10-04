@@ -14,6 +14,11 @@
         <module>gslibrary-nms</module>
     </modules>
 
+    <properties>
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
     <repositories>
         <repository>
             <id>spigotmc-repo</id>
@@ -25,16 +30,14 @@
         </repository>
     </repositories>
 
-    <dependencyManagement>
-        <dependencies>
-            <!-- SpigotAPI -->
-            <dependency>
-                <groupId>org.spigotmc</groupId>
-                <artifactId>spigot-api</artifactId>
-                <version>1.13-R0.1-SNAPSHOT</version>
-                <scope>provided</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+    <dependencies>
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
 </project>

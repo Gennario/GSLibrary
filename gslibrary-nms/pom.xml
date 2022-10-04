@@ -13,13 +13,12 @@
 
     <modules>
         <module>gslibrary-nms-common</module>
+        <module>gslibrary-nms-v1_8_R1</module>
+        <module>gslibrary-nms-v1_8_R2</module>
         <module>gslibrary-nms-v1_8_R3</module>
+        <module>gslibrary-nms-v1_9_R1</module>
+        <module>gslibrary-nms-v1_9_R2</module>
     </modules>
-
-    <properties>
-        <java.version>1.8</java.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 
     <build>
         <plugins>
