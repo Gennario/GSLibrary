@@ -185,6 +185,8 @@ public class NMSAdapterImpl implements NMSAdapter {
         return new WatchableObject(0, 0, data);
     }
 
+    // -------------------- Armor Stand Start -------------------- //
+
     @Override
     public Object getMetaArmorStandProperties(boolean small, boolean arms, boolean noBasePlate, boolean marker) {
         byte data = 0;
@@ -195,6 +197,44 @@ public class NMSAdapterImpl implements NMSAdapter {
 
         return new WatchableObject(0, 10, data);
     }
+
+    @Override
+    public Object getMetaArmorStandRotationHead(float x, float y, float z) {
+        Vector3f v = new Vector3f(x, y, z);
+        return new WatchableObject(7, 16, v);
+    }
+
+    @Override
+    public Object getMetaArmorStandRotationBody(float x, float y, float z) {
+        Vector3f v = new Vector3f(x, y, z);
+        return new WatchableObject(7, 17, v);
+    }
+
+    @Override
+    public Object getMetaArmorStandRotationLeftArm(float x, float y, float z) {
+        Vector3f v = new Vector3f(x, y, z);
+        return new WatchableObject(7, 18, v);
+    }
+
+    @Override
+    public Object getMetaArmorStandRotationRightArm(float x, float y, float z) {
+        Vector3f v = new Vector3f(x, y, z);
+        return new WatchableObject(7, 19, v);
+    }
+
+    @Override
+    public Object getMetaArmorStandRotationLeftLeg(float x, float y, float z) {
+        Vector3f v = new Vector3f(x, y, z);
+        return new WatchableObject(7, 20, v);
+    }
+
+    @Override
+    public Object getMetaArmorStandRotationRightLeg(float x, float y, float z) {
+        Vector3f v = new Vector3f(x, y, z);
+        return new WatchableObject(7, 21, v);
+    }
+
+    // -------------------- Armor Stand End -------------------- //
 
     @Override
     public Object getMetaItemStack(org.bukkit.inventory.ItemStack itemStack) {

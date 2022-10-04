@@ -1,13 +1,13 @@
-package eu.gs.gslibrary.nms.v1_8_R3;
+package eu.gs.gslibrary.nms.v1_12_R1;
 
 import eu.gs.gslibrary.nms.NMSAdapter;
 import eu.gs.gslibrary.nms.utils.EntityEquipmentSlot;
 import eu.gs.gslibrary.nms.utils.reflect.R;
 import io.netty.channel.ChannelPipeline;
-import net.minecraft.server.v1_8_R3.*;
+import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
@@ -29,13 +29,33 @@ public class NMSAdapterImpl implements NMSAdapter {
         return new BlockPosition(l.getBlockX(), l.getBlockY(), l.getBlockZ());
     }
 
+    private EnumItemSlot slot(EntityEquipmentSlot slot) {
+        switch (slot) {
+            case MAINHAND:
+                return EnumItemSlot.MAINHAND;
+            case OFFHAND:
+                return EnumItemSlot.OFFHAND;
+            case FEET:
+                return EnumItemSlot.FEET;
+            case LEGS:
+                return EnumItemSlot.LEGS;
+            case CHEST:
+                return EnumItemSlot.CHEST;
+            case HEAD:
+                return EnumItemSlot.HEAD;
+            default:
+                break;
+        }
+        return null; // This should never happen...
+    }
+
     /*
      *  General
      */
 
     @Override
     public void sendPacket(Player player, Object packet) {
-        if (packet instanceof Packet) {
+        if (packet instanceof Packet<?>) {
             ((CraftPlayer) player).getHandle().playerConnection.sendPacket((Packet<?>) packet);
         }
     }
@@ -80,7 +100,7 @@ public class NMSAdapterImpl implements NMSAdapter {
 
     @Override
     public Object packetActionbarMessage(String text) {
-        return new PacketPlayOutChat(s(text), (byte) 2);
+        return new PacketPlayOutChat(s(text), ChatMessageType.GAME_INFO);
     }
 
     @Override
@@ -148,27 +168,27 @@ public class NMSAdapterImpl implements NMSAdapter {
 
     @Override
     public Object getMetaEntityRemainingAir(int airTicksLeft) {
-        return new DataWatcher.WatchableObject(2, 1, airTicksLeft);
+        return new DataWatcher.Item<>(new DataWatcherObject<>(1, DataWatcherRegistry.b), airTicksLeft);
     }
 
     @Override
     public Object getMetaEntityCustomName(String name) {
-        return new DataWatcher.WatchableObject(4, 2, name);
+        return new DataWatcher.Item<>(new DataWatcherObject<>(2, DataWatcherRegistry.e), s(name));
     }
 
     @Override
     public Object getMetaEntityCustomNameVisible(boolean visible) {
-        return new DataWatcher.WatchableObject(0, 3, (byte) (visible ? 1 : 0));
+        return new DataWatcher.Item<>(new DataWatcherObject<>(3, DataWatcherRegistry.h), visible);
     }
 
     @Override
     public Object getMetaEntitySilenced(boolean silenced) {
-        return new DataWatcher.WatchableObject(0, 4, (byte) (silenced ? 1 : 0));
+        return new DataWatcher.Item<>(new DataWatcherObject<>(4, DataWatcherRegistry.h), silenced);
     }
 
     @Override
     public Object getMetaEntityGravity(boolean gravity) {
-        return new DataWatcher.WatchableObject(0, 5, (byte) (gravity ? 1 : 0));
+        return new DataWatcher.Item<>(new DataWatcherObject<>(5, DataWatcherRegistry.h), gravity);
     }
 
     @Override
@@ -182,7 +202,7 @@ public class NMSAdapterImpl implements NMSAdapter {
         data += glowing ? 40 : 0;
         data += flyingElytra ? 80 : 0;
 
-        return new DataWatcher.WatchableObject(0, 0, data);
+        return new DataWatcher.Item<>(new DataWatcherObject<>(0, DataWatcherRegistry.a), data);
     }
 
     // -------------------- Armor Stand Start -------------------- //
@@ -195,50 +215,50 @@ public class NMSAdapterImpl implements NMSAdapter {
         data += noBasePlate ? 8 : 0;
         data += marker ? 10 : 0;
 
-        return new DataWatcher.WatchableObject(0, 10, data);
+        return new DataWatcher.Item<>(new DataWatcherObject<>(13, DataWatcherRegistry.a), data);
     }
 
     @Override
     public Object getMetaArmorStandRotationHead(float x, float y, float z) {
         Vector3f v = new Vector3f(x, y, z);
-        return new DataWatcher.WatchableObject(7, 16, v);
+        return new DataWatcher.Item<>(new DataWatcherObject<>(16, DataWatcherRegistry.i), v);
     }
 
     @Override
     public Object getMetaArmorStandRotationBody(float x, float y, float z) {
         Vector3f v = new Vector3f(x, y, z);
-        return new DataWatcher.WatchableObject(7, 17, v);
+        return new DataWatcher.Item<>(new DataWatcherObject<>(17, DataWatcherRegistry.i), v);
     }
 
     @Override
     public Object getMetaArmorStandRotationLeftArm(float x, float y, float z) {
         Vector3f v = new Vector3f(x, y, z);
-        return new DataWatcher.WatchableObject(7, 18, v);
+        return new DataWatcher.Item<>(new DataWatcherObject<>(18, DataWatcherRegistry.i), v);
     }
 
     @Override
     public Object getMetaArmorStandRotationRightArm(float x, float y, float z) {
         Vector3f v = new Vector3f(x, y, z);
-        return new DataWatcher.WatchableObject(7, 19, v);
+        return new DataWatcher.Item<>(new DataWatcherObject<>(19, DataWatcherRegistry.i), v);
     }
 
     @Override
     public Object getMetaArmorStandRotationLeftLeg(float x, float y, float z) {
         Vector3f v = new Vector3f(x, y, z);
-        return new DataWatcher.WatchableObject(7, 20, v);
+        return new DataWatcher.Item<>(new DataWatcherObject<>(20, DataWatcherRegistry.i), v);
     }
 
     @Override
     public Object getMetaArmorStandRotationRightLeg(float x, float y, float z) {
         Vector3f v = new Vector3f(x, y, z);
-        return new DataWatcher.WatchableObject(7, 21, v);
+        return new DataWatcher.Item<>(new DataWatcherObject<>(21, DataWatcherRegistry.i), v);
     }
 
     // -------------------- Armor Stand End -------------------- //
 
     @Override
     public Object getMetaItemStack(org.bukkit.inventory.ItemStack itemStack) {
-        return new DataWatcher.WatchableObject(5, 8, i(itemStack));
+        return new DataWatcher.Item<>(new DataWatcherObject<>(8, DataWatcherRegistry.f), i(itemStack));
     }
 
     /*
@@ -247,7 +267,7 @@ public class NMSAdapterImpl implements NMSAdapter {
 
     @Override
     public int getEntityTypeId(EntityType type) {
-        return type.getTypeId(); // TODO
+        return 0; // TODO
     }
 
     @Override
@@ -266,15 +286,16 @@ public class NMSAdapterImpl implements NMSAdapter {
 
     @Override
     public Object packetTeleportEntity(int eid, Location l, boolean onGround) {
-        return new PacketPlayOutEntityTeleport(
-                eid,
-                MathHelper.floor(l.getX() * 32.0),
-                MathHelper.floor(l.getY() * 32.0),
-                MathHelper.floor(l.getZ() * 32.0),
-                (byte) ((int) (l.getYaw() * 256.0F / 360.0F)),
-                (byte) ((int) (l.getPitch() * 256.0F / 360.0F)),
-                onGround
-        );
+        PacketPlayOutEntityTeleport packet = new PacketPlayOutEntityTeleport();
+        R r = new R(packet);
+        r.set("a", eid);
+        r.set("b", l.getX());
+        r.set("c", l.getY());
+        r.set("d", l.getZ());
+        r.set("e", (byte) ((int) (l.getYaw() * 256.0F / 360.0F)));
+        r.set("f", (byte) ((int) (l.getPitch() * 256.0F / 360.0F)));
+        r.set("h", onGround);
+        return packet;
     }
 
     @Override
@@ -282,12 +303,13 @@ public class NMSAdapterImpl implements NMSAdapter {
         PacketPlayOutSpawnEntity packet = new PacketPlayOutSpawnEntity();
         R r = new R(packet);
         r.set("a", eid);
-        r.set("b", MathHelper.floor(l.getX() * 32.0D));
-        r.set("c", MathHelper.floor(l.getY() * 32.0D));
-        r.set("d", MathHelper.floor(l.getZ() * 32.0D));
-        r.set("h", MathHelper.d(l.getPitch() * 256.0F / 360.0F));
-        r.set("i", MathHelper.d(l.getYaw() * 256.0F / 360.0F));
-        r.set("j", getEntityTypeId(type));
+        r.set("b", id);
+        r.set("c", l.getX());
+        r.set("d", l.getY());
+        r.set("e", l.getZ());
+        r.set("i", MathHelper.d(l.getPitch() * 256.0F / 360.0F));
+        r.set("j", MathHelper.d(l.getYaw() * 256.0F / 360.0F));
+        r.set("k", getEntityTypeId(type));
         return packet;
     }
 
@@ -296,33 +318,28 @@ public class NMSAdapterImpl implements NMSAdapter {
         PacketPlayOutSpawnEntityLiving packet = new PacketPlayOutSpawnEntityLiving();
         R r = new R(packet);
         r.set("a", eid);
-        r.set("b", getEntityTypeId(type));
-        r.set("c", MathHelper.floor(l.getX() * 32.0D));
-        r.set("d", MathHelper.floor(l.getY() * 32.0D));
-        r.set("e", MathHelper.floor(l.getZ() * 32.0D));
+        r.set("b", id);
+        r.set("c", getEntityTypeId(type));
+        r.set("c", l.getX());
+        r.set("d", l.getY());
+        r.set("e", l.getZ());
         r.set("i", (byte) ((int) (l.getYaw() * 256.0F / 360.0F)));
         r.set("j", (byte) ((int) (l.getPitch() * 256.0F / 360.0F)));
         r.set("k", (byte) ((int) (l.getYaw() * 256.0F / 360.0F)));
-        r.set("g", MathHelper.d(l.getYaw() * 256.0F / 360.0F));
         return packet;
     }
 
     @Override
     public Object packetSetEquipment(int eid, EntityEquipmentSlot slot, org.bukkit.inventory.ItemStack itemStack) {
-        return new PacketPlayOutEntityEquipment(eid, slot.getLegacySlotId(), i(itemStack));
+        return new PacketPlayOutEntityEquipment(eid, slot(slot), i(itemStack));
     }
 
     @Override
     public Object packetUpdatePassengers(int eid, int... passengers) {
-        PacketPlayOutAttachEntity packet = new PacketPlayOutAttachEntity();
+        PacketPlayOutMount packet = new PacketPlayOutMount();
         R r = new R(packet);
-        r.set("a", 0);
-        r.set("b", eid);
-        if (passengers != null && passengers.length > 0) {
-            r.set("c", passengers[0]);
-        } else {
-            r.set("c", -1);
-        }
+        r.set("a", eid);
+        r.set("b", passengers);
         return packet;
     }
 

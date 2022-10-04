@@ -142,7 +142,23 @@ public interface NMSAdapter {
     Object getMetaEntityProperties(boolean onFire, boolean crouched, boolean sprinting, boolean swimming,
                                    boolean invisible, boolean glowing, boolean flyingElytra);
 
+    // -------------------- Armor Stand Start -------------------- //
+
     Object getMetaArmorStandProperties(boolean small, boolean arms, boolean noBasePlate, boolean marker);
+
+    Object getMetaArmorStandRotationHead(float x, float y, float z);
+
+    Object getMetaArmorStandRotationBody(float x, float y, float z);
+
+    Object getMetaArmorStandRotationLeftArm(float x, float y, float z);
+
+    Object getMetaArmorStandRotationRightArm(float x, float y, float z);
+
+    Object getMetaArmorStandRotationLeftLeg(float x, float y, float z);
+
+    Object getMetaArmorStandRotationRightLeg(float x, float y, float z);
+
+    // -------------------- Armor Stand End -------------------- //
 
     Object getMetaItemStack(ItemStack itemStack);
 
