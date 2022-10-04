@@ -6,6 +6,8 @@ import com.google.common.base.Enums;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import eu.gs.gslibrary.utils.Utils;
 import eu.gs.gslibrary.utils.items.ItemSystem;
+import eu.gs.gslibrary.utils.replacement.Replacement;
+import jline.internal.Nullable;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
@@ -30,12 +32,24 @@ public class EntityUtils {
         EntityType entityType = EntityType.valueOf(section.getString("type", "ARMOR_STAND"));
 
         Entity entity = spawnEntity(location, entityType);
-        entity = editEntity(entity, section);
+        entity = editEntity(entity, section, null, null);
 
         return entity;
     }
 
-    public Entity editEntity(Entity entity, Section section) {
+    public Entity spawnEntity(Location location, Section section, @Nullable Player player, @Nullable Replacement replacement) {
+        EntityType entityType = EntityType.valueOf(section.getString("type", "ARMOR_STAND"));
+
+        Entity entity = spawnEntity(location, entityType);
+        entity = editEntity(entity, section, player, replacement);
+
+        return entity;
+    }
+
+    public Entity editEntity(Entity entity, Section section, Player player, Replacement replacement) {
+        if(replacement == null) {
+            replacement = new Replacement((player1, string) -> string);
+        }
         if (section.contains("name")) {
             entity.setCustomName(Utils.colorize(null, section.getString("name")));
             entity.setCustomNameVisible(true);
@@ -95,22 +109,40 @@ public class EntityUtils {
             if (equip != null) {
                 EntityEquipment equipment = living.getEquipment();
 
-                ItemStack helmet = ItemSystem.itemFromConfig(section.getSection("helmet"));
+                ItemStack helmet;
+                if(player != null) {
+                    helmet = ItemSystem.itemFromConfig(section.getSection("helmet"), player, replacement);
+                }else helmet = ItemSystem.itemFromConfig(section.getSection("helmet"));
                 equipment.setHelmet(helmet);
 
-                ItemStack chestplate = ItemSystem.itemFromConfig(section.getSection("chestplate"));
+                ItemStack chestplate;
+                if(player != null) {
+                    chestplate = ItemSystem.itemFromConfig(section.getSection("chestplate"), player, replacement);
+                }else chestplate = ItemSystem.itemFromConfig(section.getSection("chestplate"));
                 equipment.setChestplate(chestplate);
 
-                ItemStack leggings = ItemSystem.itemFromConfig(section.getSection("leggings"));
+                ItemStack leggings;
+                if(player != null) {
+                    leggings = ItemSystem.itemFromConfig(section.getSection("leggings"), player, replacement);
+                }else leggings = ItemSystem.itemFromConfig(section.getSection("leggings"));
                 equipment.setLeggings(leggings);
 
-                ItemStack boots = ItemSystem.itemFromConfig(section.getSection("boots"));
+                ItemStack boots;
+                if(player != null) {
+                    boots = ItemSystem.itemFromConfig(section.getSection("boots"), player, replacement);
+                }else boots = ItemSystem.itemFromConfig(section.getSection("boots"));
                 equipment.setBoots(boots);
 
-                ItemStack mainHand = ItemSystem.itemFromConfig(section.getSection("mainHand"));
+                ItemStack mainHand;
+                if(player != null) {
+                    mainHand = ItemSystem.itemFromConfig(section.getSection("mainHand"), player, replacement);
+                }else mainHand = ItemSystem.itemFromConfig(section.getSection("mainHand"));
                 equipment.setItemInMainHand(mainHand);
 
-                ItemStack offHand = ItemSystem.itemFromConfig(section.getSection("offHand"));
+                ItemStack offHand;
+                if(player != null) {
+                    offHand = ItemSystem.itemFromConfig(section.getSection("offHand"), player, replacement);
+                }else offHand = ItemSystem.itemFromConfig(section.getSection("offHand"));
                 equipment.setItemInOffHand(offHand);
             }
 
