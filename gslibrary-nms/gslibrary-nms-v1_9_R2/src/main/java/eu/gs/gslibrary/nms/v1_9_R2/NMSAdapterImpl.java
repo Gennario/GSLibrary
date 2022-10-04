@@ -32,13 +32,20 @@ public class NMSAdapterImpl implements NMSAdapter {
 
     private EnumItemSlot slot(EntityEquipmentSlot slot) {
         switch (slot) {
-            case MAINHAND: return EnumItemSlot.MAINHAND;
-            case OFFHAND: return EnumItemSlot.OFFHAND;
-            case FEET: return EnumItemSlot.FEET;
-            case LEGS: return EnumItemSlot.LEGS;
-            case CHEST: return EnumItemSlot.CHEST;
-            case HEAD: return EnumItemSlot.HEAD;
-            default: break;
+            case MAINHAND:
+                return EnumItemSlot.MAINHAND;
+            case OFFHAND:
+                return EnumItemSlot.OFFHAND;
+            case FEET:
+                return EnumItemSlot.FEET;
+            case LEGS:
+                return EnumItemSlot.LEGS;
+            case CHEST:
+                return EnumItemSlot.CHEST;
+            case HEAD:
+                return EnumItemSlot.HEAD;
+            default:
+                break;
         }
         return null; // This should never happen...
     }
@@ -199,6 +206,8 @@ public class NMSAdapterImpl implements NMSAdapter {
         return new DataWatcher.Item<>(new DataWatcherObject<>(0, DataWatcherRegistry.a), data);
     }
 
+    // -------------------- Armor Stand Start -------------------- //
+
     @Override
     public Object getMetaArmorStandProperties(boolean small, boolean arms, boolean noBasePlate, boolean marker) {
         byte data = 0;
@@ -211,6 +220,44 @@ public class NMSAdapterImpl implements NMSAdapter {
     }
 
     @Override
+    public Object getMetaArmorStandRotationHead(float x, float y, float z) {
+        Vector3f v = new Vector3f(x, y, z);
+        return new DataWatcher.Item<>(new DataWatcherObject<>(16, DataWatcherRegistry.i), v);
+    }
+
+    @Override
+    public Object getMetaArmorStandRotationBody(float x, float y, float z) {
+        Vector3f v = new Vector3f(x, y, z);
+        return new DataWatcher.Item<>(new DataWatcherObject<>(17, DataWatcherRegistry.i), v);
+    }
+
+    @Override
+    public Object getMetaArmorStandRotationLeftArm(float x, float y, float z) {
+        Vector3f v = new Vector3f(x, y, z);
+        return new DataWatcher.Item<>(new DataWatcherObject<>(18, DataWatcherRegistry.i), v);
+    }
+
+    @Override
+    public Object getMetaArmorStandRotationRightArm(float x, float y, float z) {
+        Vector3f v = new Vector3f(x, y, z);
+        return new DataWatcher.Item<>(new DataWatcherObject<>(19, DataWatcherRegistry.i), v);
+    }
+
+    @Override
+    public Object getMetaArmorStandRotationLeftLeg(float x, float y, float z) {
+        Vector3f v = new Vector3f(x, y, z);
+        return new DataWatcher.Item<>(new DataWatcherObject<>(20, DataWatcherRegistry.i), v);
+    }
+
+    @Override
+    public Object getMetaArmorStandRotationRightLeg(float x, float y, float z) {
+        Vector3f v = new Vector3f(x, y, z);
+        return new DataWatcher.Item<>(new DataWatcherObject<>(21, DataWatcherRegistry.i), v);
+    }
+
+    // -------------------- Armor Stand End -------------------- //
+
+    @Override
     public Object getMetaItemStack(org.bukkit.inventory.ItemStack itemStack) {
         return new DataWatcher.Item<>(new DataWatcherObject<>(8, DataWatcherRegistry.f), Optional.fromNullable(i(itemStack)));
     }
@@ -221,12 +268,12 @@ public class NMSAdapterImpl implements NMSAdapter {
 
     @Override
     public int getEntityTypeId(EntityType type) {
-        return EntityTypes.a(type.getName());
+        return EntityTypes.a(type.getName()); // TODO
     }
 
     @Override
     public double getEntityHeight(EntityType type) {
-        return 0;
+        return 0; // TODO
     }
 
     @Override
