@@ -32,13 +32,20 @@ public class NMSAdapterImpl implements NMSAdapter {
 
     private EnumItemSlot slot(EntityEquipmentSlot slot) {
         switch (slot) {
-            case MAINHAND: return EnumItemSlot.MAINHAND;
-            case OFFHAND: return EnumItemSlot.OFFHAND;
-            case FEET: return EnumItemSlot.FEET;
-            case LEGS: return EnumItemSlot.LEGS;
-            case CHEST: return EnumItemSlot.CHEST;
-            case HEAD: return EnumItemSlot.HEAD;
-            default: break;
+            case MAINHAND:
+                return EnumItemSlot.MAINHAND;
+            case OFFHAND:
+                return EnumItemSlot.OFFHAND;
+            case FEET:
+                return EnumItemSlot.FEET;
+            case LEGS:
+                return EnumItemSlot.LEGS;
+            case CHEST:
+                return EnumItemSlot.CHEST;
+            case HEAD:
+                return EnumItemSlot.HEAD;
+            default:
+                break;
         }
         return null; // This should never happen...
     }
@@ -261,12 +268,7 @@ public class NMSAdapterImpl implements NMSAdapter {
 
     @Override
     public int getEntityTypeId(EntityType type) {
-        return EntityTypes.a(type.getName()); // TODO
-    }
-
-    @Override
-    public double getEntityHeight(EntityType type) {
-        return 0; // TODO
+        return EntityTypes.a(type.getName());
     }
 
     @Override
@@ -314,12 +316,12 @@ public class NMSAdapterImpl implements NMSAdapter {
         r.set("a", eid);
         r.set("b", id);
         r.set("c", getEntityTypeId(type));
-        r.set("c", l.getX());
-        r.set("d", l.getY());
-        r.set("e", l.getZ());
-        r.set("i", (byte) ((int) (l.getYaw() * 256.0F / 360.0F)));
-        r.set("j", (byte) ((int) (l.getPitch() * 256.0F / 360.0F)));
-        r.set("k", (byte) ((int) (l.getYaw() * 256.0F / 360.0F)));
+        r.set("d", l.getX());
+        r.set("e", l.getY());
+        r.set("f", l.getZ());
+        r.set("j", (byte) ((int) (l.getYaw() * 256.0F / 360.0F)));
+        r.set("k", (byte) ((int) (l.getPitch() * 256.0F / 360.0F)));
+        r.set("l", (byte) ((int) (l.getYaw() * 256.0F / 360.0F)));
         return packet;
     }
 

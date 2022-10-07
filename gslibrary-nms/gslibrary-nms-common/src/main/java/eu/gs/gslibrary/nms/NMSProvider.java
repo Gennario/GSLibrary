@@ -1,5 +1,7 @@
 package eu.gs.gslibrary.nms;
 
+import eu.gs.gslibrary.nms.utils.Version;
+
 /**
  * This class provides an implementation of {@link NMSAdapter}.
  *

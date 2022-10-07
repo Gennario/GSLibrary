@@ -177,6 +177,61 @@
             <artifactId>gslibrary-nms-v1_12_R1</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <dependency>
+            <groupId>eu.gs</groupId>
+            <artifactId>gslibrary-nms-v1_13_R1</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eu.gs</groupId>
+            <artifactId>gslibrary-nms-v1_13_R2</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eu.gs</groupId>
+            <artifactId>gslibrary-nms-v1_14_R1</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eu.gs</groupId>
+            <artifactId>gslibrary-nms-v1_15_R1</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eu.gs</groupId>
+            <artifactId>gslibrary-nms-v1_16_R1</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eu.gs</groupId>
+            <artifactId>gslibrary-nms-v1_16_R2</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eu.gs</groupId>
+            <artifactId>gslibrary-nms-v1_16_R3</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eu.gs</groupId>
+            <artifactId>gslibrary-nms-v1_17_R1</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eu.gs</groupId>
+            <artifactId>gslibrary-nms-v1_18_R1</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eu.gs</groupId>
+            <artifactId>gslibrary-nms-v1_18_R2</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eu.gs</groupId>
+            <artifactId>gslibrary-nms-v1_19_R1</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

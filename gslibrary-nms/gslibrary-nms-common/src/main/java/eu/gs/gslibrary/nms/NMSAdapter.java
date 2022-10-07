@@ -1,6 +1,7 @@
 package eu.gs.gslibrary.nms;
 
 import eu.gs.gslibrary.nms.utils.EntityEquipmentSlot;
+import eu.gs.gslibrary.nms.utils.EntitySizeEnum;
 import io.netty.channel.ChannelPipeline;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -168,7 +169,15 @@ public interface NMSAdapter {
 
     int getEntityTypeId(EntityType type);
 
-    double getEntityHeight(EntityType type);
+    default double getEntityHeight(EntityType type) {
+        EntitySizeEnum actualType = EntitySizeEnum.fromEntityType(type);
+        return actualType == null ? 0.0f : actualType.getHeight();
+    }
+
+    default double getEntityWidth(EntityType type) {
+        EntitySizeEnum actualType = EntitySizeEnum.fromEntityType(type);
+        return actualType == null ? 0.0f : actualType.getWidth();
+    }
 
     Object packetEntityAnimation(int eid, int animation);
 

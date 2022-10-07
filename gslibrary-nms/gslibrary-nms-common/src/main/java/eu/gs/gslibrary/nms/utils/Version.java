@@ -1,4 +1,4 @@
-package eu.gs.gslibrary.nms;
+package eu.gs.gslibrary.nms.utils;
 
 import org.bukkit.Bukkit;
 
