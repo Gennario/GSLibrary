@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class NMSAdapterImpl implements NMSAdapter {
@@ -47,7 +48,7 @@ public class NMSAdapterImpl implements NMSAdapter {
 
     @Override
     public ChannelPipeline getPipeline(Player player) {
-        // TODO ?????????????? FUCKING NMS WILL KILL ME ONE DAY
+        // TODO: 1.8.R1 pipeline
         return ((Channel) ((CraftPlayer) player).getHandle().playerConnection.networkManager).pipeline();
     }
 
@@ -245,14 +246,15 @@ public class NMSAdapterImpl implements NMSAdapter {
      *  Entity
      */
 
-    @Override
-    public int getEntityTypeId(EntityType type) {
-        return 0; // TODO
+    private static final Map<String, Integer> ENTITY_TYPE_NAME_ID_MAP;
+
+    static {
+        ENTITY_TYPE_NAME_ID_MAP = R.getFieldValue(EntityTypes.class, "g");
     }
 
     @Override
-    public double getEntityHeight(EntityType type) {
-        return 0; // TODO
+    public int getEntityTypeId(EntityType type) {
+        return ENTITY_TYPE_NAME_ID_MAP == null ? type.getTypeId() : ENTITY_TYPE_NAME_ID_MAP.get(type.getName());
     }
 
     @Override
@@ -287,9 +289,9 @@ public class NMSAdapterImpl implements NMSAdapter {
         r.set("c", MathHelper.floor(l.getX() * 32.0D));
         r.set("d", MathHelper.floor(l.getY() * 32.0D));
         r.set("e", MathHelper.floor(l.getZ() * 32.0D));
-        r.set("i", (byte)((int)(l.getYaw() * 256.0F / 360.0F)));
-        r.set("j", (byte)((int)(l.getPitch() * 256.0F / 360.0F)));
-        r.set("k", (byte)((int)(l.getYaw() * 256.0F / 360.0F)));
+        r.set("i", (byte) ((int) (l.getYaw() * 256.0F / 360.0F)));
+        r.set("j", (byte) ((int) (l.getPitch() * 256.0F / 360.0F)));
+        r.set("k", (byte) ((int) (l.getYaw() * 256.0F / 360.0F)));
         r.set("g", MathHelper.d(l.getYaw() * 256.0F / 360.0F));
         return packet;
     }
@@ -306,11 +308,12 @@ public class NMSAdapterImpl implements NMSAdapter {
                 (int) l.getX(),
                 (int) l.getY(),
                 (int) l.getZ(),
-                (byte)((int) (l.getYaw() * 256.0F / 360.0F)),
-                (byte)((int) (l.getPitch() * 256.0F / 360.0F)),
+                (byte) ((int) (l.getYaw() * 256.0F / 360.0F)),
+                (byte) ((int) (l.getPitch() * 256.0F / 360.0F)),
                 onGround
         );
     }
+
     @Override
     public Object packetUpdatePassengers(int eid, int... passengers) {
         PacketPlayOutAttachEntity packet = new PacketPlayOutAttachEntity();
