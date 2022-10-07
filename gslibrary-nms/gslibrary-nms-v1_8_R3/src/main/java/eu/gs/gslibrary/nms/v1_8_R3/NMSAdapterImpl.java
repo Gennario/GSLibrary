@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class NMSAdapterImpl implements NMSAdapter {
@@ -245,14 +246,15 @@ public class NMSAdapterImpl implements NMSAdapter {
      *  Entity
      */
 
-    @Override
-    public int getEntityTypeId(EntityType type) {
-        return type.getTypeId(); // TODO
+    private static final Map<String, Integer> ENTITY_TYPE_NAME_ID_MAP;
+
+    static {
+        ENTITY_TYPE_NAME_ID_MAP = R.getFieldValue(EntityTypes.class, "g");
     }
 
     @Override
-    public double getEntityHeight(EntityType type) {
-        return 0; // TODO
+    public int getEntityTypeId(EntityType type) {
+        return ENTITY_TYPE_NAME_ID_MAP == null ? type.getTypeId() : ENTITY_TYPE_NAME_ID_MAP.get(type.getName());
     }
 
     @Override
