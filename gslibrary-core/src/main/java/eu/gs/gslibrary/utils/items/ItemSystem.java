@@ -79,11 +79,13 @@ public class ItemSystem {
         if (customModelData != 0) itemMeta.setCustomModelData(customModelData);
         itemStack.setItemMeta(itemMeta);
 
-        if(section.contains("leather")) {
-            LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
-            String[] split = section.getString("leather").split(";");
-            leatherArmorMeta.setColor(Color.fromRGB(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2])));
-            itemStack.setItemMeta(leatherArmorMeta);
+        if(itemMeta instanceof LeatherArmorMeta) {
+            if (section.contains("leather")) {
+                LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
+                String[] split = section.getString("leather").split(";");
+                leatherArmorMeta.setColor(Color.fromRGB(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2])));
+                itemStack.setItemMeta(leatherArmorMeta);
+            }
         }
 
         return itemStack;
@@ -146,11 +148,13 @@ public class ItemSystem {
         if (customModelData != 0) itemMeta.setCustomModelData(customModelData);
         itemStack.setItemMeta(itemMeta);
 
-        if(section.contains("leather")) {
-            LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
-            String[] split = section.getString("leather").split(";");
-            leatherArmorMeta.setColor(Color.fromRGB(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2])));
-            itemStack.setItemMeta(leatherArmorMeta);
+        if(itemMeta instanceof LeatherArmorMeta) {
+            if (section.contains("leather")) {
+                LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
+                String[] split = section.getString("leather").split(";");
+                leatherArmorMeta.setColor(Color.fromRGB(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2])));
+                itemStack.setItemMeta(leatherArmorMeta);
+            }
         }
 
         return itemStack;
@@ -213,11 +217,13 @@ public class ItemSystem {
         if (customModelData != 0) itemMeta.setCustomModelData(customModelData);
         itemStack.setItemMeta(itemMeta);
 
-        if(section.contains("leather")) {
-            LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
-            String[] split = section.getString("leather").split(";");
-            leatherArmorMeta.setColor(Color.fromRGB(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2])));
-            itemStack.setItemMeta(leatherArmorMeta);
+        if(itemMeta instanceof LeatherArmorMeta) {
+            if (section.contains("leather")) {
+                LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
+                String[] split = section.getString("leather").split(";");
+                leatherArmorMeta.setColor(Color.fromRGB(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2])));
+                itemStack.setItemMeta(leatherArmorMeta);
+            }
         }
 
         return itemStack;

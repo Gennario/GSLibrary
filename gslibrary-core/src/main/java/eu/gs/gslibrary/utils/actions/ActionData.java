@@ -1,13 +1,14 @@
 package eu.gs.gslibrary.utils.actions;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -34,23 +35,29 @@ public class ActionData {
     }
 
     public double getDouble(String key) {
-        return Double.parseDouble((String) data.get(key));
+        return (double) data.get(key);
     }
 
     public int getInt(String key) {
-        return Integer.parseInt((String) data.get(key));
+        return (int) data.get(key);
     }
 
     public float getFloat(String key) {
-        return Float.parseFloat((String) data.get(key));
+        try {
+            return (float) data.get(key);
+        }catch (Exception e) {
+            return (getInt(key));
+        }
     }
 
     public List<Object> getList(String key) {
-        return Arrays.asList(data.get(key));
+        return (List<Object>) data.get(key);
     }
 
     public List<String> getListString(String key) {
-        return Arrays.asList(getList(key).toArray(new String[0]));
+        return getList(key).stream()
+                .map(object -> Objects.toString(object, null))
+                .collect(Collectors.toList());
     }
 
     public Object getCustom(String path) {

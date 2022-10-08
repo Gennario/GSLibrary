@@ -193,10 +193,12 @@ public class GUINormalItem extends GUIItem {
         }
         itemStack.setItemMeta(itemMeta);
 
-        if(leatherColor != null) {
-            LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
-            leatherArmorMeta.setColor(leatherColor);
-            itemStack.setItemMeta(leatherArmorMeta);
+        if(itemMeta instanceof LeatherArmorMeta) {
+            if (leatherColor != null) {
+                LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
+                leatherArmorMeta.setColor(leatherColor);
+                itemStack.setItemMeta(leatherArmorMeta);
+            }
         }
 
         return itemStack;
