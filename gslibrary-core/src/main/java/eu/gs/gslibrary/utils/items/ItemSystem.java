@@ -6,11 +6,13 @@ import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import eu.gs.gslibrary.utils.Utils;
 import eu.gs.gslibrary.utils.replacement.Replacement;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,6 +79,13 @@ public class ItemSystem {
         if (customModelData != 0) itemMeta.setCustomModelData(customModelData);
         itemStack.setItemMeta(itemMeta);
 
+        if(section.contains("leather")) {
+            LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
+            String[] split = section.getString("leather").split(";");
+            leatherArmorMeta.setColor(Color.fromRGB(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2])));
+            itemStack.setItemMeta(leatherArmorMeta);
+        }
+
         return itemStack;
     }
 
@@ -137,6 +146,13 @@ public class ItemSystem {
         if (customModelData != 0) itemMeta.setCustomModelData(customModelData);
         itemStack.setItemMeta(itemMeta);
 
+        if(section.contains("leather")) {
+            LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
+            String[] split = section.getString("leather").split(";");
+            leatherArmorMeta.setColor(Color.fromRGB(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2])));
+            itemStack.setItemMeta(leatherArmorMeta);
+        }
+
         return itemStack;
     }
 
@@ -196,6 +212,13 @@ public class ItemSystem {
         if (!itemFlags.isEmpty()) itemFlags.forEach(flag -> itemMeta.addItemFlags(ItemFlag.valueOf(flag)));
         if (customModelData != 0) itemMeta.setCustomModelData(customModelData);
         itemStack.setItemMeta(itemMeta);
+
+        if(section.contains("leather")) {
+            LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
+            String[] split = section.getString("leather").split(";");
+            leatherArmorMeta.setColor(Color.fromRGB(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2])));
+            itemStack.setItemMeta(leatherArmorMeta);
+        }
 
         return itemStack;
     }

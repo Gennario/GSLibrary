@@ -7,6 +7,7 @@ import eu.gs.gslibrary.utils.Utils;
 import eu.gs.gslibrary.utils.items.HeadManager;
 import eu.gs.gslibrary.utils.replacement.Replacement;
 import lombok.Getter;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -15,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.material.MaterialData;
 
 import java.util.ArrayList;
@@ -39,6 +41,8 @@ public class GUINormalItem extends GUIItem {
     private List<Pair<Enchantment, Integer>> enchantments;
     private List<ItemFlag> itemFlags;
     private List<Pair<Attribute, Collection<AttributeModifier>>> attributeModifiers;
+
+    private Color leatherColor;
 
     private Replacement replacement;
 
@@ -189,6 +193,12 @@ public class GUINormalItem extends GUIItem {
         }
         itemStack.setItemMeta(itemMeta);
 
+        if(leatherColor != null) {
+            LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
+            leatherArmorMeta.setColor(leatherColor);
+            itemStack.setItemMeta(leatherArmorMeta);
+        }
+
         return itemStack;
     }
 
@@ -210,6 +220,7 @@ public class GUINormalItem extends GUIItem {
         if(itemFlags != null) guiNormalItem.setItemFlags(new ArrayList<>(itemFlags));
         if(attributeModifiers != null) guiNormalItem.setAttributeModifiers(attributeModifiers);
         if(replacement != null) guiNormalItem.setReplacement(replacement);
+        if(leatherColor != null) guiNormalItem.setLeatherColor(leatherColor);
 
         return guiNormalItem;
     }
@@ -276,6 +287,11 @@ public class GUINormalItem extends GUIItem {
 
     public GUINormalItem setReplacement(Replacement replacement) {
         this.replacement = replacement;
+        return this;
+    }
+
+    public GUINormalItem setLeatherColor(Color leatherColor) {
+        this.leatherColor = leatherColor;
         return this;
     }
 }

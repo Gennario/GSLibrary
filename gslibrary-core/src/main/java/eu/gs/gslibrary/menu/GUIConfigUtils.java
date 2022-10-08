@@ -7,6 +7,7 @@ import eu.gs.gslibrary.conditions.ConditionValue;
 import eu.gs.gslibrary.utils.Pair;
 import eu.gs.gslibrary.GSLibrary;
 import eu.gs.gslibrary.utils.replacement.Replacement;
+import org.bukkit.Color;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemFlag;
@@ -151,6 +152,11 @@ public final class GUIConfigUtils {
         });
         if (replacement != null) {
             guiItem.setReplacement(replacement);
+        }
+
+        if(section.contains("leather")) {
+            String[] split = section.getString("leather").split(";");
+            guiItem.setLeatherColor(Color.fromRGB(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2])));
         }
 
         return guiItem;
