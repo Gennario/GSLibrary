@@ -6,7 +6,7 @@
 
     <groupId>eu.gs</groupId>
     <artifactId>GSLibrary</artifactId>
-    <version>BETA-1.0v3</version>
+    <version>BETA-1.0v4</version>
     <packaging>pom</packaging>
 
     <modules>
