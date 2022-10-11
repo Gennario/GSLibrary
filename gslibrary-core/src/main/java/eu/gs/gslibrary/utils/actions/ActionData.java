@@ -4,7 +4,6 @@ import dev.dejvokep.boostedyaml.block.implementation.Section;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +43,7 @@ public class ActionData {
     public float getFloat(String key) {
         try {
             return (float) data.get(key);
-        }catch (Exception e) {
+        } catch (Exception e) {
             return (getInt(key));
         }
     }
