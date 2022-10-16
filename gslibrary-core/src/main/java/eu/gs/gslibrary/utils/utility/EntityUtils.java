@@ -1,4 +1,4 @@
-package eu.gs.gslibrary.utils.api;
+package eu.gs.gslibrary.utils.utility;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.XPotion;

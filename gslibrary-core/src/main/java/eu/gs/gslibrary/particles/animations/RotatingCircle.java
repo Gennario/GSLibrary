@@ -1,6 +1,6 @@
 package eu.gs.gslibrary.particles.animations;
 
-import eu.gs.gslibrary.utils.api.MathUtils;
+import eu.gs.gslibrary.utils.utility.MathUtils;
 import eu.gs.gslibrary.particles.ParticleAnimationExtender;
 import eu.gs.gslibrary.particles.ParticleEffect;
 import lombok.Getter;

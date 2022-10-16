@@ -73,5 +73,4 @@ public final class Utils {
     public static boolean isOldVersion() {
         return Integer.parseInt(Utils.getMinecraftVersion(Bukkit.getServer()).split("\\.")[1]) < 13;
     }
-
 }

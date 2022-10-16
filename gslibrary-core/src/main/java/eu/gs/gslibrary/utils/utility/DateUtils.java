@@ -1,4 +1,4 @@
-package eu.gs.gslibrary.utils.api;
+package eu.gs.gslibrary.utils.utility;
 
 import lombok.experimental.UtilityClass;
 

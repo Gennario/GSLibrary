@@ -1,4 +1,4 @@
-package eu.gs.gslibrary.utils.api.bossbar;
+package eu.gs.gslibrary.utils.utility.bossbar;
 import com.google.common.collect.Lists;
 import eu.gs.gslibrary.GSLibrary;
 import org.bukkit.Bukkit;

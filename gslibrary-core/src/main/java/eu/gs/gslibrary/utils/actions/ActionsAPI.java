@@ -6,15 +6,17 @@ import eu.gs.gslibrary.GSLibrary;
 import eu.gs.gslibrary.menu.PlayerGUIHistory;
 import eu.gs.gslibrary.utils.BungeeUtils;
 import eu.gs.gslibrary.utils.Utils;
-import eu.gs.gslibrary.utils.api.ActionbarUtils;
-import eu.gs.gslibrary.utils.api.TitleUtils;
+import eu.gs.gslibrary.utils.utility.ActionbarUtils;
+import eu.gs.gslibrary.utils.utility.TitleUtils;
 import eu.gs.gslibrary.utils.replacement.Replacement;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Sound;
+import org.bukkit.*;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.meta.FireworkMeta;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ActionsAPI {
@@ -235,6 +237,28 @@ public class ActionsAPI {
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                 onlinePlayer.setAllowFlight(!onlinePlayer.getAllowFlight());
             }
+        });
+        addAction("firework", (player, identifier, data, replacement1) -> {
+            String fireworkType = data.getString("value", "BALL_LARGE");
+            int fireworkPower = data.getInt("power", 1);
+            boolean fireworkFlicker = data.getBoolean("flicker", true);
+            boolean fireworkTrail = data.getBoolean("trail", true);
+
+            List<Color> fireworkColors = new ArrayList<>();
+            data.getListString("join_settings.firework.colors").forEach(c -> {
+                Color color = Utils.getColor(c);
+                if (color != null) fireworkColors.add(color);
+            });
+
+            Firework f = player.getWorld().spawn(player.getLocation(), Firework.class);
+            FireworkMeta fm = f.getFireworkMeta();
+            fm.addEffect(FireworkEffect.builder()
+                    .flicker(fireworkFlicker)
+                    .trail(fireworkTrail)
+                    .with(FireworkEffect.Type.valueOf(fireworkType))
+                    .withColor(fireworkColors).build());
+            fm.setPower(fireworkPower);
+            f.setFireworkMeta(fm);
         });
     }
 

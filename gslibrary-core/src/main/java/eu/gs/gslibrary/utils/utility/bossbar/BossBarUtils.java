@@ -1,4 +1,4 @@
-package eu.gs.gslibrary.utils.api.bossbar;
+package eu.gs.gslibrary.utils.utility.bossbar;
 import com.google.common.base.Preconditions;
 import lombok.Getter;
 import org.bukkit.Bukkit;

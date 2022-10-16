@@ -2,7 +2,7 @@ package eu.gs.gslibrary.particles.animations;
 
 import eu.gs.gslibrary.particles.ParticleAnimationExtender;
 import eu.gs.gslibrary.particles.ParticleEffect;
-import eu.gs.gslibrary.utils.api.MathUtils;
+import eu.gs.gslibrary.utils.utility.MathUtils;
 import lombok.Getter;
 import org.bukkit.Location;
 
