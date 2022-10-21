@@ -7,6 +7,7 @@ import eu.gs.gslibrary.menu.PlayerGUIHistory;
 import eu.gs.gslibrary.utils.BungeeUtils;
 import eu.gs.gslibrary.utils.Utils;
 import eu.gs.gslibrary.utils.utility.ActionbarUtils;
+import eu.gs.gslibrary.utils.utility.TextUtils;
 import eu.gs.gslibrary.utils.utility.TitleUtils;
 import eu.gs.gslibrary.utils.replacement.Replacement;
 import org.bukkit.*;
@@ -132,7 +133,7 @@ public class ActionsAPI {
         /* Actionbar action */
         addAction("actionbar", (player, identifier, data, replacement) -> {
             if (data.isExist("value")) {
-                ActionbarUtils.sendActionbar(player, replacement.replace(player, data.getString("value")));
+                ActionbarUtils.sendActionBar(player, replacement.replace(player, data.getString("value")));
             } else {
                 System.out.println("Some actionbar action are missing correct data");
             }
@@ -140,7 +141,7 @@ public class ActionsAPI {
         addAction("actionbar-all", (player, identifier, data, replacement) -> {
             if (data.isExist("value")) {
                 for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                    ActionbarUtils.sendActionbar(onlinePlayer, replacement.replace(onlinePlayer, data.getString("value")));
+                    ActionbarUtils.sendActionBar(onlinePlayer, replacement.replace(onlinePlayer, data.getString("value")));
                 }
             } else {
                 System.out.println("Some actionbar-all action are missing correct data");
@@ -246,7 +247,7 @@ public class ActionsAPI {
 
             List<Color> fireworkColors = new ArrayList<>();
             data.getListString("join_settings.firework.colors").forEach(c -> {
-                Color color = Utils.getColor(c);
+                Color color = TextUtils.getColor(c);
                 if (color != null) fireworkColors.add(color);
             });
 
