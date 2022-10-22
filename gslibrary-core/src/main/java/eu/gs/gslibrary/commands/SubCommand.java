@@ -37,6 +37,11 @@ public class SubCommand {
         return this;
     }
 
+    public SubCommand addArg(String name, SubCommandArg.CommandArgType type, SubCommandArg.CommandArgValue value, List<String> tabCompleteArgs) {
+        this.subCommandArgs.add(new SubCommandArg(name, type, value).setCustomTabCompleteArgs(tabCompleteArgs));
+        return this;
+    }
+
     public SubCommand setAliases(String... aliases) {
         this.aliases = Arrays.asList(aliases);
         return this;

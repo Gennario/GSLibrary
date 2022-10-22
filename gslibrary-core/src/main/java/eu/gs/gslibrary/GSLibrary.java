@@ -1,5 +1,7 @@
 package eu.gs.gslibrary;
 
+import eu.gs.gslibrary.commands.CommandAPI;
+import eu.gs.gslibrary.commands.SubCommandArg;
 import eu.gs.gslibrary.conditions.ConditionsAPI;
 import eu.gs.gslibrary.menu.GUI;
 import eu.gs.gslibrary.menu.GUIRunnable;
