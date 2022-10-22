@@ -27,7 +27,8 @@ public class CommandAPI {
     private final JavaPlugin plugin;
     private final String name;
     private final List<SubCommand> subCommands;
-    private String description, permission;
+    private String description;
+    private List<String> permission;
     private List<String> aliases;
     private boolean help;
     private CommandResponse emptyCommandResponse;
@@ -86,8 +87,9 @@ public class CommandAPI {
         return this;
     }
 
-    public CommandAPI setPermission(String permission) {
+    public CommandAPI setPermission(List<String> permission) {
         this.permission = permission;
+        return this;
     }
 
     public void buildCommand() {
@@ -112,7 +114,13 @@ public class CommandAPI {
             pluginCommand.setExecutor((sender, cmd, label, args) -> {
                 if (args.length == 0) {
                     if(permission != null && !permission.isEmpty()) {
-                        if (!sender.hasPermission(permission)) {
+                        boolean hasPermission = false;
+                        for (String s1 : permission) {
+                            if(sender.hasPermission(s1)) {
+                                hasPermission = true;
+                            }
+                        }
+                        if (!hasPermission) {
                             sender.sendMessage(languageAPI.getMessage("commands.no-perms", null, null).toArray(new String[0]));
                             return false;
                         }
@@ -134,7 +142,13 @@ public class CommandAPI {
                                 return false;
                             }
                             if (command.getPermission() != null) {
-                                if (!sender.hasPermission(command.getPermission())) {
+                                boolean hasPermission = false;
+                                for (String s1 : command.getPermission()) {
+                                    if(sender.hasPermission(s1)) {
+                                        hasPermission = true;
+                                    }
+                                }
+                                if (!hasPermission) {
                                     sender.sendMessage(languageAPI.getMessage("commands.no-perms", null, null).toArray(new String[0]));
                                     return false;
                                 }
@@ -228,28 +242,29 @@ public class CommandAPI {
                         if (subCommand.getCommand().equalsIgnoreCase(args[0])) {
                             int count = args.length - 2;
                             if ((subCommand.getSubCommandArgs().size() - 1) >= count) {
-                                switch (subCommand.getSubCommandArgs().get(count).getValue()) {
+                                SubCommandArg subCommandArg = subCommand.getSubCommandArgs().get(count);
+                                switch (subCommandArg.getValue()) {
                                     case STRING:
                                     case INT:
                                     case LONG:
                                     case FLOAT:
                                     case DOUBLE:
-                                        if (!subCommand.getCustomTabCompleteArgs().isEmpty()) {
-                                            return subCommand.getCustomTabCompleteArgs();
+                                        if (!subCommandArg.getCustomTabCompleteArgs().isEmpty()) {
+                                            return subCommandArg.getCustomTabCompleteArgs();
                                         }
                                         list.add("[<" + subCommand.getSubCommandArgs().get(count).getName() + ">]");
                                         return list;
                                     case MATERIAL:
-                                        if (!subCommand.getCustomTabCompleteArgs().isEmpty()) {
-                                            return subCommand.getCustomTabCompleteArgs();
+                                        if (!subCommandArg.getCustomTabCompleteArgs().isEmpty()) {
+                                            return subCommandArg.getCustomTabCompleteArgs();
                                         }
                                         for (Material material : Material.values()) {
                                             list.add(material.name());
                                         }
                                         return list;
                                     case ENTITY:
-                                        if (!subCommand.getCustomTabCompleteArgs().isEmpty()) {
-                                            return subCommand.getCustomTabCompleteArgs();
+                                        if (!subCommandArg.getCustomTabCompleteArgs().isEmpty()) {
+                                            return subCommandArg.getCustomTabCompleteArgs();
                                         }
                                         for (EntityType entityType : EntityType.values()) {
                                             list.add(entityType.name());

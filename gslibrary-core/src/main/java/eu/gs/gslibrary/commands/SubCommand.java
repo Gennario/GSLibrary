@@ -18,14 +18,12 @@ public class SubCommand {
     private List<SubCommandArg> subCommandArgs;
     private CommandResponse response;
     private String description;
-    private List<String> customTabCompleteArgs;
     private boolean allowConsoleSender;
 
     public SubCommand(String command) {
         this.command = command;
         this.aliases = new ArrayList<>();
         this.subCommandArgs = new ArrayList<>();
-        this.customTabCompleteArgs = new ArrayList<>();
         this.allowConsoleSender = true;
     }
 
@@ -66,13 +64,6 @@ public class SubCommand {
 
     public SubCommand setResponse(CommandResponse response) {
         this.response = response;
-        return this;
-    }
-
-    public SubCommand setCustomTabCompleteArgs(String... customTabCompleteArgs) {
-        for (String arg : customTabCompleteArgs) {
-            this.customTabCompleteArgs.add(arg);
-        }
         return this;
     }
 
