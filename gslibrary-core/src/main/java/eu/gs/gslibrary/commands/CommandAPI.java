@@ -27,7 +27,7 @@ public class CommandAPI {
     private final JavaPlugin plugin;
     private final String name;
     private final List<SubCommand> subCommands;
-    private String description;
+    private String description, permission;
     private List<String> aliases;
     private boolean help;
     private CommandResponse emptyCommandResponse;
@@ -86,6 +86,10 @@ public class CommandAPI {
         return this;
     }
 
+    public CommandAPI setPermission(String permission) {
+        this.permission = permission;
+    }
+
     public void buildCommand() {
         try {
             if (help) {
@@ -107,6 +111,12 @@ public class CommandAPI {
             PluginCommand pluginCommand = constructor.newInstance(name, plugin);
             pluginCommand.setExecutor((sender, cmd, label, args) -> {
                 if (args.length == 0) {
+                    if(permission != null && !permission.isEmpty()) {
+                        if (!sender.hasPermission(permission)) {
+                            sender.sendMessage(languageAPI.getMessage("commands.no-perms", null, null).toArray(new String[0]));
+                            return false;
+                        }
+                    }
                     if (help) {
                         sender.sendMessage(languageAPI.getMessage("commands.usage", null, new Replacement((player, string) -> {
                             return string.replace("%label%", label).replace("%help%", "help [page]");

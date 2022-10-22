@@ -15,6 +15,7 @@ public class SubCommandArg {
         this.type = type;
         this.value = value;
     }
+
     public enum CommandArgType {
         OPTIONAL,
         REQUIRED

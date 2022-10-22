@@ -12,7 +12,8 @@ import java.util.List;
 public class SubCommand {
 
     private final String command;
-    private String permission, usage;
+    private List<String> permission;
+    private String usage;
     private List<String> aliases;
     private List<SubCommandArg> subCommandArgs;
     private CommandResponse response;
@@ -43,7 +44,7 @@ public class SubCommand {
         return this;
     }
 
-    public SubCommand setPermission(String permission) {
+    public SubCommand setPermission(List<String> permission) {
         this.permission = permission;
         return this;
     }

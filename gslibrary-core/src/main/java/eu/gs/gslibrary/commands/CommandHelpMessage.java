@@ -31,7 +31,11 @@ public class CommandHelpMessage {
         int messages = 0;
         for (SubCommand subCommand : commandAPI.getSubCommands()) {
             if(subCommand.getPermission() != null) {
-                if(!commandSender.hasPermission(subCommand.getPermission())) continue;
+                boolean hasPermission = false;
+                for (String s : subCommand.getPermission()) {
+                    if(commandSender.hasPermission(s)) hasPermission = true;
+                }
+                if(!hasPermission) continue;
             }
             if ((page - 1) * 8 <= ticks && messages < 8) {
                 String format = languageAPI.getColoredString("commands.help.format", null, new Replacement((player, string) -> string.replace("%label%", label).replace("%cmd%", subCommand.getUsage()).replace("%usage%", subCommand.getDescription())));
