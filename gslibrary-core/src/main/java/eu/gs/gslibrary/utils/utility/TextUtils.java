@@ -1,5 +1,6 @@
 package eu.gs.gslibrary.utils.utility;
 
+import eu.gs.gslibrary.commands.CommandArg;
 import eu.gs.gslibrary.iridiumcolorapi.IridiumColorAPI;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Color;
@@ -25,10 +26,10 @@ public class TextUtils {
         return builder.toString();
     }
 
-    public static String joinString(int index, String[] args) {
+    public static String joinString(int index, CommandArg[] args) {
         StringBuilder builder = new StringBuilder();
         for (int i = index; i < args.length; i++) {
-            builder.append(args[i]).append(" ");
+            builder.append(args[i].getAsString()).append(" ");
         }
         return builder.toString();
     }

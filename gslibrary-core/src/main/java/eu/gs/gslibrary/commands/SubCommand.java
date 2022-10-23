@@ -42,6 +42,11 @@ public class SubCommand {
         return this;
     }
 
+    public SubCommand setAliases(List<String> aliases) {
+        this.aliases = aliases;
+        return this;
+    }
+
     public SubCommand setAliases(String... aliases) {
         this.aliases = Arrays.asList(aliases);
         return this;
@@ -49,6 +54,11 @@ public class SubCommand {
 
     public SubCommand setPermission(List<String> permission) {
         this.permission = permission;
+        return this;
+    }
+
+    public SubCommand setPermission(String... permission) {
+        this.permission = Arrays.asList(permission);
         return this;
     }
 

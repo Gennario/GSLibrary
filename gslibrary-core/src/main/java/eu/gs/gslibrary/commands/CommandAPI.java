@@ -92,6 +92,11 @@ public class CommandAPI {
         return this;
     }
 
+    public CommandAPI setPermission(String... permission) {
+        this.permission = Arrays.asList(permission);
+        return this;
+    }
+
     public void buildCommand() {
         try {
             if (help) {
