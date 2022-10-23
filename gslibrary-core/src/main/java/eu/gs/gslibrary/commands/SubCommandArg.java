@@ -21,7 +21,7 @@ public class SubCommandArg {
         this.name = name;
         this.type = type;
         this.value = value;
-        this.customTabCompleteArgs = getCustomTabCompleteArgs();
+        this.customTabCompleteArgs = new ArrayList<>();
     }
 
     public SubCommandArg setCustomTabCompleteArgs(List<String> customTabCompleteArgs) {
